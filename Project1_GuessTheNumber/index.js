@@ -2,10 +2,11 @@
 
 //DONE: 
 //Guess the number Game UI
-let score = 20;
 const scoreValue = document.querySelector('.score-value');
 const message = document.querySelector('.label-message');
 let secretNumber = Math.trunc(Math.random() * 20) + 1;
+let score = 20;
+let highscore = 0;
 
 //[again] btn click event
 document.querySelector('.btn-again').addEventListener('click', function(){
@@ -32,6 +33,11 @@ document.querySelector('.btn-check').addEventListener('click', function(){
         message.textContent = '🎉 Correct Number!';
         document.querySelector('body').style.backgroundColor = '#fffb00';
         document.querySelector('.number').textContent = secretNumber;
+
+        if(score > highscore){
+            highscore = score;
+            document.querySelector('.highscore-value').textContent = highscore;
+        }
     }
     //When guess is bigger than secret number
     else if(guess > secretNumber){
