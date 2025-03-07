@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html{
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Press Start 2P', cursive;
+    background-color: #ffdddd;
+}
+header{
+    display: flex;
+    flex-direction: column;
+    height: 25vh;
+}
+header h1{
+    font-size: 6rem;
+    color: #701313;
+    text-align: center;
+    padding-top: 10rem;
+}
+header p{
+    font-size: 1.6rem;
+    color: #fd3b3b;
+    text-align: center;
+    padding-top: 1rem;
+    text-transform: uppercase;   
+}
+.btn-again{
+    position: absolute;
+    padding: 1rem 2rem;
+    margin: 2rem;
+    font-size: 5rem;
+    background-color: #ffaaaa;
+    color: #701313;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+main{
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+    align-items: center;
+    width: 100%;
+    height: 75vh;
+}
+.guess-section{
+    display:  flex;
+    flex-direction: column;
+    align-items: end;
+    border-radius: 5px;
+    font-size: 6rem;
+    width: 100%;
+}
+
+.number{
+    border: 5px solid #701313;
+    font-size: 10rem;
+    color: #701313;
+    width: 50%;
+    align-items: center;
+    text-align: center;
+    padding: 5rem;
+    margin: 0 5rem;
+}
+.result{
+    display: flex;
+    flex-direction: column;
+    font-size: 2rem;
+    color: #701313;
+}
+.label-message{
+    color: #701313;
+    font-size: 2rem;
+    margin: 2rem;
+    padding: 2rem;
+    width: fit-content;
+}
+.guess{
+    background: none;
+    display: block;
+    padding: 2rem;
+    font-size: 80%;
+    font-family: inherit;
+    text-align: center;
+    border: 2px solid #ffaaaa;
+    border-radius: 10px;
+    width: 50%;
+    height: 50%;
+}
+.btn-check{
+    padding: 1rem 2rem;
+    font-size: 2rem;
+    margin-top: 1rem;
+    background-color: #ffaaaa;
+    color: #701313;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 50%;
+    transition: all 0.3s;
+}
+.btn-check:hover{
+    background-color: #701313;
+    color: #ffaaaa;
+}
+.score{
+    font-size: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    font-size: 2rem;
+    color: #701313;
+    padding: 2rem;
+    margin-left: 85%;
+}
+.score p{
+    margin: 1rem;
+
+}
