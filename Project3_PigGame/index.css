@@ -61,7 +61,7 @@ main{
     opacity: 1;
 }
 .player-current-box{
-    background-color: rgb(251, 255, 0);
+    background-color: #f7f7f7;
     opacity: 0.8;
     border-radius: 9px;
     color:  #8a0303;
