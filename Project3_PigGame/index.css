@@ -51,7 +51,7 @@ main{
 }
 .player-score{
     font-size: 7rem;
-    font-weight: 700;
+    font-weight: 200;
     color: #333;
     margin-bottom: auto;
 }
@@ -62,7 +62,7 @@ main{
     font-weight: 700;
 }
 .player-active .player-score{
-    font-weight: 400;
+    font-weight: 700;
 }
 .player-active .player-current-box{
     opacity: 1;
