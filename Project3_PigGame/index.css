@@ -1,11 +1,15 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 html{
     font-size: 62.5%;
     box-sizing: border-box;
 }
 body{
     font-family: 'Lato', sans-serif;
-    background-image: #f7f7f7;
-    background-size: cover;
+    background-image: linear-gradient(to top right, #aaaa59 0%, #3abf2e 100%);
     color: #333;
     line-height: 1.6;
     font-size: 1.6rem;
@@ -18,7 +22,7 @@ main{
     position: relative;
     width: 130rem;
     height: 70rem;
-    background-color: rgba(255, 76, 76, 0.35);
+    background-color: rgba(237, 255, 76, 0.35);
     backdrop-filter: blur(200px);
     filter: blur();
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.253);
@@ -34,11 +38,14 @@ main{
     align-items: center;
     padding: 9rem;
     transition: all 0.75s;
-    background-color: rgba(167, 15, 15, 0.35);
 }
 .player-name{
-    font-size: 7rem;
-    font-weight: 700;
+    position: relative;
+    font-size: 4rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    word-spacing: 2px;
+    font-weight: 300;
     color: #333;
     margin-bottom: auto;
 }
@@ -48,23 +55,23 @@ main{
     color: #333;
     margin-bottom: auto;
 }
-.plaer-active{
-    background-color: #f7f7f7;
+.player-active{
+    background-color: rgba(253, 255, 136, 0.774);
 }
 .player-active .player-name{
-    color: #c7365f;
+    font-weight: 700;
 }
 .player-active .player-score{
-    color: #c7365f;
+    font-weight: 400;
 }
 .player-active .player-current-box{
     opacity: 1;
 }
 .player-current-box{
-    background-color: #f7f7f7;
+    background-color: #028b3b;
     opacity: 0.8;
-    border-radius: 9px;
-    color:  #8a0303;
+    border-radius: 10px;
+    color:  #d0ff00;
     width: 30rem;
     padding: 2rem;
     text-align: center;
@@ -74,7 +81,7 @@ main{
     text-transform: uppercase;
     font-size: 3rem;
     margin-bottom: 1rem;
-    color: #ff0000;
+    color: #d0ff00;
 }
 .player-current-score{
     font-size: 3.5rem;
@@ -106,7 +113,7 @@ main{
     margin-right: 0.7rem;
 }
 .btn:hover{
-    background-color: rgba(255, 255, 255, 0.856);
+    background-color: #028b3b79;
 }
 .btn--new{
     top: 5rem;
@@ -125,6 +132,7 @@ main{
     outline: none;
 }
 .dice{
+    display: none;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -133,8 +141,6 @@ main{
     width: 10rem;
     border-radius: 9px;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-    background-color: nano;
-    transition: all 0.5s;
 }
 .player-winner{
     background-color: #095ddb;
