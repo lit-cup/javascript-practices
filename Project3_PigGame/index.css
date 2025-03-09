@@ -52,7 +52,7 @@ main{
 .player-score{
     font-size: 7rem;
     font-weight: 200;
-    color: #333;
+    color: #028b3b;
     margin-bottom: auto;
 }
 .player-active{
@@ -142,11 +142,11 @@ main{
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 .player-winner{
-    background-color: #095ddb;
+    background-color: #09db5aaf;
 }
 .player-winner .player-name{
     font-weight: 900;
-    color: #095ddb;
+    color: #028b3b;
 }
 .hidden{
     display: none;
