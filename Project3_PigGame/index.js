@@ -12,16 +12,29 @@ const btnHold = document.querySelector('.btn-hold');
 const player0 = document.querySelector('.player-0');
 const player1 = document.querySelector('.player-1');
 
-current0EL.textContent = 0;
-current1EL.textContent = 0;
-score0EL.textContent = 0;
-score1EL.textContent = 0;
-diceEL.classList.add('hidden');
+let scores, currentScore, activePlayer, playing;
 
-let playing = true;
-const scores = [0, 0];
-let currentScore = 0;
-let activePlayer = 0;
+
+//init game
+const init = function(){
+    
+    scores = [0,0];
+    currentScore = 0;
+    activePlayer = 0;
+    playing = true;
+    
+    player0.classList.remove('player-winner');
+    player1.classList.remove('player-winner');
+    player0.classList.add('player-active');
+    player1.classList.remove('player-active');
+    diceEL.classList.add('hidden');
+
+    current0EL.textContent = 0;
+    current1EL.textContent = 0;
+    score0EL.textContent = 0;
+    score1EL.textContent = 0;
+}
+init();
 
 const switchPlayer = function(){
     document.getElementById(`current-${activePlayer}`).textContent = 0;
@@ -52,7 +65,7 @@ btnHold.addEventListener('click', function(){
         scores[activePlayer]+= currentScore;
         document.getElementById(`score-${activePlayer}`).textContent = scores[activePlayer];
     
-        if(scores[activePlayer]>=20){
+        if(scores[activePlayer]>=100){
             playing = false;
             diceEL.classList.add('hidden');
             document
@@ -66,6 +79,8 @@ btnHold.addEventListener('click', function(){
         }
     }
 });
+
+btnNew.addEventListener('click', init);
 
 // toggle() is a method that:
 // Adds the class if it's not already present
