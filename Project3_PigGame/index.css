@@ -64,10 +64,10 @@ main{
 .player-active .player-score{
     font-weight: 700;
 }
-.player-active .player-current-box{
+.player-active .player-current--box{
     opacity: 1;
 }
-.player-current-box{
+.player-current--box{
     background-color: #028b3b;
     opacity: 0.8;
     border-radius: 10px;
@@ -77,13 +77,13 @@ main{
     text-align: center;
     transition: all 0.75s;
 }
-.player-current-label{
+.player-current--label{
     text-transform: uppercase;
     font-size: 3rem;
     margin-bottom: 1rem;
     color: #d0ff00;
 }
-.player-current-score{
+.player-current--score{
     font-size: 3.5rem;
 }
 .btn{
@@ -115,14 +115,14 @@ main{
 .btn:hover{
     background-color: #028b3b79;
 }
-.btn--new{
+.btn-new{
     top: 5rem;
 } 
-.btn--roll{
-    top: 50rem;
+.btn-roll{
+    top: 45rem;
 }
-.btn--hold{
-    top: 60rem;
+.btn-hold{
+    top: 55rem;
 }
 .btn:active{
     transform: translate(-50%, 0.5rem);
