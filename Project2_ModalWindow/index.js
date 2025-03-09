@@ -11,3 +11,7 @@ for(let i=0; i<btnsOpenModal.length; i++){
         overlay.classList.remove('content');
     });
 }
+btnCloseModal.addEventListener('click', function(){
+    modal.classList.add('content');
+    overlay.classList.add('content');
+});
