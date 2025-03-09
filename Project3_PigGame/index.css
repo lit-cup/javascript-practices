@@ -1,0 +1,145 @@
+html{
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Lato', sans-serif;
+    background-image: #f7f7f7;
+    background-size: cover;
+    color: #333;
+    line-height: 1.6;
+    font-size: 1.6rem;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+main{
+    position: relative;
+    width: 130rem;
+    height: 70rem;
+    background-color: rgba(255, 76, 76, 0.35);
+    backdrop-filter: blur(200px);
+    filter: blur();
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.253);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+}
+.player{
+    display: flex;
+    flex: 50%;
+    padding: 9rem;
+    flex-direction: column;
+    align-items: center;
+    padding: 9rem;
+    transition: all 0.75s;
+    background-color: rgba(167, 15, 15, 0.35);
+}
+.player-name{
+    font-size: 7rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: auto;
+}
+.player-score{
+    font-size: 7rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: auto;
+}
+.plaer-active{
+    background-color: #f7f7f7;
+}
+.player-active .player-name{
+    color: #c7365f;
+}
+.player-active .player-score{
+    color: #c7365f;
+}
+.player-active .player-current-box{
+    opacity: 1;
+}
+.player-current-box{
+    background-color: rgb(251, 255, 0);
+    opacity: 0.8;
+    border-radius: 9px;
+    color:  #8a0303;
+    width: 30rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.75s;
+}
+.player-current-label{
+    text-transform: uppercase;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #ff0000;
+}
+.player-current-score{
+    font-size: 3.5rem;
+}
+.btn{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #444;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 2rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+
+    background-color: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(200px);
+    filter: blur();
+    padding: 1rem 2.5rem;
+    border-radius: 50rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+.btn::first-letter{
+    font-size: 2rem;
+    display: inline-block;
+    margin-right: 0.7rem;
+}
+.btn:hover{
+    background-color: rgba(255, 255, 255, 0.856);
+}
+.btn--new{
+    top: 5rem;
+} 
+.btn--roll{
+    top: 50rem;
+}
+.btn--hold{
+    top: 60rem;
+}
+.btn:active{
+    transform: translate(-50%, 0.5rem);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+.btn:focus{
+    outline: none;
+}
+.dice{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 10rem;
+    width: 10rem;
+    border-radius: 9px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    background-color: nano;
+    transition: all 0.5s;
+}
+.player-winner{
+    background-color: #095ddb;
+}
+.player-winner .player-name{
+    font-weight: 900;
+    color: #095ddb;
+}
