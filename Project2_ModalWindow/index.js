@@ -15,3 +15,7 @@ btnCloseModal.addEventListener('click', function(){
     modal.classList.add('content');
     overlay.classList.add('content');
 });
+overlay.addEventListener('click', function(){
+    modal.classList.add('content');
+    overlay.classList.add('content');
+});
