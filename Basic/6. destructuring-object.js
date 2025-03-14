@@ -1,4 +1,4 @@
-const books = [
+const books = 
     {
       title: 'Algorithms',
       author: ['Robert Sedgewick', 'Kevin Wayne'],
@@ -21,175 +21,63 @@ const books = [
           oneStarRatingCount: 13
         }
       },
-      highlighted: true
-    },
-    {
-      title: 'Structure and Interpretation of Computer Programs',
-      author: ['Harold Abelson', 'Gerald Jay Sussman', 'Julie Sussman (Contributor)'],
-      publisher: 'The MIT Press',
-      publicationDate: '2022-04-12',
-      edition: 2,
-      keywords: ['computer science', 'programming', 'javascript', 'software', 'engineering'],
-      pages: 640,
-      format: 'paperback',
-      ISBN: '9780262543231',
-      language: 'English',
-      programmingLanguage: 'JavaScript',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 4.36,
-          ratingsCount: 14,
-          reviewsCount: 3,
-          fiveStarRatingCount: 8,
-          oneStarRatingCount: 0
-        }
+      highlighted: true,
+      booksdetail: function({
+        publicationDate, edition, keywordsIndex
+      }){
+         console.log(`Book ${this.title} Released ${publicationDate} is ${edition} edittion and ${this.keywords[keywordsIndex]}`);
       },
-      highlighted: true
-    },
-    {
-      title: 'Computer Systems: A Programmer\'s Perspective',
-      author: ['Randal E. Bryant', 'David Richard O\'Hallaron'],
-      publisher: 'Prentice Hall',
-      publicationDate: '2002-01-01',
-      edition: 1,
-      keywords: ['computer science', 'computer systems', 'programming', 'software', 'C', 'engineering'],
-      pages: 978,
-      format: 'hardcover',
-      ISBN: '9780130340740',
-      language: 'English',
-      programmingLanguage: 'C',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 4.44,
-          ratingsCount: 1010,
-          reviewsCount: 57,
-          fiveStarRatingCount: 638,
-          oneStarRatingCount: 16
-        }
-      },
-      highlighted: true
-    },
-    {
-      title: 'Operating System Concepts',
-      author: ['Abraham Silberschatz', 'Peter B. Galvin', 'Greg Gagne'],
-      publisher: 'John Wiley & Sons',
-      publicationDate: '2004-12-14',
-      edition: 10,
-      keywords: ['computer science', 'operating systems', 'programming', 'software', 'C', 'Java', 'engineering'],
-      pages: 921,
-      format: 'hardcover',
-      ISBN: '9780471694663',
-      language: 'English',
-      programmingLanguage: 'C, Java',
-      onlineContent: false,
-      thirdParty: {
-        goodreads: {
-          rating: 3.9,
-          ratingsCount: 2131,
-          reviewsCount: 114,
-          fiveStarRatingCount: 728,
-          oneStarRatingCount: 65
-        }
+      booksdetail2: function({
+        publicationDate ='2011-05-25' , edition, keywordsIndex
+      }){
+         console.log(`Book ${this.title} Released ${publicationDate} is ${edition} edittion and ${this.keywords[keywordsIndex]}`);
       }
-    },
-    {
-      title: 'Engineering Mathematics',
-      author: ['K.A. Stroud', 'Dexter J. Booth'],
-      publisher: 'Palgrave',
-      publicationDate: '2007-01-01',
-      edition: 14,
-      keywords: ['mathematics', 'engineering'],
-      pages: 1288,
-      format: 'paperback',
-      ISBN: '9781403942463',
-      language: 'English',
-      programmingLanguage: null,
-      onlineContent: true,
-      thirdParty: {
-        goodreads: {
-          rating: 4.35,
-          ratingsCount: 370,
-          reviewsCount: 18,
-          fiveStarRatingCount: 211,
-          oneStarRatingCount: 6
-        }
-      },
-      highlighted: true
-    },
-    {
-      title: 'The Personal MBA: Master the Art of Business',
-      author: 'Josh Kaufman',
-      publisher: 'Portfolio',
-      publicationDate: '2010-12-30',
-      keywords: ['business'],
-      pages: 416,
-      format: 'hardcover',
-      ISBN: '9781591843528',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.11,
-          ratingsCount: 40119,
-          reviewsCount: 1351,
-          fiveStarRatingCount: 18033,
-          oneStarRatingCount: 1090
-        }
-      }
-    },
-    {
-      title: 'Crafting Interpreters',
-      author: 'Robert Nystrom',
-      publisher: 'Genever Benning',
-      publicationDate: '2021-07-28',
-      keywords: ['computer science', 'compilers', 'engineering', 'interpreters', 'software', 'engineering'],
-      pages: 865,
-      format: 'paperback',
-      ISBN: '9780990582939',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.7,
-          ratingsCount: 253,
-          reviewsCount: 23,
-          fiveStarRatingCount: 193,
-          oneStarRatingCount: 0
-        }
-      }
-    },
-    {
-      title: 'Deep Work: Rules for Focused Success in a Distracted World',
-      author: 'Cal Newport',
-      publisher: 'Grand Central Publishing',
-      publicationDate: '2016-01-05',
-      edition: 1,
-      keywords: ['work', 'focus', 'personal development', 'business'],
-      pages: 296,
-      format: 'hardcover',
-      ISBN: '9781455586691',
-      language: 'English',
-      thirdParty: {
-        goodreads: {
-          rating: 4.19,
-          ratingsCount: 144584,
-          reviewsCount: 11598,
-          fiveStarRatingCount: 63405,
-          oneStarRatingCount: 1808
-        }
-      },
-      highlighted: true
-    }
-  ];
+    };
+
+
+  //Set reference with desturcture/stucture function
+    books.booksdetail({
+        publicationDate: '2011-05-24',
+        edition: 4,
+        keywordsIndex: 3,
+    }); 
+    //also can set default result if can't destructure
+    books.booksdetail2({
+        edition: 4,
+        keywordsIndex: 2,
+    });
+    //Result publicationDate will be se by reference default varialbe
 
   //how to get value from structure
-  //1.
-  const {title, author, keywords} = books;
-  console.log(title, author, keywords);
-  //2.
-  const {title: booktitle, author: authorName, keywords: words} = books;
-  console.log(booktitle, authorName, words);
+    //1.
+    const {title, author, keywords} = books;
+    console.log(title, author, keywords);
+    //2.
+    const {title: booktitle, author: authorName, keywords: words} = books;
+    console.log(booktitle, authorName, words);
 
-  //3. Can't use without reference elements
-  const {titlebooks = [], keywords: kwords = [] } = books;
-  // titlebooks result will become undefined/ empty array
+    //3. Can't use without reference defined
+    const {titlebooks = [], keywords: kwords = [] } = books;
+    // titlebooks result will become undefined/ empty array
+
+  //Mutating variables
+    let a = 111;
+    let b = 999;
+    const obj = {a: 20, b: 18, c: 23};
+    //(X){a,b}=obj;
+    //(O){ { a,b } = obj };
+
+  //Nested Objects
+    //const {thirdParty} = books <= this get books reference thirdParty object
+    //to get reference book thirdParty elements use below
+    const {
+        thirdParty: {
+            rating, ratingsCount
+        }
+    } = books;
+    //also the same set i, j
+    const {
+        thirdParty: {
+            rating: i, ratingsCount: j
+        }
+    } = books;
