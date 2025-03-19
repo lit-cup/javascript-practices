@@ -79,3 +79,38 @@ console.log(ncCorrect); // 0
 // which mean: 
 // if Nullish value is not null/undefined it will short circuited 
 // if Nullish value is null/undefined it will continue evaluation meet none-nullish value and returned
+
+
+
+// Logical Assignment Operators
+
+const rest1 = {
+    name: 'Shou',
+    numGuests: '20',
+};
+
+const rest2 = {
+    name: 'Chen U',
+    owner: 'Yui',
+};
+
+// OR assignment operator
+// rest1.numGuests = rest1.numGuests || 10;
+// rest2.numGuests = rest2.numGUests || 10;
+// use to checked obj elemet if falsy, 
+// yes keep, 
+// no new and add
+// simple way could write like this
+rest1.numGuests ||= 10;
+rest2.numGuests ||= 10;
+
+// Same as solve 0 sitution use nullish
+// nullish assignment operator (null or undefiend)
+rest1.numGuests ??= 10;  // rest1 obj numGuests equal 0 the output keeping
+rest2.numGuests ??=10; // rest2 obj dosen't have so rest2.numGuests is 10
+
+// AND assignment operator
+// rest1.owner = rest1.owner && 'NOTHING';
+// rest2.owner = rest2.owner && 'NOTHING';
+rest1.owner &&= 'NOTHING';
+rest2.owner &&= 'NOTHING';
