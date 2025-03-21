@@ -61,3 +61,30 @@ console.log(users2[0]?.name ?? 'User Array empty');
 // users2[0]?.name ?? 'User Array empty', logical is like below
 if(users2.length > 0) console.log(users2[0].name);
 else console.log('User array empty');
+
+
+
+// Looping Object: Object key, Values, Entries
+
+// Property NAMES
+const properties = Object.keys(weather);
+console.log(properties); // ['Chiayi', 'Taipei', 'city-3'];
+
+let cityw = `Weather with ${properties.length} citys: `;
+
+for(const city of properties){
+    cityw += `${city},`;
+}
+console.log(cityw);
+
+// Property VALUSE
+const values = Object.values(weather);
+console.log(values);
+
+// Entire object
+const entries = Object.entries(weather);
+
+//Usage [key, value]
+for(const [city, {HOT, Cold}] of entries){
+    console.log(`The ${city} is HOT ${HOT} degress and Cold ${Cold} degress`);
+}
