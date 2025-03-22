@@ -1,7 +1,5 @@
 # Arrays vs Sets vs Object vs Maps
 
-====
-
 # Arrays
 
 ```
