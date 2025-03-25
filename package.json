@@ -1,0 +1,15 @@
+{
+  "name": "javascript-partices",
+  "version": "1.0.0",
+  "description": "1. **[Guess the Number](./Project1_GuessTheNumber/README.md)** ('guess-the-number'): a simple guess number game, player need to guess number between 1 to 20.",
+  "main": "sever.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

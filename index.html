@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto Mono', monospace;
+            background: #0f0f0f;
+            color: #fff;
+        }
+        .main-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 250px;
+            background: #1a1a1a;
+            border-right: 1px solid #333;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .sidebar h3 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: #999;
+        }
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .file-list li {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #ccc;
+        }
+        .file-list li:hover {
+            background: #2d2d2d;
+            color: #fff;
+        }
+        .file-list li.active {
+            background: #333;
+            color: #fff;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+        }
+        .pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #1e1e1e;
+            border-right: 1px solid #333;
+        }
+        .pane:last-child {
+            border-right: none;
+        }
+        .header {
+            background: #2d2d2d;
+            padding: 10px;
+            font-size: 14px;
+            border-bottom: 1px solid #333;
+        }
+        .editor-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        .CodeMirror {
+            height: 100% !important;
+            font-size: 14px;
+            line-height: 18px;
+        }
+        #consoleOutput {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            white-space: pre;
+            font-size: 14px;
+        }
+        #consoleOutput .log { color: #fff; }
+        #consoleOutput .error { color: #ff5555; }
+        #consoleOutput .warn { color: #f1fa8c; }
+        .controls {
+            padding: 10px;
+            background: #2d2d2d;
+            border-top: 1px solid #333;
+        }
+        button {
+            padding: 5px 10px;
+            background: #555;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Sidebar with File List -->
+        <div class="sidebar">
+            <h3>Files</h3>
+            <ul class="file-list" id="fileList"></ul>
+        </div>
+        <!-- Editor and Console -->
+        <div class="content">
+            <!-- JS Editor Pane -->
+            <div class="pane">
+                <div class="header">JavaScript</div>
+                <div class="editor-wrapper">
+                    <textarea id="jsEditor"></textarea>
+                </div>
+                <div class="controls">
+                    <button onclick="runCode()">Run</button>
+                    <button onclick="stepCode()">Step</button>
+                    <button onclick="saveCode()">Save</button>
+                    <button onclick="clearConsole()">Clear Console</button>
+                </div>
+            </div>
+            <!-- Console Pane -->
+            <div class="pane">
+                <div class="header">Console</div>
+                <div id="consoleOutput"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script>
+        let currentLines = [];
+        let currentStep = -1;
+        let currentFilePath = '';
+        const fileList = document.getElementById('fileList');
+        const consoleOutput = document.getElementById('consoleOutput');
+
+        // Initialize CodeMirror
+        const editor = CodeMirror.fromTextArea(document.getElementById('jsEditor'), {
+            mode: 'javascript',
+            theme: 'dracula',
+            lineNumbers: true,
+            lineWrapping: true,
+            tabSize: 2,
+            indentWithTabs: false
+        });
+
+        // Override console methods
+        const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn
+        };
+
+        console.log = function(...args) {
+            consoleOutput.innerHTML += `<div class="log">${args.join(' ')}</div>`;
+            originalConsole.log.apply(console, args);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+
+        console.error = function(...args) {
+            consoleOutput.innerHTML += `<div class="error">${args.join(' ')}</div>`;
+            originalConsole.error.apply(console, args);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+
+        console.warn = function(...args) {
+            consoleOutput.innerHTML += `<div class="warn">${args.join(' ')}</div>`;
+            originalConsole.warn.apply(console, args);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+
+        // Load code into lines
+        function loadCode() {
+            const code = editor.getValue();
+            currentLines = code.trim().split('\n').filter(line => line.trim());
+            currentStep = -1;
+            consoleOutput.innerHTML = '';
+        }
+
+        // Run all code
+        function runCode() {
+            loadCode();
+            try {
+                eval(currentLines.join('\n'));
+            } catch (error) {
+                console.error(`Error: ${error.message}`);
+            }
+        }
+
+        // Step through code
+        function stepCode() {
+            if (currentStep === -1) loadCode();
+            if (currentStep >= currentLines.length - 1) return;
+            currentStep++;
+            try {
+                eval(currentLines[currentStep]);
+                // Highlight current line
+                editor.setSelection(
+                    { line: currentStep, ch: 0 },
+                    { line: currentStep, ch: currentLines[currentStep].length }
+                );
+            } catch (error) {
+                console.error(`Error on line ${currentStep + 1}: ${error.message}`);
+            }
+        }
+
+        // Save code
+        function saveCode() {
+            if (!currentFilePath) {
+                console.error('No file selected to save');
+                return;
+            }
+            fetch('/api/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    filePath: currentFilePath,
+                    content: editor.getValue()
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('File saved successfully');
+                } else {
+                    console.error('Failed to save file');
+                }
+            })
+            .catch(error => console.error(`Error saving file: ${error.message}`));
+        }
+
+        // Clear console
+        function clearConsole() {
+            consoleOutput.innerHTML = '';
+            currentStep = -1;
+        }
+
+        // Load file contents
+        function loadFile(filePath) {
+            fetch(filePath)
+                .then(response => {
+                    if (!response.ok) throw new Error('File not found');
+                    return response.text();
+                })
+                .then(code => {
+                    editor.setValue(code);
+                    currentFilePath = filePath;
+                    // Highlight selected file
+                    document.querySelectorAll('.file-list li').forEach(li => li.classList.remove('active'));
+                    document.querySelector(`.file-list li[data-path="${filePath}"]`).classList.add('active');
+                })
+                .catch(error => {
+                    console.error(`Error loading file: ${error.message}`);
+                    editor.setValue('// Could not load file\nconsole.error("Error: ' + error.message + '");');
+                });
+        }
+
+        // Fetch the list of files dynamically
+        fetch('/api/files')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to fetch file list');
+                return response.json();
+            })
+            .then(files => {
+                // Sort files alphabetically
+                files.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+
+                // Populate file list
+                files.forEach(filePath => {
+                    const li = document.createElement('li');
+                    li.textContent = filePath.split('/').pop();
+                    li.dataset.path = filePath;
+                    li.addEventListener('click', () => loadFile(filePath));
+                    fileList.appendChild(li);
+                });
+
+                // Load the first file by default
+                if (files.length > 0) {
+                    loadFile(files[0]);
+                }
+            })
+            .catch(error => {
+                console.error(`Error fetching file list: ${error.message}`);
+                fileList.innerHTML = '<li>Error loading files</li>';
+            });
+    </script>
+</body>
+</html>
