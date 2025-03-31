@@ -15,6 +15,10 @@ const weather = {
         Cold: 17,
         HOT: 21,
     },
+     [twcity[2]]: {
+        Cold: 17,
+        HOT: 21,
+    },
 };
 
 
