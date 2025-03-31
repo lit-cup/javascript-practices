@@ -11,11 +11,11 @@ app.use(express.static('.'));
 // Endpoint to list JS files in the folder
 app.get('/api/files', async (req, res) => {
     try {
-        const folderPath = path.join(__dirname, '../Basic/DataStructuresOperatorString');
+        const folderPath = path.join(__dirname, 'Basic/DataStructuresOperatorsString');
         const files = await fs.readdir(folderPath);
         const jsFiles = files
             .filter(file => file.endsWith('.js'))
-            .map(file => `../Basic/DataStructuresOperatorString/${file}`);
+            .map(file => `Basic/DataStructuresOperatorsString/${file}`);
         res.json(jsFiles);
     } catch (error) {
         res.status(500).json({ error: 'Failed to list files' });
