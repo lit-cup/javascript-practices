@@ -1,7 +1,7 @@
-{
-    username: "John",
-    password: "123"
-}
+// {
+//     username: "John",
+//     password: "123"
+// }
 
 var datebase = [
     {
