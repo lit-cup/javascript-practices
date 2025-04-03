@@ -7,7 +7,7 @@ const runOnce = function () {
     console.log('This will run once!');
 }
 
-    // but if we want to run like functio() 
+    // but if we want to run like function() 
     // we should use IIFE
     (function () {
         console.log('This will run once!');
