@@ -61,11 +61,11 @@ checkIn(flight, chen); // LH123 Mr. Chen Wrong passport!
 
 // EXAMPLE:
 // ** Store function in variable/ properties:
-const add = ( a , b ) => a + b; // function expression
+const add = (a, b) => a + b; // function expression
 const counter = {
     variable: 23,
-    inc: function(){ this.variable++;}
-} 
+    inc: function () { this.variable++; }
+}
 // ** Pass function as argument to OTHER function:
 const greet = () => console.log('Hello!');
 btnClose.addEventListener('click', greet); // addEventListener is a function that takes a function as an argument
@@ -83,18 +83,18 @@ counter.inc().bind(someOtherObject); // call bind method on inc function in coun
 
 //EXAMPLE:
 // ** Function that receives another function as an argument:
-    const greet2 = () => console.log('Hello!');
-    btnClose.addEventListener('click', greet2);
-    // addEventListener is a Higher-order function
-    // greet2 is a callback function
+const greet2 = () => console.log('Hello!');
+btnClose.addEventListener('click', greet2);
+// addEventListener is a Higher-order function
+// greet2 is a callback function
 
 // ** Function that returns new function:
-    function count(){
-        let counter = 0;
-        return function(){counter++;}
-    }
-    // count() is a higher-order function
-    // function() is a callback function
+function count() {
+    let counter = 0;
+    return function () { counter++; }
+}
+// count() is a higher-order function
+// function() is a callback function
 
 
 // Why we need first-class functions?
@@ -126,3 +126,75 @@ console.log(greet("Alice")); // Hello, Alice!
 console.log(greet("Bob"));   // Hello, Bob!
 
 
+
+// Case 4 [ Callback functions ]
+// * Function Accepting Callback Functions
+// * 1 Steps by steps of a callback function passing
+
+
+
+// example of callback function email smallfirstword and oneWord checking
+const userName = function (str) {
+    const first = str.split('@')[0]; // split the string by @ and take the first part
+    return first.toLowerCase();
+}
+const smallFirstWord = function (str) {
+    const [first, ...others] = str.split('@');
+    return [first.toLowerCase(), ...others].join('@');
+}
+
+// Higher-order function:
+const transformer = function (str, fn) {
+    console.log(`Original string: ${str}`);
+    console.log(`Transformed string: ${fn(str)}`); // abstracting fn to upperfirstword or oneWord other level function
+    console.log(`Transformed by: ${fn.name}`);
+}
+
+// Original string: JavaScript is the best! 
+// Transformed string: JavaScript is the best! 
+// Transformed by: upperFirstWord
+transformer('SPU76611@gmail.com', smallFirstWord);  // calling functions later from line 142
+
+// Original string: JavaScript is the best! 
+// Transformed string: javascriptisthebest! 
+// Transformed by: oneWord
+transformer('spu76611@gmail.com', userName);
+
+
+// * 2 Javascript uses callbacks all the time
+// Why: 
+// 1. callback functions that makes it easy to split up or code into more reusable and interconnected parts
+// 2. Allow us to create abstraction
+// * Abstraction: 
+// That we hide the detail of some code implementation because we don't really care about all that detail.
+// And this allows us to think about problems at a higher more abstract level.
+
+const high5 = function () {
+    console.log('👋');
+}
+
+// high5 is a callback function
+// addEventListener is a higher-order function
+document.body.addEventListener('click', high5);
+['Jonas', 'Martha', 'Adam'].forEach(high5);
+
+
+// Case 5 [ Functions returning functions ]
+// * Function returning function is a higher-order function
+
+
+// Example 1
+const greet = function (greeting) { // greet()
+    return function (name) { // greeterHey()
+        console.log(`${greeting} ${name}`);
+    }
+}
+const greeterHey = greet('Hey'); // greeterHey is a function that returns a function
+greeterHey('Chen'); // Hey Jonas
+
+greet('Hello')('Chen'); // Hello Chen
+
+// Arr Function Challenge
+const greetArr = greeting => name => console.log(`${greeting} ${name}`); // arrow function
+
+greetArr('Hello')('Chen'); // Hello Chen
