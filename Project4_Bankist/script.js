@@ -114,22 +114,44 @@ const createUsernames = function (accs) { // Map method application
 };
 createUsernames(accounts);
 
+const calcDisplayBalance = function (transactions) {
+    const balance = transactions.reduce((acc, cur) => acc + cur, 0);
+    labelBalance.textContent = `${balance}$`;
+}
+calcDisplayBalance(account1.movements);
+
+
 // The Filter method for fliter mov > 0 then it is deposit
-const deposits = account1.movements.filter(trans => trans > 0);
-// console.log(account1.movements);
-// console.log(deposits);
+// const deposits = account1.movements.filter(trans => trans > 0);
 
 // Is Like for of method
 // const depositForOf = [];
 // for (const tran of account1.movements) if (tran > 0) depositForOf.push(tran);
-// console.log(depositForOf);
 
 // The Filter method for fliter mov < 0 then it is withdrawals
-const withdrawals = account1.movements.filter(trans => trans < 0);
-// console.log(account1.movements);
-// console.log(withdrawals);
+// const withdrawals = account1.movements.filter(trans => trans < 0);
 
 // Is Like this for of method
 // const withdrawalsForOf = [];
 // for (const tran of account1.movements) if (tran < 0) withdrawalsForOf.push(tran);
-// console.log(withdrawalsForOf);
+
+
+// The Reduce method:
+// accumulator
+// const balance = account1.movements.reduce(
+//     function (acc, cur, i, arr) {
+//         console.log(`Iteration ${i}: ${acc}`);
+//         return acc + cur
+//     }, 0); // 0 is the started add value
+
+// Arrow function version
+// const balance = account1.movements.reduce(acc, cur => acc + cur, 0);
+
+// for of version
+// let balance2 = 0
+// for(const tran of account1.movements) balance2 += tran;
+
+// Find Maximum value
+// movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+// const max = account1.movements.reduce((acc, tran) => acc > tran ? acc : tran, account1.movements[0]);
+// console.log(max);
