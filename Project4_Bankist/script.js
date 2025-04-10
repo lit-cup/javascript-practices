@@ -100,3 +100,16 @@ displayTransactions(account1.movements);
 // const transactionsDescriptions = account1.movements.map((mov, i) => `
 //         Transatoion ${i + 1}: You ${mov > 0 ? 'DESPOSIT' : 'WITHDRAWAL'} ${Math.abs(mov)}
 // `);
+
+const createUsernames = function (accs) { // Map method application
+    // create Username for each accounts
+    accs.forEach(
+        acc =>
+            acc.username =
+            acc.owner
+                .toLowerCase()
+                .split(' ')
+                .map(name => name[0])
+                .join(''));
+};
+createUsernames(accounts);
