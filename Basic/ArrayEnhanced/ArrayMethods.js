@@ -9,9 +9,19 @@ console.log([...arr]); // ['a', 'b', 'c', 'd', 'e']
 ////////////////////////////////////////////////////////////////////
 
 // Splice method 
+// remove from start index, and deletCount element then insert items
+// Syntax:
+// splice(start)
+// splice(start, deleteCount)
+// splice(start, deleteCount, item1)
+// splice(start, deleteCount, item1, item2)
+// splice(start, deleteCount, item1, item2, /* …, */ itemN)
+
+
+
 // extracted from original array
-arr.splice(1, 2);   // ['b', 'c'] arr = ['a', 'd', 'e']
-arr.splice(1, 2, 'x', 'y'); // ['b', 'c', 'x', 'y']
+arr.splice(1, 2);   // ['b', 'c'] arr = ['a', 'd', 'e'] remove 2 element [b, c] at index 1
+arr.splice(1, 2, 'x', 'y'); // remove 2 elements at index 1 and insert x, y ['a', 'x', 'y', 'd', 'e']
 // To remove element 
 arr.splice(-1);   // ['a', 'b', 'c', 'd'] arr = ['a', 'b', 'c']
 
