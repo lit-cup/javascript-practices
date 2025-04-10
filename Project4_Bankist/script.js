@@ -68,7 +68,7 @@ const displayTransactions = function (transactions) {
             </li>
         `
         containerTransactions.insertAdjacentHTML("afterbegin", html);
-        // insertAdjacentHTML()
+        // insertAdjacentHTML(){
         //      <!-- beforebegin -->
         // <p>
         //      <!-- afterbegin -->
@@ -76,7 +76,27 @@ const displayTransactions = function (transactions) {
         //      <!-- beforeend -->
         // </p>
         //      <!-- afterend -->
+        //}
 
     });
 }
 displayTransactions(account1.movements);
+
+// The map method
+// return array and operator all element
+
+// const twdToUsd = 0.03;
+// const transactionsUSD = account1.movements.map(function (trans) {
+//     return trans * eurToUsd;
+// });
+// Arrow function
+// const transactionsUSD = account1.movements.map(trans => trans * earToUsd);
+
+// for of method
+// const movementsUSDfor = [];
+// for (const tran of transactions) movementsUSDfor.push(tran * twdToUsd);
+
+// Map method with transate Ueser usage
+// const transactionsDescriptions = account1.movements.map((mov, i) => `
+//         Transatoion ${i + 1}: You ${mov > 0 ? 'DESPOSIT' : 'WITHDRAWAL'} ${Math.abs(mov)}
+// `);
