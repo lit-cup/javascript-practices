@@ -59,7 +59,7 @@ const inputClosePin = document.getElementById('confirm-btn');
 const displayTransactions = function (transactions) {
     containerTransactions.innerHTML = '';
     transactions.forEach(function (mov, i) {
-        const type = mov > 0 ? 'DESPOSIT' : 'WITHDRAWAL';
+        const type = mov > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
         const html = `
             <li class="transaction-item" id="transaction-item">
                 <div class="transaction-item-type transaction-item-${type}">${i + 1} ${type}</div>
@@ -113,3 +113,23 @@ const createUsernames = function (accs) { // Map method application
                 .join(''));
 };
 createUsernames(accounts);
+
+// The Filter method for fliter mov > 0 then it is deposit
+const deposits = account1.movements.filter(trans => trans > 0);
+// console.log(account1.movements);
+// console.log(deposits);
+
+// Is Like for of method
+// const depositForOf = [];
+// for (const tran of account1.movements) if (tran > 0) depositForOf.push(tran);
+// console.log(depositForOf);
+
+// The Filter method for fliter mov < 0 then it is withdrawals
+const withdrawals = account1.movements.filter(trans => trans < 0);
+// console.log(account1.movements);
+// console.log(withdrawals);
+
+// Is Like this for of method
+// const withdrawalsForOf = [];
+// for (const tran of account1.movements) if (tran < 0) withdrawalsForOf.push(tran);
+// console.log(withdrawalsForOf);
