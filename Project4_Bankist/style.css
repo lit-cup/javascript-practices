@@ -73,6 +73,8 @@ body {
     justify-content: center;
     height: 90vh;
     width: 80%;
+    /* Control main-content fade in/out */
+    /* opacity: 0; */
 }
 
 .balance-content {
@@ -136,6 +138,7 @@ body {
     grid-row: span 3;
     padding: 0;
     margin: 0;
+    overflow-y: scroll;
 }
 
 .transaction-item {
@@ -143,27 +146,38 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     padding: 1rem;
     border-bottom: 5px solid #e2e2e2;
 }
 
 .transaction-item-type {
-    width: 20%;
-    padding: 0.5rem;
+    width: fit-content;
+    padding: 0.2rem 0.5rem;
+    font-weight: 500;
     text-align: center;
+    color: rgb(0, 0, 0);
     border-radius: 10px;
-    background-color: #03cf2f;
+}
+
+.transaction-item-DESPOSIT {
+    background: linear-gradient(to left top, #64db78, greenyellow);
+}
+
+.transaction-item-WITHDRAWAL {
+    background: linear-gradient(to left top, rgb(197, 65, 65), rgb(253, 97, 69));
 }
 
 .transaction-item-date {
     width: 15%;
     font-size: 0.8rem;
+    font-weight: 500;
     padding: 0.5rem 0rem 0.5rem 0.5rem;
     text-align: start;
 }
 
 .transaction-item-amount {
-    width: 55%;
+    width: 60%;
     font-size: 1.5rem;
     padding: 0.5rem 0rem 0.5rem 0.5rem;
     text-align: end;
@@ -331,15 +345,15 @@ body {
     margin-right: 1rem;
 }
 
-.sort {
-    background-color: #ff4f4f;
-    color: white;
+.sort-btn {
+    background-color: #cf0303;
+    color: rgb(255, 255, 255);
     border: none;
     border-radius: 10px;
     height: 2.5rem;
     padding: 0 1rem;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 900;
     cursor: pointer;
 }
 
