@@ -82,25 +82,6 @@ const displayTransactions = function (transactions) {
 }
 displayTransactions(account1.movements);
 
-// The map method
-// return array and operator all element
-
-// const twdToUsd = 0.03;
-// const transactionsUSD = account1.movements.map(function (trans) {
-//     return trans * eurToUsd;
-// });
-// Arrow function
-// const transactionsUSD = account1.movements.map(trans => trans * earToUsd);
-
-// for of method
-// const movementsUSDfor = [];
-// for (const tran of transactions) movementsUSDfor.push(tran * twdToUsd);
-
-// Map method with transate Ueser usage
-// const transactionsDescriptions = account1.movements.map((mov, i) => `
-//         Transatoion ${i + 1}: You ${mov > 0 ? 'DESPOSIT' : 'WITHDRAWAL'} ${Math.abs(mov)}
-// `);
-
 const createUsernames = function (accs) { // Map method application
     // create Username for each accounts
     accs.forEach(
@@ -114,44 +95,95 @@ const createUsernames = function (accs) { // Map method application
 };
 createUsernames(accounts);
 
+const calcDisplaySummary = function (transactions) {
+    const incomes = transactions
+        .filter(mov => mov > 0)
+        .reduce((pre, curr) => (pre + curr), 0);
+    labelSumIn.textContent = `${incomes}$`;
+
+    const outcomes = transactions
+        .filter(mov => mov < 0)
+        .reduce((pre, curr) => (pre + curr), 0);
+    labelSumOut.textContent = `${Math.abs(outcomes)}$`;
+
+    const interest = transactions
+        .filter(mov => mov > 0)
+        .map(deposit => (deposit * 1.2) / 100)
+        .filter(money => money >= 1)
+        .reduce((pre, curr) => pre + curr, 0);
+    labelSumInterest.textContent = `${interest}$`;
+}
+calcDisplaySummary(account1.movements);
+
 const calcDisplayBalance = function (transactions) {
     const balance = transactions.reduce((acc, cur) => acc + cur, 0);
     labelBalance.textContent = `${balance}$`;
 }
 calcDisplayBalance(account1.movements);
 
+/* PIPELINE
+const twdToUsd = 0.03;
 
-// The Filter method for fliter mov > 0 then it is deposit
-// const deposits = account1.movements.filter(trans => trans > 0);
+const totalDepositsUSD = account1.movements
+    .filter(tran => tran > 0)
+    .map(tran => tran * twdToUsd)
+    .reduce((pre, curr) => pre + curr, 0);
+*/
 
-// Is Like for of method
-// const depositForOf = [];
-// for (const tran of account1.movements) if (tran > 0) depositForOf.push(tran);
+/* The Filter method
 
-// The Filter method for fliter mov < 0 then it is withdrawals
-// const withdrawals = account1.movements.filter(trans => trans < 0);
+    The Filter method for fliter mov > 0 then it is deposit
+    const deposits = account1.movements.filter(trans => trans > 0);
 
-// Is Like this for of method
-// const withdrawalsForOf = [];
-// for (const tran of account1.movements) if (tran < 0) withdrawalsForOf.push(tran);
+    Is Like for of method
+    const depositForOf = [];
+    for (const tran of account1.movements) if (tran > 0) depositForOf.push(tran);
 
+    The Filter method for fliter mov < 0 then it is withdrawals
+    const withdrawals = account1.movements.filter(trans => trans < 0);
 
-// The Reduce method:
-// accumulator
-// const balance = account1.movements.reduce(
-//     function (acc, cur, i, arr) {
-//         console.log(`Iteration ${i}: ${acc}`);
-//         return acc + cur
-//     }, 0); // 0 is the started add value
+    Is Like this for of method
+    const withdrawalsForOf = [];
+    for (const tran of account1.movements) if (tran < 0) withdrawalsForOf.push(tran);
+*/
 
-// Arrow function version
-// const balance = account1.movements.reduce(acc, cur => acc + cur, 0);
+/* The Reduce method
+    accumulator
+    const balance = account1.movements.reduce(
+        function (acc, cur, i, arr) {
+            console.log(`Iteration ${i}: ${acc}`);
+            return acc + cur
+        }, 0); // 0 is the started add value
 
-// for of version
-// let balance2 = 0
-// for(const tran of account1.movements) balance2 += tran;
+    Arrow function version
+    const balance = account1.movements.reduce(acc, cur => acc + cur, 0);
 
-// Find Maximum value
-// movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
-// const max = account1.movements.reduce((acc, tran) => acc > tran ? acc : tran, account1.movements[0]);
-// console.log(max);
+    for of version
+    let balance2 = 0
+    for(const tran of account1.movements) balance2 += tran;
+
+    Find Maximum value
+    movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+    const max = account1.movements.reduce((acc, tran) => acc > tran ? acc : tran, account1.movements[0]);
+    console.log(max);
+*/
+
+/* The map method
+    return array and operator all element
+
+    const twdToUsd = 0.03;
+    const transactionsUSD = account1.movements.map(function (trans) {
+        return trans * eurToUsd;
+    });
+    Arrow function
+    const transactionsUSD = account1.movements.map(trans => trans * earToUsd);
+
+    for of method
+    const movementsUSDfor = [];
+    for (const tran of transactions) movementsUSDfor.push(tran * twdToUsd);
+
+    Map method with transate Ueser usage
+    const transactionsDescriptions = account1.movements.map((mov, i) => `
+            Transatoion ${i + 1}: You ${mov > 0 ? 'DESPOSIT' : 'WITHDRAWAL'} ${Math.abs(mov)}
+    `);
+*/
