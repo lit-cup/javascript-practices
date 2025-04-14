@@ -55,9 +55,10 @@ const inputLoanAmount = document.getElementById('loan-amount');
 const inputCloseUsername = document.getElementById('confirm-User');
 const inputClosePin = document.getElementById('confirm-btn');
 
-// Login Event handler
+
 let currentAccount;
 
+// Login Event handler
 btnLogin.addEventListener('click', function (e) {
     e.preventDefault(); // keyboard Enter dector
     // find()
@@ -72,15 +73,42 @@ btnLogin.addEventListener('click', function (e) {
         inputLoginUsername.value = inputLoginPin.value = '';
         inputLoginPin.blur();
 
-        // Display Transactions
-        displayTransactions(currentAccount.movements);
-        // Display Summary
-        calcDisplaySummary(currentAccount);
-        // Display Balance
-        calcDisplayBalance(currentAccount.movements);
+        // UI Update
+        updateUI(currentAccount)
     }
 });
 
+// TrasferTo Event handler
+btnTransfer.addEventListener('click', function (e) {
+    e.preventDefault();
+    const amount = Number(inputTransferAmount.value);
+    const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
+
+    // Clear input field
+    inputTransferAmount.value = inputTransferTo.value = '';
+
+    // Check if enough money...
+    if (amount > 0 &&
+        receiverAcc &&
+        currentAccount.balance >= amount &&
+        receiverAcc?.username !== currentAccount.username) {
+        // TranferTo
+        currentAccount.movements.push(-amount);
+        receiverAcc.movements.push(amount);
+        // UI Update
+        updateUI(currentAccount);
+    }
+});
+
+// updateUI handler
+const updateUI = function (account) {
+    // Display Transactions
+    displayTransactions(account.movements);
+    // Display Summary
+    calcDisplaySummary(account);
+    // Display Balance
+    calcDisplayBalance(account);
+}
 
 const displayTransactions = function (transactions) {
     containerTransactions.innerHTML = '';
@@ -139,9 +167,9 @@ const calcDisplaySummary = function (account) {
     labelSumInterest.textContent = `${interest}$`;
 }
 
-const calcDisplayBalance = function (transactions) {
-    const balance = transactions.reduce((acc, cur) => acc + cur, 0);
-    labelBalance.textContent = `${balance}$`;
+const calcDisplayBalance = function (account) {
+    account.balance = account.movements.reduce((acc, cur) => acc + cur, 0);
+    labelBalance.textContent = `${account.balance}$`;
 }
 
 
