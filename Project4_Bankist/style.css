@@ -201,6 +201,10 @@ body {
 
 .transf-money input {
     background-color: #ffeea1;
+    width: 140px;
+    margin-right: 10px;
+    font-size: 1.5rem;
+    text-align: center;
 }
 
 .transfer-btn {
@@ -227,6 +231,10 @@ body {
 
 .req-loan input {
     background-color: #d8ffdf;
+    width: 140px;
+    margin-right: 10px;
+    font-size: 1.5rem;
+    text-align: center;
 }
 
 .loan-btn {
@@ -253,6 +261,10 @@ body {
 
 .close-account input {
     background-color: #fcd9d9;
+    width: 140px;
+    margin-right: 10px;
+    font-size: 1.5rem;
+    text-align: center;
 }
 
 .confirm-btn {
