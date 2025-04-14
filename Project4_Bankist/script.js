@@ -55,6 +55,32 @@ const inputLoanAmount = document.getElementById('loan-amount');
 const inputCloseUsername = document.getElementById('confirm-User');
 const inputClosePin = document.getElementById('confirm-btn');
 
+// Login Event handler
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+    e.preventDefault(); // keyboard Enter dector
+    // find()
+    currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
+    // ?. to handle if currentAccount is undefind
+    if (currentAccount?.pin === Number(inputLoginPin.value)) {
+        // Display UI and message
+        labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+        containerApp.style.opacity = 100;
+
+        // Clear input fields
+        inputLoginUsername.value = inputLoginPin.value = '';
+        inputLoginPin.blur();
+
+        // Display Transactions
+        displayTransactions(currentAccount.movements);
+        // Display Summary
+        calcDisplaySummary(currentAccount);
+        // Display Balance
+        calcDisplayBalance(currentAccount.movements);
+    }
+});
+
 
 const displayTransactions = function (transactions) {
     containerTransactions.innerHTML = '';
@@ -80,7 +106,6 @@ const displayTransactions = function (transactions) {
 
     });
 }
-displayTransactions(account1.movements);
 
 const createUsernames = function (accs) { // Map method application
     // create Username for each accounts
@@ -95,31 +120,30 @@ const createUsernames = function (accs) { // Map method application
 };
 createUsernames(accounts);
 
-const calcDisplaySummary = function (transactions) {
-    const incomes = transactions
+const calcDisplaySummary = function (account) {
+    const incomes = account.movements
         .filter(mov => mov > 0)
         .reduce((pre, curr) => (pre + curr), 0);
     labelSumIn.textContent = `${incomes}$`;
 
-    const outcomes = transactions
+    const outcomes = account.movements
         .filter(mov => mov < 0)
         .reduce((pre, curr) => (pre + curr), 0);
     labelSumOut.textContent = `${Math.abs(outcomes)}$`;
 
-    const interest = transactions
+    const interest = account.movements
         .filter(mov => mov > 0)
-        .map(deposit => (deposit * 1.2) / 100)
+        .map(deposit => (deposit * account.interestRate) / 100)
         .filter(money => money >= 1)
         .reduce((pre, curr) => pre + curr, 0);
     labelSumInterest.textContent = `${interest}$`;
 }
-calcDisplaySummary(account1.movements);
 
 const calcDisplayBalance = function (transactions) {
     const balance = transactions.reduce((acc, cur) => acc + cur, 0);
     labelBalance.textContent = `${balance}$`;
 }
-calcDisplayBalance(account1.movements);
+
 
 /* PIPELINE
 const twdToUsd = 0.03;
@@ -169,6 +193,7 @@ const totalDepositsUSD = account1.movements
 */
 
 /* The map method
+
     return array and operator all element
 
     const twdToUsd = 0.03;
@@ -186,4 +211,10 @@ const totalDepositsUSD = account1.movements
     const transactionsDescriptions = account1.movements.map((mov, i) => `
             Transatoion ${i + 1}: You ${mov > 0 ? 'DESPOSIT' : 'WITHDRAWAL'} ${Math.abs(mov)}
     `);
+*/
+
+/*  The find Method
+    const first Withdrawal = movements.find(mov => mov<0);
+ 
+    const account =accounts.find(acc => acc.owner === 'Jessica Davis')
 */
