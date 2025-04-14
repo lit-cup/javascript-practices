@@ -49,11 +49,12 @@ body {
 }
 
 .login-form input {
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     border: 2px solid #ff4f4f;
     border-radius: 10px;
     width: 80px;
     height: 1.5rem;
+    text-align: start;
 }
 
 .login-btn {
