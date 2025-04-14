@@ -53,7 +53,7 @@ const inputTransferTo = document.getElementById('transfer-to');
 const inputTransferAmount = document.getElementById('transfer-amount');
 const inputLoanAmount = document.getElementById('loan-amount');
 const inputCloseUsername = document.getElementById('confirm-User');
-const inputClosePin = document.getElementById('confirm-btn');
+const inputClosePin = document.getElementById('confirm-Pin');
 
 
 let currentAccount;
@@ -98,6 +98,26 @@ btnTransfer.addEventListener('click', function (e) {
         // UI Update
         updateUI(currentAccount);
     }
+});
+
+// Closs Acount Event Handler
+btnClose.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (currentAccount.username === inputCloseUsername.value &&
+        currentAccount.pin === Number(inputClosePin.value)
+    ) {
+        // like indexof()
+        const indexed = accounts.findIndex(account => account.username === currentAccount.username)
+
+        // Delete account
+        accounts.splice(indexed, 1);
+
+        // Hide UI
+        labelWelcome.textContent = `Log in to get started`
+        containerApp.style.opacity = 0;
+    }
+    // Clear input field
+    inputCloseUsername.value = inputClosePin.value = '';
 });
 
 // updateUI handler
