@@ -100,6 +100,20 @@ btnTransfer.addEventListener('click', function (e) {
     }
 });
 
+// Loan Event handler
+btnLoan.addEventListener('click', function (e) {
+    e.preventDefault();
+    const amount = Number(inputLoanAmount.value);
+    if (amount > 0 && currentAccount.movements.some(move => move >= amount * 0.1)) {
+        // add transations
+        currentAccount.movements.push(amount)
+
+        //UI update
+        updateUI(currentAccount);
+        inputLoanAmount.value = '';
+    }
+});
+
 // Closs Acount Event Handler
 btnClose.addEventListener('click', function (e) {
     e.preventDefault();
@@ -266,3 +280,34 @@ const totalDepositsUSD = account1.movements
  
     const account =accounts.find(acc => acc.owner === 'Jessica Davis')
 */
+
+/* The findLast method
+        movements: [200, 450, -400, 3000, -650, -130, 70, 1300]
+        const lastWithdrawal = movements.findLast(mov => mov<0); // -130
+        
+    The findLastIndex method
+        const lastesLargeMovementIndex = movements.findLastIndex(mov => Math.abs(mov)>1000)
+        console.log(lastesLargeMovementIndex) // <2000 is 3000 is index 3
+
+    console.log(`Your latest large movement was ${movements.length - latestLargeMovementIndex} movements ago`)
+ */
+
+/* The some() method // CONDITION
+    includes() could check if value is availalbe // EQUALITY
+    
+    some() could check ranage of value like this:
+    // if have bigger than 1500 element. 
+    // in this case it is ture 
+    // because movements array have 3000 which bigger than 15000
+    const anyDeposits = movements.some(mov => mov > 1500)  // true
+    
+    // EVERY method to check every condition
+    movements.every(mov=>mov>0); // false
+    account4.movements.every(mov => mov >0); true
+
+    // Separate callback
+    const deposit = mov => mov > 0;
+    movements.some(deposit);
+    movements.every(deposit);
+    movements.filiter(deposit);
+ */
