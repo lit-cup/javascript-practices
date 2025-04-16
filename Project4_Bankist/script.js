@@ -311,3 +311,28 @@ const totalDepositsUSD = account1.movements
     movements.every(deposit);
     movements.filiter(deposit);
  */
+
+/*  flat() method
+    const arr = [[1,2,3],[4,5,6],7, 8]
+    arr.flat() // [1,2,3,4,5,6,7,8]
+
+    const arrDeep = [[1,2],3],[4,[5,6],7,8]
+    arrDeep.flat(1) // [[1,2],3,4,[5,6],7,8]
+    arrDeep.flat(2) // [1,2,3,4,5,6,7,8]
+
+    // usage
+    const accountMove = accounts.map(acc => acc.movements);
+    const allMove = accountMovements.flat() conbine all movements
+    const overalBaleance = allMove.reduce((acc,move) => acc+mov,0);
+
+    // flat() method Chaing
+    const overalBalance = accounts
+        .map(acc => acc.movements)  // find accounts movements
+        .flat()                     // combine together
+        .reduce((acc,move)=>acc+mov,0) // Add together
+    
+    // flatMap()
+    const overalBalance2 = accounts
+        .flatMap(acc=> acc.movements)
+        .reduce((acc,mov)=> acc+mov,0)
+ */
