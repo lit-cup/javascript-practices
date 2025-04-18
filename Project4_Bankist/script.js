@@ -134,6 +134,16 @@ btnClose.addEventListener('click', function (e) {
     inputCloseUsername.value = inputClosePin.value = '';
 });
 
+// Sort Event Handler
+// method for false true change
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+    e.preventDefault();
+    displayTransactions(currentAccount.movements, !sorted);
+    sorted = !sorted;
+});
+
+
 // updateUI handler
 const updateUI = function (account) {
     // Display Transactions
@@ -144,9 +154,13 @@ const updateUI = function (account) {
     calcDisplayBalance(account);
 }
 
-const displayTransactions = function (transactions) {
+const displayTransactions = function (transactions, sort = false) {
+
     containerTransactions.innerHTML = '';
-    transactions.forEach(function (mov, i) {
+
+    const trans = sort ? transactions.slice().sort((a, b) => a - b) : transactions;
+
+    trans.forEach(function (mov, i) {
         const type = mov > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
         const html = `
             <li class="transaction-item" id="transaction-item">
@@ -335,4 +349,35 @@ const totalDepositsUSD = account1.movements
     const overalBalance2 = accounts
         .flatMap(acc=> acc.movements)
         .reduce((acc,mov)=> acc+mov,0)
+ */
+
+/* The sort method
+    // sort first String
+        const owners = ['Jonas','Zach','Adam','Martha']
+        owners.sort() // A-Z ['Adam', 'Jonas', 'Martha', 'Zach']
+
+    // sort Numbers
+
+        // Ascending
+            // movements.sort((a,b))=>{
+                
+            //     // return > 0, A, B (switch order)
+            //     if (a>b) return 1;
+                
+            //     // return < 0, A, B (keep order)
+            //     if(a<b) return -1;
+            // });
+        // more Simple way
+        movements.sort((a,b)=> a-b);
+
+            // Descending
+            // movements.sort((a,b))=>{
+            //     // return > 0, A, B (switch order)
+            //     if (a>b) return 1;
+            //     // return < 0, A, B (keep order)
+            //     if(a<b) return -1;    
+            // });
+
+        // more Simple way
+        movements.sort((a,b)=> b-a);
  */
