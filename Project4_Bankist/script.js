@@ -373,9 +373,9 @@ const totalDepositsUSD = account1.movements
             // Descending
             // movements.sort((a,b))=>{
             //     // return > 0, A, B (switch order)
-            //     if (a>b) return 1;
+            //     if (a>b) return -1;
             //     // return < 0, A, B (keep order)
-            //     if(a<b) return -1;    
+            //     if(a<b) return 1;    
             // });
 
         // more Simple way
