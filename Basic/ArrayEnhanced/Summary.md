@@ -1,4 +1,4 @@
-# Array Method Summary
+# Array Method Enhanced Summary
 
 This document note decide which array method to use depending on whether you want to used about array method.
 
