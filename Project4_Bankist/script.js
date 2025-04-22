@@ -104,12 +104,19 @@ const displayTransactions = function (acc, sort = false) {
 
     containerTransactions.innerHTML = '';
 
-    const trans = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
+    const combineMovsDates = acc.movements.map((mov, i) => ({
+        movement: mov,
+        movementDate: acc.movementsDates.at(i),
+    }));
 
-    trans.forEach(function (mov, i) {
-        const type = mov > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
+    if (sort) combineMovsDates.sort((a, b) => a.movement - b.movement);
+    // const trans = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
 
-        const date = new Date(acc.movementsDates[i]);
+    combineMovsDates.forEach(function (obj, i) {
+        const { movement, movementDate } = obj;
+        const type = movement > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
+
+        const date = new Date(movementDate);
         const day = `${date.getDate()}`.padStart(2, 0);
         const month = `${date.getMonth() + 1}`.padStart(2, 0);
         const year = date.getFullYear();
@@ -119,7 +126,7 @@ const displayTransactions = function (acc, sort = false) {
             <li class="transaction-item" id="transaction-item">
                 <div class="transaction-item-type transaction-item-${type}">${i + 1} ${type}</div>
                 <div class="transaction-item-date">${displayDate}</div>
-                <div class="transaction-item-amount">${mov.toFixed(2)} $</div>
+                <div class="transaction-item-amount">${movement.toFixed(2)} $</div>
             </li>
         `
         containerTransactions.insertAdjacentHTML("afterbegin", html);
@@ -135,6 +142,7 @@ const displayTransactions = function (acc, sort = false) {
 
     });
 }
+
 
 const createUsernames = function (accs) { // Map method application
     // create Username for each accounts
@@ -186,10 +194,10 @@ const updateUI = function (account) {
 
 let currentAccount;
 
-// test's value
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// // test's value
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 
 
