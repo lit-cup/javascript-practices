@@ -64,7 +64,7 @@ btnLogin.addEventListener('click', function (e) {
     // find()
     currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
     // ?. to handle if currentAccount is undefind
-    if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    if (currentAccount?.pin === Math.floor(inputLoginPin.value)) {
         // Display UI and message
         labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
         containerApp.style.opacity = 100;
@@ -81,7 +81,7 @@ btnLogin.addEventListener('click', function (e) {
 // TrasferTo Event handler
 btnTransfer.addEventListener('click', function (e) {
     e.preventDefault();
-    const amount = Number(inputTransferAmount.value);
+    const amount = Math.floor(inputTransferAmount.value);
     const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
 
     // Clear input field
@@ -103,7 +103,7 @@ btnTransfer.addEventListener('click', function (e) {
 // Loan Event handler
 btnLoan.addEventListener('click', function (e) {
     e.preventDefault();
-    const amount = Number(inputLoanAmount.value);
+    const amount = Math.floor(inputLoanAmount.value);
     if (amount > 0 && currentAccount.movements.some(move => move >= amount * 0.1)) {
         // add transations
         currentAccount.movements.push(amount)
@@ -118,7 +118,7 @@ btnLoan.addEventListener('click', function (e) {
 btnClose.addEventListener('click', function (e) {
     e.preventDefault();
     if (currentAccount.username === inputCloseUsername.value &&
-        currentAccount.pin === Number(inputClosePin.value)
+        currentAccount.pin === Math.floor(inputClosePin.value)
     ) {
         // like indexof()
         const indexed = accounts.findIndex(account => account.username === currentAccount.username)
@@ -166,7 +166,7 @@ const displayTransactions = function (transactions, sort = false) {
             <li class="transaction-item" id="transaction-item">
                 <div class="transaction-item-type transaction-item-${type}">${i + 1} ${type}</div>
                 <div class="transaction-item-date">2023-10-01</div>
-                <div class="transaction-item-amount">${mov} $</div>
+                <div class="transaction-item-amount">${mov.toFixed(2)} $</div>
             </li>
         `
         containerTransactions.insertAdjacentHTML("afterbegin", html);
@@ -200,22 +200,22 @@ const calcDisplaySummary = function (account) {
     const incomes = account.movements
         .filter(mov => mov > 0)
         .reduce((pre, curr) => (pre + curr), 0);
-    labelSumIn.textContent = `${incomes}$`;
+    labelSumIn.textContent = `${incomes.toFixed(2)}$`;
 
     const outcomes = account.movements
         .filter(mov => mov < 0)
         .reduce((pre, curr) => (pre + curr), 0);
-    labelSumOut.textContent = `${Math.abs(outcomes)}$`;
+    labelSumOut.textContent = `${Math.abs(outcomes).toFixed(2)}$`;
 
     const interest = account.movements
         .filter(mov => mov > 0)
         .map(deposit => (deposit * account.interestRate) / 100)
         .filter(money => money >= 1)
         .reduce((pre, curr) => pre + curr, 0);
-    labelSumInterest.textContent = `${interest}$`;
+    labelSumInterest.textContent = `${interest.toFixed(2)}$`;
 }
 
 const calcDisplayBalance = function (account) {
     account.balance = account.movements.reduce((acc, cur) => acc + cur, 0);
-    labelBalance.textContent = `${account.balance}$`;
+    labelBalance.textContent = `${account.balance.toFixed(2)}$`;
 }
