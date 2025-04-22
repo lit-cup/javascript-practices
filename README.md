@@ -2,8 +2,36 @@
 
 The Repo purpose to Learning/Practices/NOTES and enlighten JavaScript from [The Complete JavaScript Course 2025: From Zero to Expert!](https://www.udemy.com/course/the-complete-javascript-course/?couponCode=ST15MT20425G1) Online Course by Jonas Schmedtmann 👍
 
-## Folder (TBD)
+## Folder Structure
 
+```
+/javascript-practices
+│
+│
+├── Project1_GuessTheNumber/
+│   ├── index.html
+│   ├── script.js
+│   └── style.css
+│
+├── Project2_ModalWindow/
+│   ├── index.html
+│   ├── script.js
+│   └── style.css
+│
+├── Project3_PigGame/
+|   |── images
+│   ├── index.html
+│   ├── script.js
+│   └── style.css
+│
+├── Project4_BankistFunctionPage/
+|   |── media
+│   ├── index.html
+│   ├── script.js
+│   └── style.css
+│
+└── README.md
+```
 
 ## Project List:
 
@@ -13,6 +41,8 @@ The Repo purpose to Learning/Practices/NOTES and enlighten JavaScript from [The 
 
 3. **[Pig Game](./Project3_PigGame)** ('pig-game'): a two-player dice game where players take turns to roll a dice and accumulate points.
 
+4. **[Bankist Function Page](./Project4_BankistFunctionPage)** ('bankist-function-page'): a banking demo app that allows users to log in, view transactions, transfer money, request loans, and close accounts. Demonstrates modern JavaScript array methods and UI updates.
+
 
 ## Planing Update
-1. Build a simple feature show all the files i practices or Project(Modal), exploring like code edite on website and could execute then show the result. 
+1. Build a simple feature show all the files i practices or Project(Modal), exploring like code edite on website and could execute then show the result.
