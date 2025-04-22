@@ -54,7 +54,7 @@ const account3 = {
         '2024-03-15T23:55:05.234Z'
     ],
     currency: 'USD',
-    locale: 'en-Us',
+    locale: 'zh-TW',
 };
 
 const account4 = {
@@ -70,7 +70,7 @@ const account4 = {
         '2024-01-25T18:35:00.345Z'
     ],
     currency: 'USD',
-    locale: 'en-Us',
+    locale: 'ja-JP',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -100,7 +100,7 @@ const inputLoanAmount = document.getElementById('loan-amount');
 const inputCloseUsername = document.getElementById('confirm-User');
 const inputClosePin = document.getElementById('confirm-Pin');
 
-const formatTranDate = function (date) {
+const formatTranDate = function (date, locale) {
     const clacDaysPassed = (date1, date2) =>
         Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
     const daysPassed = clacDaysPassed(new Date(), date);
@@ -108,12 +108,13 @@ const formatTranDate = function (date) {
     if (daysPassed === 0) return 'Today';
     if (daysPassed === 1) return 'Yesterday';
     if (daysPassed <= 7) return `${daysPassed} days agp`;
-    else {
-        const day = `${date.getDate()}`.padStart(2, 0);
-        const month = `${date.getMonth() + 1}`.padStart(2, 0);
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-    }
+
+    // const day = `${date.getDate()}`.padStart(2, 0);
+    // const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    // const year = date.getFullYear();
+    // return `${day}/${month}/${year}`;
+
+    return new Intl.DateTimeFormat(locale).format(date);
 }
 
 
@@ -134,7 +135,7 @@ const displayTransactions = function (acc, sort = false) {
         const type = movement > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
 
         const date = new Date(movementDate);
-        const displayDate = formatTranDate(date);
+        const displayDate = formatTranDate(date, acc.locale);
 
         const html = `
             <li class="transaction-item" id="transaction-item">
@@ -213,8 +214,6 @@ currentAccount = account1;
 updateUI(currentAccount);
 containerApp.style.opacity = 100;
 
-// Experimenting APi
-
 
 // Login Event handler
 btnLogin.addEventListener('click', function (e) {
@@ -227,14 +226,27 @@ btnLogin.addEventListener('click', function (e) {
         labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
         containerApp.style.opacity = 100;
 
-        // Create current date and time
+        // // Create current date and time
+        // const now = new Date();
+        // const day = `${now.getDate()}`.padStart(2, 0);
+        // const month = `${now.getMonth() + 1}`.padStart(2, 0);
+        // const year = now.getFullYear();
+        // const hour = `${now.getHours()}`.padStart(2, 0);
+        // const min = `${now.getMinutes()}`.padStart(2, 0);
+        // labelDate.textContent = `As of ${day}/${month}/${year}, ${hour}:${min}`;
+        // Experimenting APi
         const now = new Date();
-        const day = `${now.getDate()}`.padStart(2, 0);
-        const month = `${now.getMonth() + 1}`.padStart(2, 0);
-        const year = now.getFullYear();
-        const hour = `${now.getHours()}`.padStart(2, 0);
-        const min = `${now.getMinutes()}`.padStart(2, 0);
-        labelDate.textContent = `As of ${day}/${month}/${year}, ${hour}:${min}`;
+        const options = {
+            hour: 'numeric',
+            minute: 'numeric',
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+        }
+        // const locale = navigator.language;
+
+        // iso language code table
+        labelDate.textContent = 'As of ' + new Intl.DateTimeFormat(currentAccount.locale, options).format(now);
 
         // Clear input fields
         inputLoginUsername.value = inputLoginPin.value = '';
