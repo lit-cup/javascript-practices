@@ -15,7 +15,7 @@ const account1 = {
         '2023-07-23T22:45:10.901Z',
         '2025-04-20T23:50:15.234Z'
     ],
-    currency: 'USD',
+    currency: 'EUR',
     locale: 'en-Us',
 };
 
@@ -117,6 +117,21 @@ const formatTranDate = function (date, locale) {
     return new Intl.DateTimeFormat(locale).format(date);
 }
 
+const formatCur = function (value, locale, currency) {
+    const formatter = new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currency,
+    });
+    const parts = formatter.formatToParts(value);
+    const symbol = parts.find(part => part.type === 'currency').value;
+    const number = parts
+        .filter(part => part.type !== 'currency')
+        .map(part => part.value)
+        .join('')
+        .trim();
+    return `${number} ${symbol}`;
+
+}
 
 const displayTransactions = function (acc, sort = false) {
 
@@ -133,15 +148,17 @@ const displayTransactions = function (acc, sort = false) {
     combineMovsDates.forEach(function (obj, i) {
         const { movement, movementDate } = obj;
         const type = movement > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
-
         const date = new Date(movementDate);
+
         const displayDate = formatTranDate(date, acc.locale);
+
+        const formattedTran = formatCur(movement, acc.locale, acc.currency)
 
         const html = `
             <li class="transaction-item" id="transaction-item">
                 <div class="transaction-item-type transaction-item-${type}">${i + 1} ${type}</div>
                 <div class="transaction-item-date">${displayDate}</div>
-                <div class="transaction-item-amount">${movement.toFixed(2)} $</div>
+                <div class="transaction-item-amount">${formattedTran}</div>
             </li>
         `
         containerTransactions.insertAdjacentHTML("afterbegin", html);
@@ -193,7 +210,7 @@ const calcDisplaySummary = function (account) {
 
 const calcDisplayBalance = function (account) {
     account.balance = account.movements.reduce((acc, cur) => acc + cur, 0);
-    labelBalance.textContent = `${account.balance.toFixed(2)}$`;
+    labelBalance.textContent = formatCur(account.balance, account.locale, account.currency);
 }
 
 // updateUI handler
