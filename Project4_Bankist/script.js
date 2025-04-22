@@ -8,12 +8,12 @@ const account1 = {
     movementsDates: [
         '2023-01-01T10:15:30.123Z',
         '2023-02-01T12:20:45.456Z',
-        '2023-03-01T14:25:50.789Z',
+        '2023-03-12T14:25:50.789Z',
         '2023-04-01T16:30:55.012Z',
         '2023-05-01T18:35:00.345Z',
-        '2023-06-01T20:40:05.678Z',
-        '2023-07-01T22:45:10.901Z',
-        '2023-08-01T23:50:15.234Z'
+        '2023-07-22T20:40:05.678Z',
+        '2023-07-23T22:45:10.901Z',
+        '2025-04-20T23:50:15.234Z'
     ],
     currency: 'USD',
     locale: 'en-Us',
@@ -100,6 +100,23 @@ const inputLoanAmount = document.getElementById('loan-amount');
 const inputCloseUsername = document.getElementById('confirm-User');
 const inputClosePin = document.getElementById('confirm-Pin');
 
+const formatTranDate = function (date) {
+    const clacDaysPassed = (date1, date2) =>
+        Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
+    const daysPassed = clacDaysPassed(new Date(), date);
+
+    if (daysPassed === 0) return 'Today';
+    if (daysPassed === 1) return 'Yesterday';
+    if (daysPassed <= 7) return `${daysPassed} days agp`;
+    else {
+        const day = `${date.getDate()}`.padStart(2, 0);
+        const month = `${date.getMonth() + 1}`.padStart(2, 0);
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+}
+
+
 const displayTransactions = function (acc, sort = false) {
 
     containerTransactions.innerHTML = '';
@@ -117,10 +134,7 @@ const displayTransactions = function (acc, sort = false) {
         const type = movement > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
 
         const date = new Date(movementDate);
-        const day = `${date.getDate()}`.padStart(2, 0);
-        const month = `${date.getMonth() + 1}`.padStart(2, 0);
-        const year = date.getFullYear();
-        const displayDate = `${day}/${month}/${year}`;
+        const displayDate = formatTranDate(date);
 
         const html = `
             <li class="transaction-item" id="transaction-item">
@@ -194,11 +208,12 @@ const updateUI = function (account) {
 
 let currentAccount;
 
-// // test's value
-// currentAccount = account1;
-// updateUI(currentAccount);
-// containerApp.style.opacity = 100;
+// test's value
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
 
+// Experimenting APi
 
 
 // Login Event handler
