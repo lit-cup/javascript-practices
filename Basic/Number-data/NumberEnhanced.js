@@ -219,8 +219,23 @@ const options = {
     // useGrouping: false,
 }
 // with different language code have different date clear
-console.log('US: ', new Intl.DateTimeFormat('en-US', options).format(numBasic));
-console.log('TW: ', new Intl.DateTimeFormat('zh-TW', options).format(numBasic));
+// Intl.DateTimeFormat()
+console.log('US: ', new Intl.NumberFormat('en-US', options).format(numBasic));
+console.log('TW: ', new Intl.NumberFormat('zh-TW', options).format(numBasic));
 // from browser
-console.log('Browser: ' + navigator.language, new Intl.DateTimeFormat(navigator.language).format(numBasic));
+console.log('Browser: ' + navigator.language, new Intl.NumberFormat(navigator.language).format(numBasic));
+//
+//
+//
+// Time out Usage
+const ingredeients = ['olives', 'spinach'];
+const pizzaTimer = setTimeout((ing1, ing2) =>
+    console.log(`Here is your pizza with ${ing1} and ${ing2}`),
+    3000,
+    ...ingredeients
+); // 3s
+console.log('Waiting...');
+
+if (ingredeients.includes('spinach')) clearTimeout(pizzaTimer);
+
 
