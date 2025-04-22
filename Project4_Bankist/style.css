@@ -102,8 +102,8 @@ body {
 .balance {
     font-size: 3rem;
     font-weight: 700;
-    text-align: center;
-    width: 250px;
+    text-align: end;
+    width: 50%;
     color: #ff4f4f;
 }
 
