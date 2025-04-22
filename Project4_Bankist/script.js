@@ -5,6 +5,18 @@ const account1 = {
     movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
     interestRate: 1.2, // %
     pin: 1111,
+    movementsDates: [
+        '2023-01-01T10:15:30.123Z',
+        '2023-02-01T12:20:45.456Z',
+        '2023-03-01T14:25:50.789Z',
+        '2023-04-01T16:30:55.012Z',
+        '2023-05-01T18:35:00.345Z',
+        '2023-06-01T20:40:05.678Z',
+        '2023-07-01T22:45:10.901Z',
+        '2023-08-01T23:50:15.234Z'
+    ],
+    currency: 'USD',
+    locale: 'en-Us',
 };
 
 const account2 = {
@@ -12,13 +24,37 @@ const account2 = {
     movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
     interestRate: 1.5,
     pin: 2222,
+    movementsDates: [
+        '2023-09-01T10:15:30.123Z',
+        '2023-10-01T12:20:45.456Z',
+        '2023-11-01T14:25:50.789Z',
+        '2023-12-01T16:30:55.012Z',
+        '2024-01-01T18:35:00.345Z',
+        '2024-02-01T20:40:05.678Z',
+        '2024-03-01T22:45:10.901Z',
+        '2024-04-01T23:50:15.234Z'
+    ],
+    currency: 'USD',
+    locale: 'en-Us',
 };
 
 const account3 = {
     owner: 'Steven Thomas Williams',
-    movements: [200, -200, 340, -300, -20, 50, 400, -460],
-    interestRate: 0.7,
+    movements: [300, -150, 500, -400, 100, 250, -50, 600],
+    interestRate: 0.8,
     pin: 3333,
+    movementsDates: [
+        '2023-08-15T09:10:20.123Z',
+        '2023-09-15T11:25:35.456Z',
+        '2023-10-15T13:40:50.789Z',
+        '2023-11-15T15:55:05.012Z',
+        '2023-12-15T17:10:20.345Z',
+        '2024-01-15T19:25:35.678Z',
+        '2024-02-15T21:40:50.901Z',
+        '2024-03-15T23:55:05.234Z'
+    ],
+    currency: 'USD',
+    locale: 'en-Us',
 };
 
 const account4 = {
@@ -26,6 +62,15 @@ const account4 = {
     movements: [430, 1000, 700, 50, 90],
     interestRate: 1,
     pin: 4444,
+    movementsDates: [
+        '2023-09-05T10:15:30.123Z',
+        '2023-10-10T12:20:45.456Z',
+        '2023-11-15T14:25:50.789Z',
+        '2023-12-20T16:30:55.012Z',
+        '2024-01-25T18:35:00.345Z'
+    ],
+    currency: 'USD',
+    locale: 'en-Us',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -55,18 +100,25 @@ const inputLoanAmount = document.getElementById('loan-amount');
 const inputCloseUsername = document.getElementById('confirm-User');
 const inputClosePin = document.getElementById('confirm-Pin');
 
-const displayTransactions = function (transactions, sort = false) {
+const displayTransactions = function (acc, sort = false) {
 
     containerTransactions.innerHTML = '';
 
-    const trans = sort ? transactions.slice().sort((a, b) => a - b) : transactions;
+    const trans = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
 
     trans.forEach(function (mov, i) {
         const type = mov > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
+
+        const date = new Date(acc.movementsDates[i]);
+        const day = `${date.getDate()}`.padStart(2, 0);
+        const month = `${date.getMonth() + 1}`.padStart(2, 0);
+        const year = date.getFullYear();
+        const displayDate = `${day}/${month}/${year}`;
+
         const html = `
             <li class="transaction-item" id="transaction-item">
                 <div class="transaction-item-type transaction-item-${type}">${i + 1} ${type}</div>
-                <div class="transaction-item-date">2023-10-01</div>
+                <div class="transaction-item-date">${displayDate}</div>
                 <div class="transaction-item-amount">${mov.toFixed(2)} $</div>
             </li>
         `
@@ -124,7 +176,7 @@ const calcDisplayBalance = function (account) {
 // updateUI handler
 const updateUI = function (account) {
     // Display Transactions
-    displayTransactions(account.movements);
+    displayTransactions(account);
     // Display Summary
     calcDisplaySummary(account);
     // Display Balance
@@ -134,13 +186,12 @@ const updateUI = function (account) {
 
 let currentAccount;
 
-const now = new Date();
-const day = `${now.getDate()}`.padStart(2, 0);
-const month = `${now.getMonth() + 1}`.padStart(2, 0);
-const year = now.getFullYear();
-const hour = now.getHours();
-const min = now.getMinutes();
-labelDate.textContent = `As of ${day}/${month}/${year}, ${hour}:${min}`;
+// test's value
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+
 
 // Login Event handler
 btnLogin.addEventListener('click', function (e) {
@@ -152,6 +203,15 @@ btnLogin.addEventListener('click', function (e) {
         // Display UI and message
         labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
         containerApp.style.opacity = 100;
+
+        // Create current date and time
+        const now = new Date();
+        const day = `${now.getDate()}`.padStart(2, 0);
+        const month = `${now.getMonth() + 1}`.padStart(2, 0);
+        const year = now.getFullYear();
+        const hour = `${now.getHours()}`.padStart(2, 0);
+        const min = `${now.getMinutes()}`.padStart(2, 0);
+        labelDate.textContent = `As of ${day}/${month}/${year}, ${hour}:${min}`;
 
         // Clear input fields
         inputLoginUsername.value = inputLoginPin.value = '';
@@ -179,6 +239,11 @@ btnTransfer.addEventListener('click', function (e) {
         // TranferTo
         currentAccount.movements.push(-amount);
         receiverAcc.movements.push(amount);
+
+        // Add transfer date
+        currentAccount.movementsDates.push(new Date().toISOString());
+        receiverAcc.movementsDates.push(new Date().toISOString());
+
         // UI Update
         updateUI(currentAccount);
     }
@@ -191,6 +256,9 @@ btnLoan.addEventListener('click', function (e) {
     if (amount > 0 && currentAccount.movements.some(move => move >= amount * 0.1)) {
         // add transations
         currentAccount.movements.push(amount)
+
+        // Add Loan date
+        currentAccount.movementsDates.push(new Date().toISOString());
 
         //UI update
         updateUI(currentAccount);
@@ -223,7 +291,7 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
     e.preventDefault();
-    displayTransactions(currentAccount.movements, !sorted);
+    displayTransactions(currentAccount, !sorted);
     sorted = !sorted;
 });
 
