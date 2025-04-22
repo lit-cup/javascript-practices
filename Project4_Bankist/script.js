@@ -31,7 +31,7 @@ const account4 = {
 const accounts = [account1, account2, account3, account4];
 
 const labelWelcome = document.querySelector('.login-title');
-const labelDate = document.querySelector('.balaance-time');
+const labelDate = document.querySelector('.balance-time');
 const labelBalance = document.querySelector('.balance');
 const labelSumIn = document.querySelector('.cash-in-amount');
 const labelSumOut = document.querySelector('.cash-out-amount');
@@ -55,8 +55,92 @@ const inputLoanAmount = document.getElementById('loan-amount');
 const inputCloseUsername = document.getElementById('confirm-User');
 const inputClosePin = document.getElementById('confirm-Pin');
 
+const displayTransactions = function (transactions, sort = false) {
+
+    containerTransactions.innerHTML = '';
+
+    const trans = sort ? transactions.slice().sort((a, b) => a - b) : transactions;
+
+    trans.forEach(function (mov, i) {
+        const type = mov > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
+        const html = `
+            <li class="transaction-item" id="transaction-item">
+                <div class="transaction-item-type transaction-item-${type}">${i + 1} ${type}</div>
+                <div class="transaction-item-date">2023-10-01</div>
+                <div class="transaction-item-amount">${mov.toFixed(2)} $</div>
+            </li>
+        `
+        containerTransactions.insertAdjacentHTML("afterbegin", html);
+        // insertAdjacentHTML(){
+        //      <!-- beforebegin -->
+        // <p>
+        //      <!-- afterbegin -->
+        //      foo
+        //      <!-- beforeend -->
+        // </p>
+        //      <!-- afterend -->
+        //}
+
+    });
+}
+
+const createUsernames = function (accs) { // Map method application
+    // create Username for each accounts
+    accs.forEach(
+        acc =>
+            acc.username =
+            acc.owner
+                .toLowerCase()
+                .split(' ')
+                .map(name => name[0])
+                .join(''));
+};
+createUsernames(accounts);
+
+const calcDisplaySummary = function (account) {
+    const incomes = account.movements
+        .filter(mov => mov > 0)
+        .reduce((pre, curr) => (pre + curr), 0);
+    labelSumIn.textContent = `${incomes.toFixed(2)}$`;
+
+    const outcomes = account.movements
+        .filter(mov => mov < 0)
+        .reduce((pre, curr) => (pre + curr), 0);
+    labelSumOut.textContent = `${Math.abs(outcomes).toFixed(2)}$`;
+
+    const interest = account.movements
+        .filter(mov => mov > 0)
+        .map(deposit => (deposit * account.interestRate) / 100)
+        .filter(money => money >= 1)
+        .reduce((pre, curr) => pre + curr, 0);
+    labelSumInterest.textContent = `${interest.toFixed(2)}$`;
+}
+
+const calcDisplayBalance = function (account) {
+    account.balance = account.movements.reduce((acc, cur) => acc + cur, 0);
+    labelBalance.textContent = `${account.balance.toFixed(2)}$`;
+}
+
+// updateUI handler
+const updateUI = function (account) {
+    // Display Transactions
+    displayTransactions(account.movements);
+    // Display Summary
+    calcDisplaySummary(account);
+    // Display Balance
+    calcDisplayBalance(account);
+}
+
 
 let currentAccount;
+
+const now = new Date();
+const day = `${now.getDate()}`.padStart(2, 0);
+const month = `${now.getMonth() + 1}`.padStart(2, 0);
+const year = now.getFullYear();
+const hour = now.getHours();
+const min = now.getMinutes();
+labelDate.textContent = `As of ${day}/${month}/${year}, ${hour}:${min}`;
 
 // Login Event handler
 btnLogin.addEventListener('click', function (e) {
@@ -144,78 +228,3 @@ btnSort.addEventListener('click', function (e) {
 });
 
 
-// updateUI handler
-const updateUI = function (account) {
-    // Display Transactions
-    displayTransactions(account.movements);
-    // Display Summary
-    calcDisplaySummary(account);
-    // Display Balance
-    calcDisplayBalance(account);
-}
-
-const displayTransactions = function (transactions, sort = false) {
-
-    containerTransactions.innerHTML = '';
-
-    const trans = sort ? transactions.slice().sort((a, b) => a - b) : transactions;
-
-    trans.forEach(function (mov, i) {
-        const type = mov > 0 ? 'DEPOSIT' : 'WITHDRAWAL';
-        const html = `
-            <li class="transaction-item" id="transaction-item">
-                <div class="transaction-item-type transaction-item-${type}">${i + 1} ${type}</div>
-                <div class="transaction-item-date">2023-10-01</div>
-                <div class="transaction-item-amount">${mov.toFixed(2)} $</div>
-            </li>
-        `
-        containerTransactions.insertAdjacentHTML("afterbegin", html);
-        // insertAdjacentHTML(){
-        //      <!-- beforebegin -->
-        // <p>
-        //      <!-- afterbegin -->
-        //      foo
-        //      <!-- beforeend -->
-        // </p>
-        //      <!-- afterend -->
-        //}
-
-    });
-}
-
-const createUsernames = function (accs) { // Map method application
-    // create Username for each accounts
-    accs.forEach(
-        acc =>
-            acc.username =
-            acc.owner
-                .toLowerCase()
-                .split(' ')
-                .map(name => name[0])
-                .join(''));
-};
-createUsernames(accounts);
-
-const calcDisplaySummary = function (account) {
-    const incomes = account.movements
-        .filter(mov => mov > 0)
-        .reduce((pre, curr) => (pre + curr), 0);
-    labelSumIn.textContent = `${incomes.toFixed(2)}$`;
-
-    const outcomes = account.movements
-        .filter(mov => mov < 0)
-        .reduce((pre, curr) => (pre + curr), 0);
-    labelSumOut.textContent = `${Math.abs(outcomes).toFixed(2)}$`;
-
-    const interest = account.movements
-        .filter(mov => mov > 0)
-        .map(deposit => (deposit * account.interestRate) / 100)
-        .filter(money => money >= 1)
-        .reduce((pre, curr) => pre + curr, 0);
-    labelSumInterest.textContent = `${interest.toFixed(2)}$`;
-}
-
-const calcDisplayBalance = function (account) {
-    account.balance = account.movements.reduce((acc, cur) => acc + cur, 0);
-    labelBalance.textContent = `${account.balance.toFixed(2)}$`;
-}
