@@ -193,19 +193,19 @@ const calcDisplaySummary = function (account) {
     const incomes = account.movements
         .filter(mov => mov > 0)
         .reduce((pre, curr) => (pre + curr), 0);
-    labelSumIn.textContent = `${incomes.toFixed(2)}$`;
+    labelSumIn.textContent = formatCur(incomes, account.locale, account.currency);
 
     const outcomes = account.movements
         .filter(mov => mov < 0)
         .reduce((pre, curr) => (pre + curr), 0);
-    labelSumOut.textContent = `${Math.abs(outcomes).toFixed(2)}$`;
+    labelSumOut.textContent = formatCur(outcomes, account.locale, account.currency);
 
     const interest = account.movements
         .filter(mov => mov > 0)
         .map(deposit => (deposit * account.interestRate) / 100)
         .filter(money => money >= 1)
         .reduce((pre, curr) => pre + curr, 0);
-    labelSumInterest.textContent = `${interest.toFixed(2)}$`;
+    labelSumInterest.textContent = formatCur(interest, account.locale, account.currency);
 }
 
 const calcDisplayBalance = function (account) {
