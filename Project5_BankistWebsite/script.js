@@ -1,4 +1,12 @@
 'use strict';
+// Features implemented in this script:
+// 1. Modal window functionality
+// 2. Smooth scrolling for buttons
+// 3. Page navigation with event delegation
+// 4. Tabbed component for operations section
+// 5. Menu fade animation on hover
+// 6. Sticky navigation using Intersection Observer API
+// 7. Section reveal animations on scroll
 
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
@@ -184,3 +192,29 @@ allSections.forEach(function (section) {
   sectionObserver.observe(section);
   section.classList.add('section--hidden');
 });
+
+// Lazy loading images
+const loadImg = function (entries, observe) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+
+  // Replace src with dat-src
+  entry.target.src = entry.target.dataset.src;
+
+  // remove blur
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+
+  observe.unobserve(entry.target);
+};
+
+
+const imgTargets = document.querySelectorAll('img[data-src]');
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '-200px',
+});
+
+imgTargets.forEach(img => imgObserver.observe(img));
