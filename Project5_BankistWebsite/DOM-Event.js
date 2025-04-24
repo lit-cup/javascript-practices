@@ -177,4 +177,15 @@ console.log(h1.parentElement.children);
     if (el !== h1) el.style.transform = 'scale(0.5)';
 });
 
-// 
+// Sticky navigaion: Intersecion Observer API
+const obsCallback = function (entries, observer) {
+    entries.forEach(entry => {
+        console.log(entry)
+    })
+};
+const obsOptions = {
+    root: null,
+    threshold: [0, 0.2],
+}
+const observer = new IntersectionObserver(obsCallback, obsOptions);
+observer.observe(section1);
