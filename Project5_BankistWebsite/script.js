@@ -7,6 +7,7 @@
 // 5. Menu fade animation on hover
 // 6. Sticky navigation using Intersection Observer API
 // 7. Section reveal animations on scroll
+// 8. Slider function: slide, btn click slide, dots click clide
 
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
@@ -131,7 +132,7 @@ const headFadeHover = function (e) {
   if (e.target.classList.contains('nav__link'));
   const link = e.target;
   const siblings = link.closest('.nav').querySelectorAll('.nav__link');
-  const logo = link.closest('.nav').querySelector('.img');
+  const logo = link.closest('.nav').querySelector('img');
 
   siblings.forEach(el => {
     if (el !== link) el.style.opacity = this;
@@ -190,7 +191,7 @@ const sectionObserver = new IntersectionObserver(
 // active
 allSections.forEach(function (section) {
   sectionObserver.observe(section);
-  section.classList.add('section--hidden');
+  // section.classList.add('section--hidden');
 });
 
 // Lazy loading images
@@ -218,3 +219,84 @@ const imgObserver = new IntersectionObserver(loadImg, {
 });
 
 imgTargets.forEach(img => imgObserver.observe(img));
+
+
+// Slider
+const slider = function () {
+  const slides = document.querySelectorAll('.slide');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+  const dotContainer = document.querySelector('.dots');
+  let curSlide = 0;
+  const maxSLide = slides.length;
+
+  // const slider = document.querySelector('.slider');
+  // slider.style.trnasform = 'scale(0.4) translateX(-800px)';
+  // slider.style.overflow = 'visible';
+
+  // Dots slide
+  const createDots = function () {
+    slides.forEach(function (_, i) {
+      dotContainer.insertAdjacentHTML('beforeend',
+        `<button class="dots__dot" data-slide="${i}"></button>`
+      );
+    });
+  };
+
+
+  const activateDot = function (slide) {
+    document.querySelectorAll('.dots__dot')
+      .forEach(dot => dot.classList.remove('dots__dot--active'));
+    document.querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add('dots__dot--active');
+  }
+
+  const goToSlide = function (slide) {
+    slides.forEach((s, i) =>
+      (s.style.transform = `translateX(${100 * (i - slide)}%)`));  // 0% 100% 200% 300%
+  }
+
+
+  const rightSlide = function () {
+    if (curSlide === maxSLide - 1) curSlide = 0;
+    else curSlide++;
+
+    goToSlide(curSlide);   // i = 0 | curSlide = 1  -100% 0% 200% 300%
+    activateDot(curSlide);
+  }
+
+  const leftSlide = function () {
+    if (curSlide === 0) curSlide = maxSLide - 1;
+    else curSlide--;
+
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  }
+
+  const init = function () {
+    goToSlide(0);
+    createDots();
+    activateDot(0);
+  }
+  init();
+
+  // Next slide
+  btnRight.addEventListener('click', rightSlide);
+  btnLeft.addEventListener('click', leftSlide);
+
+  // keydown event
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') leftSlide();
+    if (e.key === 'ArrowRight') rightSlide();
+  })
+
+  // dot slide click event
+  dotContainer.addEventListener('click', function (e) {
+    if (e.target.classList.contains('dots__dot')) {
+      curSlide = Number(e.target.dataset.slide);
+      goToSlide(curSlide);
+      activateDot(curSlide);
+    }
+  });
+}
+slider();
