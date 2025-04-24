@@ -11,24 +11,36 @@ The Repo purpose to Learning/Practices/NOTES and enlighten JavaScript from [The 
 ├── Project1_GuessTheNumber/
 │   ├── index.html
 │   ├── script.js
-│   └── style.css
+│   ├── style.css
+│   └── README.md
 │
 ├── Project2_ModalWindow/
 │   ├── index.html
+|   |── style.css
 │   ├── script.js
-│   └── style.css
+│   └── README.md
 │
 ├── Project3_PigGame/
 |   |── images
 │   ├── index.html
+|   |── style.css
 │   ├── script.js
-│   └── style.css
+│   └── README.md
 │
-├── Project4_BankistFunctionPage/
+├── Project4_BankistApp/
 |   |── media
 │   ├── index.html
+|   |── style.css
 │   ├── script.js
-│   └── style.css
+│   └── README.md
+|
+├── Project5_BankistWebsite/
+|   |── img
+|   |──.prettierrc
+│   ├── index.html
+|   |── style.css
+│   ├── script.js
+│   └── README.md
 │
 └── README.md
 ```
@@ -41,8 +53,9 @@ The Repo purpose to Learning/Practices/NOTES and enlighten JavaScript from [The 
 
 3. **[Pig Game](./Project3_PigGame)** ('pig-game'): a two-player dice game where players take turns to roll a dice and accumulate points.
 
-4. **[Bankist Function Page](./Project4_BankistFunctionPage)** ('bankist-function-page'): a banking demo app that allows users to log in, view transactions, transfer money, request loans, and close accounts. Demonstrates modern JavaScript array methods and UI updates.
+4. **[BankistApp](./Project4_BankistApp)** ('bankist'): a banking demo app that allows users to log in, view transactions, transfer money, request loans, and close accounts. Demonstrates modern JavaScript array methods and UI updates.
 
+5. **[BankistWebsite](./Project5_BankistWebsite)** ('bankistWebsite'): A modern, interactive banking landing page demo. This project demonstrates advanced DOM manipulation, event handling, and UI effects using vanilla JavaScript and CSS.
 
 ## Planing Update
 1. Build a simple feature show all the files i practices or Project(Modal), exploring like code edite on website and could execute then show the result.
