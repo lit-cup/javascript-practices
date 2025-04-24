@@ -189,3 +189,36 @@ const obsOptions = {
 }
 const observer = new IntersectionObserver(obsCallback, obsOptions);
 observer.observe(section1);
+
+
+// Lifecycle DOM Events
+document.addEventListener('DOMContentLoaded', function (e) {
+    console.log('HTML parsed and DOm tree built!', e);
+})
+
+window.addEventListener('load', function (e) {
+    console.log('Page fully loaded', e);
+});
+
+// window.addEventListener('beforeunload', function (e) {
+//     e.preventDefault();
+//     console.log(e);
+//     e.returnValue = '';
+// });
+
+// Efficient Script Loading
+
+// END OF BODY
+// <script src="script.js"></script>
+// Use this if you need to support older browsers or if the script must load after the HTML is fully parsed.
+// How it works: The script is loaded and executed only after the entire HTML document is parsed.
+
+// ASYNC in HEAD
+// <script async src="script.js"></script>
+// Use for third-party scripts where the order of execution doesn't matter (e.g., Google Analytics).
+// How it works: The script is loaded asynchronously and executed as soon as it's available, without blocking the HTML parsing.
+
+// DEFER in HEAD
+// <script defer src="script.js"></script>
+// This is the best solution overall! Use it for your own scripts and when the order of execution matters (e.g., including a library).
+// How it works: The script is loaded in parallel with HTML parsing but executed only after the HTML document is fully parsed.
