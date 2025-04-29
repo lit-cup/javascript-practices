@@ -2,13 +2,25 @@
 
 
 // Example of a constructor function for OOP
+/**
+ * const className = function(index1, index2){
+ *    this.index1 = index1; // instance properties
+ *    this.index2 = index2; // instance properties
+ * }
+ * 
+ * className.prototype.methodName = function(){ // prototype method
+ *   // method logic
+ * }
+ * 
+ */
+
 const Person = function (name, brith) {
     // console.log(this); // Person {}
 
     // Instance properties
     this.name = name;
     this.brith = brith;
-    // Never to this should be used like line 38
+    // Never to this, should be create function used to like line 38
     // this.calcAge = function () {
     //     console.log(2025 - this.brith);
     // };

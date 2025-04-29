@@ -3,6 +3,15 @@
 // const Person = class { }
 
 //class declaration Not recommded
+/**
+ * class className{
+ *  constructor(){} // constructor function
+ *  methodName(){} // instance method
+ *  static methodName(){} // static method is only available on the class itself, not on the instance
+ *  get propertyName(){} // getter method
+ *  set propertyName(value){} // setter method
+ * }
+ */
 class PersonCL {
     constructor(name, birth) {
         this.name = name;
@@ -87,6 +96,15 @@ PersonCL.hey(); // Hey there! 👋 and hey is not available in chen class is bec
 
 
 // Object.create
+/**
+ * const className = {
+ *   methodName(){}, // instance method
+ *   init(index1, index2...){} // constructor function
+ * }
+ * const instance = Object.create(className); // create a new object with className as prototype
+ * instance.propertyName = value; // add properties to instance object
+ * instance.methodName(); // call method from className
+ */
 const PersonProto = {
     calcAge() {
         console.log(2025 - this.birth);
