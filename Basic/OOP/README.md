@@ -28,11 +28,11 @@ ThereFore, all arrays have access to the map method!
 
 # JS OOP 3 ways of Implementing Prototypal inheritance in JavaScript
 
-**1. Constructor functions**
+**1. Constructor functions**[Construcor](./jsOOP.js)
 - Technique to create objects from a function;
 - This is how built-in objects like Arrays, Maps or Sets are actually implemented
   
-**2. ES6 Classes**
+**2. ES6 Classes**[ES6 Classes](./ES6classes.js)
 - Modern alternative to constructor function syntax;
 - "Syntactic suger": behind the scenes, ES6 classes work *exactly* like constructor functions;
 - ES6 classes do *NOT* like classes in "classical OOP".
