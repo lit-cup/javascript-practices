@@ -7,7 +7,6 @@ Prototype <- Object
 ```
 
 - **Method:** Prototypal inheritance/delegation
-
 - **Prototype:** Contains methods
 - **Object:** Can access methods
 
@@ -31,17 +30,45 @@ ThereFore, all arrays have access to the map method!
 **1. Constructor functions**[Construcor](./jsOOP.js)
 - Technique to create objects from a function;
 - This is how built-in objects like Arrays, Maps or Sets are actually implemented
+```
+  const className = function(index1, index2....){
+     this.index1 = index1; // instance properties
+     this.index2 = index2; // instance properties
+  }
+  className.prototype.methodName = function(){ // prototype method
+    // method logic
+  }
+```
   
 **2. ES6 Classes**[ES6 Classes](./ES6classes.js)
 - Modern alternative to constructor function syntax;
 - "Syntactic suger": behind the scenes, ES6 classes work *exactly* like constructor functions;
 - ES6 classes do *NOT* like classes in "classical OOP".
+```
+  class className{
+   constructor(){} // constructor function
+   methodName(){} // instance method
+   static methodName(){} // static method is only available on the class itself, not on the instance
+   get propertyName(){} // getter method
+   set propertyName(value){} // setter method
+ }
+```
 
-**3. Object.create()**
+**3. Object.create()**[ES6 Classes](./ES6classes.js)
 - The easiest and most straightForward way of linking an object to a prototype object
+```
+ const className = {
+   methodName(){}, // instance method
+   init(index1, index2...){} // constructor function
+ }
+ const instance = Object.create(className); // create a new object with className as prototype
+ instance.propertyName = value; // add properties to instance object
+ instance.methodName(); // call method from className
+```
 
 ## Usage
-[jsOOP](./jsOOP.js)
+- 1. [jsOOP](./jsOOP.js)
+- 2. [ES6 Classes](./ES6classes.js)
 
 # How Prototypal Inheritance / Delegation works, base on jsOOP construct function
 
