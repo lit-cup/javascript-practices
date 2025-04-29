@@ -6,12 +6,12 @@
 Prototype <- Object
 ```
 
-**Method:** Prototypal inheritance/delegation
+- **Method:** Prototypal inheritance/delegation
 
-**Prototype:** Contains methods
-**Object:** Can access methods
+- **Prototype:** Contains methods
+- **Object:** Can access methods
 
-**Description::**
+**Description:**
 - Objects are *linked* to a prototype object;
 - Prototypal inheritance: The prototype contains methods(behavior) that are *accessible to all objects linked to that prototype*
 - Behavior is *delegated* to the linked prototype/object
@@ -28,28 +28,26 @@ ThereFore, all arrays have access to the map method!
 
 # JS OOP 3 ways of Implementing Prototypal inheritance in JavaScript
 
-## - 1. Constructor functions
+**1. Constructor functions**
 - Technique to create objects from a function;
 - This is how built-in objects like Arrays, Maps or Sets are actually implemented
   
-## - 2. ES6 Classes
+**2. ES6 Classes**
 - Modern alternative to constructor function syntax;
 - "Syntactic suger": behind the scenes, ES6 classes work *exactly* like constructor functions;
 - ES6 classes do *NOT* like classes in "classical OOP".
 
-## - 3. Object.create()
+**3. Object.create()**
 - The easiest and most straightForward way of linking an object to a prototype object
 
-# how to implementing Abstraction/Encapsulation/Inheritance/Polymorphism
+## Usage
 [jsOOP](./jsOOP.js)
-
-===
 
 # How Prototypal Inheritance / Delegation works, base on jsOOP construct function
 
-## How Prototypal Inheritance work with function constructors and ES6 classes
+## 1.How Prototypal Inheritance work with function constructors and ES6 classes
 
-So we create a Constructor function call Person 
+- So we create a Constructor function call Person 
 
 ```
 const Person = function (name, brith) {
@@ -57,7 +55,7 @@ const Person = function (name, brith) {
     this.brith = brith;
 }
 ```
-=> [Person()];
+- background => [Person()];
 this time Person() has .prototype property
 
 ```
@@ -65,14 +63,16 @@ Person.prototype.calcAge = function () {
     console.log(2025 - this.brith);
 }
 ```
-=>Person.prototype = [Person.prototype]{ calcAge: function }; => Person.constructor
+- background =>Person.prototype = [Person.prototype]{ calcAge: function }; => Person.constructor
 
+***
 *Person.prototype is Not the prototype of Person, but object created through by Person*
+***
 
 It is like = Person => prototype have {calcAge: funciton}; not person
 but we create a object from person it will through prototype then inhered the prototype function
 
-Example about new Person();
+# 2.Example about new Person();
 
 ```
 const chen = new Person('Chen', 2000);
