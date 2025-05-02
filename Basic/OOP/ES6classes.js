@@ -34,7 +34,7 @@ class PersonCL {
     // set property that already exists
     set fullName(name) {
         console.log(name)
-        // _name is for same name as name
+        // _ name is for same name as name form constructor
         if (name.includes(' ')) this._name = name;
         else console.log('Not a full name!');
     }
