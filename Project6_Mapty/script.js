@@ -11,11 +11,50 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
+class Workout {
+    date = new Date();
+    // using a unique id for each workout
+    id = (Date.now() + '').slice(-10);
+    constructor(coords, distance, duration) {
+        this.coords = coords; // [lat, lng]
+        this.distance = distance; // in km
+        this.duration = duration; // in min
+    }
+}
+class Running extends Workout {
+    type = 'running';
+    constructor(coords, distance, duration, cadence) {
+        super(coords, distance, duration);
+        this.cadence = cadence; // in steps/min
+    }
+    calcPace() {
+        this.pace = this.duration / this.distance; // in min/km
+        return this.pace;
+    }
+}
+
+class Cycling extends Workout {
+    type = 'cycling';
+    constructor(coords, distance, duration, elevationGain) {
+        super(coords, distance, duration);
+        this.elevationGain = elevationGain; // in m
+    }
+    calcSpeed() {
+        this.speed = this.distance / (this.duration / 60); // in km/h
+        return this.speed;
+    }
+}
+
+const run1 = new Running([39, -12], 5.2, 24, 178);
+const cycling1 = new Cycling([39, -12], 27, 95, 523);
+console.log(run1, run1.calcPace());
+console.log(cycling1, cycling1.calcSpeed());
 
 class maptyApp {
 
     #map;
     #mapEvent;
+    #workouts = [];
 
     constructor() {
         this._getPosition();
@@ -51,20 +90,20 @@ class maptyApp {
         // handling the map click event
         this.#map.on('click', this._showForm.bind(this));
     }
-    _pinMap(map, mapEvent) {
-        const { lat, lng } = mapEvent.latlng;
-        L.marker([lat, lng])
-            .addTo(map)
+    _pinMap(workout) {
+        // Display marker on the map
+        L.marker(workout.coords)
+            .addTo(this.#map)
             .bindPopup(
                 L.popup({
                     maxWidth: 250,
                     minWidth: 100,
                     autoClose: false,
                     closeOnClick: false,
-                    className: 'running-popup'
+                    className: `${workout.type}-popup`
                 })
             )
-            .setPopupContent('Workout')
+            .setPopupContent(`${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.distance}`)
             .openPopup();
     }
     _showForm(mapE) {
@@ -73,17 +112,75 @@ class maptyApp {
         inputDistance.focus();
     }
     _toggleElevationField() {
-        inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
         inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+        inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     }
     _newWorkout(e) {
+        // check if the input is finite or not
+        const validInput = (...inputs) =>
+            inputs.every(input => Number.isFinite(input));
+
+        const positiveInput = (...inputs) =>
+            inputs.every(input => input > 0);
+
         e.preventDefault();
+
+        // Get data from the form
+        const type = inputType.value;
+        const distance = +inputDistance.value;
+        const duration = +inputDuration.value;
+        const { lat, lng } = this.#mapEvent.latlng;
+        let workout;
+
+        // if workout is running, create running object
+        if (type === 'running') {
+            const cadence = +inputCadence.value;
+            if (!validInput(distance, duration, cadence) ||
+                !positiveInput(distance, duration, cadence)) {
+                return alert('Distance should be a positive number');
+            }
+            workout = new Running([lat, lng], distance, duration, cadence);
+
+        }
+        // if workout is cycling, create cycling object
+        if (type === 'cycling') {
+            const elevation = +inputElevation.value;
+            if (!validInput(distance, duration, elevation) ||
+                !positiveInput(distance, duration)) {
+                return alert('Distance should be a positive number');
+            }
+            workout = new Cycling([lat, lng], distance, duration, elevation);
+        }
+
+        // Add new object to the workouts array
+        console.log(workout);
+        this.#workouts.push(workout);
+
+        // // Render workout on the list
+        // this._renderWorkout(workout);
+
         // clear the input fields
         inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = '';
 
         // display the form
-        this._pinMap(this.#map, this.#mapEvent);
+        this._pinMap(workout);
     }
+    // _renderWorkout(workout) {
+    //     const html = `
+    //     <li class="workout workout--${workout.name}" data-id="${workout.id}">
+    //       <h2 class="workout__title">Running on April 14</h2>
+    //       <div class="workout__details">
+    //         <span class="workout__icon">${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'}</span>
+    //         <span class="workout__value">${workout.distance}</span>
+    //         <span class="workout__unit">km</span>
+    //       </div>
+    //       <div class="workout__details">
+    //         <span class="workout__icon">⏱</span>
+    //         <span class="workout__value">${workout.duration}</span>
+    //         <span class="workout__unit">min</span>
+    //       </div>
+    //     `;
+    // }
 }
 
 const app = new maptyApp();
