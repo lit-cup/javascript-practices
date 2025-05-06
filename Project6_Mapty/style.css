@@ -3,7 +3,7 @@
   --color-brand--2: #00c46a;
 
   --color-dark--1: #2d3439;
-  --color-dark--bg: #2d343966;
+  --color-dark--bg: #2d34392b;
   --color-dark--2: #42484d;
   --color-light--1: #aaa;
   --color-light--2: #ececec;
@@ -45,7 +45,7 @@ a:visited {
 /* SIDEBAR */
 .sidebar {
   height: 85vh;
-  width: 30%;
+  width: 32%;
   flex-basis: 50rem;
   background-color: var(--color-dark--bg);
   border-radius: 15px;
@@ -59,7 +59,7 @@ a:visited {
 
 .sidebar:hover {
   background-color: var(--color-dark--1);
-  transition: all 1s;
+  transition: all 0.2s;
 }
 
 .logo {
@@ -83,12 +83,12 @@ a:visited {
   background-color: var(--color-dark--2);
   border-radius: 5px;
   padding: 1.5rem 2.25rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.7rem;
   cursor: pointer;
 
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 0.75rem 1.5rem;
+  gap: 0.7rem 1rem;
 }
 
 .workout--running {
