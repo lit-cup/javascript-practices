@@ -11,17 +11,42 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
-const renderMap = function (latitude, longitude) {
+let map, mapEvent;
+
+
+const pinMap = (map, mapEvent) => {
+    const { lat, lng } = mapEvent.latlng;
+    L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup(
+            L.popup({
+                maxWidth: 250,
+                minWidth: 100,
+                autoClose: false,
+                closeOnClick: false,
+                className: 'running-popup'
+            })
+        )
+        .setPopupContent('Workout')
+        .openPopup();
+}
+
+
+const renderMap = (latitude, longitude) => {
     const coords = [latitude, longitude];
-    const map = L.map('map').setView(coords, 13);
+    map = L.map('map').setView(coords, 13);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
+    // handling the map click event
+    map.on('click', mapE => {
+        mapEvent = mapE;
+        form.classList.remove('hidden');
+        inputDistance.focus();
+        //pinMap(map, mapEvent);
+    });
 
-    L.marker(coords).addTo(map)
-        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-        .openPopup();
 }
 
 
@@ -29,7 +54,7 @@ if (navigator.geolocation) {
     console.log('Geolocation is supported by this browser.');
 
     navigator.geolocation.getCurrentPosition(
-        function (position) {
+        position => {
             // Get the position coordinates via GPS using the Geolocation API
             const latitude = position.coords;
             const longitude = position.coords;
@@ -37,7 +62,7 @@ if (navigator.geolocation) {
             // Set the map with the coordinates
             renderMap(latitude, longitude);
 
-        }, function (error) {
+        }, error => {
             console.log('Could not get location by GPS: ', error.message);
             // https://www.google.com/maps/@23.4938181,120.4367907,15.79z
 
@@ -52,3 +77,17 @@ if (navigator.geolocation) {
                 .catch(error => console.error('IP Geolocation Error:', error));
         })
 };
+
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    // clear the input fields
+    inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = '';
+
+    // display the form
+    pinMap(map, mapEvent);
+});
+
+inputType.addEventListener('change', function () {
+    inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+    inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+});
