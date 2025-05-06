@@ -15,6 +15,8 @@ class Workout {
     date = new Date();
     // using a unique id for each workout
     id = (Date.now() + '').slice(-10);
+
+    click = 0;
     constructor(coords, distance, duration) {
         this.coords = coords; // [lat, lng]
         this.distance = distance; // in km
@@ -24,6 +26,9 @@ class Workout {
         // prettier-ignore
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()}`;
+    }
+    clicks() {
+        this.click++;
     }
 }
 class Running extends Workout {
@@ -54,32 +59,39 @@ class Cycling extends Workout {
     }
 }
 
-const run1 = new Running([39, -12], 5.2, 24, 178);
-const cycling1 = new Cycling([39, -12], 27, 95, 523);
-console.log(run1, run1.calcPace());
-console.log(cycling1, cycling1.calcSpeed());
+// const run1 = new Running([39, -12], 5.2, 24, 178);
+// const cycling1 = new Cycling([39, -12], 27, 95, 523);
+// console.log(run1, run1.calcPace());
+// console.log(cycling1, cycling1.calcSpeed());
 
 class maptyApp {
 
     #map;
+    #mapviewlevel = 13;
     #mapEvent;
     #workouts = [];
 
     constructor() {
+        // Get user's position
         this._getPosition();
+        // Get user's localStorage
+        this._getLocalStorage();
+
         // using bind because the private variable is not accessible in the event handler
         form.addEventListener('submit', this._newWorkout.bind(this));
 
         inputType.addEventListener('change', this._toggleElevationField);
+
+        containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     }
     _getPosition() {
         if (navigator.geolocation) {
-            console.log('Geolocation is supported by this browser.');
+            // console.log('Geolocation is supported by this browser.');
 
             navigator.geolocation.getCurrentPosition(
                 this._loadMap.bind(this),
                 error => {
-                    console.log('Could not get location by GPS: ', error.message);
+                    // console.log('Could not get location by GPS: ', error.message);
                 })
         };
     }
@@ -87,17 +99,21 @@ class maptyApp {
         // Get the position coordinates via GPS using the Geolocation API
         const { latitude } = position.coords;
         const { longitude } = position.coords;
-        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
         // Set the map with the coordinates
         const coords = [latitude, longitude];
 
-        this.#map = L.map('map').setView(coords, 13);
+        this.#map = L.map('map').setView(coords, this.#mapviewlevel);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(this.#map);
         // handling the map click event
         this.#map.on('click', this._showForm.bind(this));
+
+        this.#workouts.forEach(work => {
+            this._pinMap(work);
+        })
     }
     _pinMap(workout) {
         // Display marker on the map
@@ -162,7 +178,7 @@ class maptyApp {
         }
 
         // Add new object to the workouts array
-        console.log(workout.pace);
+        // console.log(workout.pace);
         this.#workouts.push(workout);
 
         // Render workout on the list
@@ -173,6 +189,9 @@ class maptyApp {
 
         // display the form
         this._pinMap(workout);
+
+        // Set local storage to all workot
+        this._setLocalStorage();
     }
     _hideForm() {
         inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = '';
@@ -228,6 +247,45 @@ class maptyApp {
 
         }
         form.insertAdjacentHTML('afterend', html);
+    }
+    _moveToPopup(e) {
+        const workoutEl = e.target.closest('.workout');
+        if (!workoutEl) return;
+
+        const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
+
+        // // Using public interface
+        // this will not work because between string to object, will broken prototype chain so click no longer in the chain
+        // workout.clicks();
+
+        this.#map.setView(workout.coords, this.#mapviewlevel, {
+            animate: true,
+            pan: {
+                duration: 1,
+            },
+        })
+        // console.log(workout.click);
+    }
+
+    _setLocalStorage() {
+        localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+    }
+    _getLocalStorage() {
+        const data = JSON.parse(localStorage.getItem('workouts'));
+
+        if (!data) return;
+
+        this.#workouts = data;
+
+        this.#workouts.forEach(work => {
+            this._renderWorkout(work);
+            // this._pinMap(work); we don't set this because this.#map doesn't defined at this part, so we need to put it when map loaded
+        })
+
+    }
+    reset() {
+        localStorage.removeItem('workouts');
+        location.reload();
     }
 }
 
