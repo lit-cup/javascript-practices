@@ -1,8 +1,5 @@
 'use strict';
 
-// prettier-ignore
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
 const inputType = document.querySelector('.form__input--type');
@@ -10,6 +7,64 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const inputEdit = document.querySelector('.edit__option');
+const spanEdit = document.querySelector('.desc__edit');
+const inputDelAll = document.querySelector('.edit__delAll');
+const spanDelAll = document.querySelector('.desc__delAll');
+const inputSort = document.querySelector('.edit__sort');
+const spanSort = document.querySelector('.desc__sort');
+
+
+class Tool {
+    constructor(workout, inputEdit, inputDelAll, inputDelete, inputSort, spanDelAll, spanDelete, spanEdit, spanSort) {
+        this.workout = workout;
+        this.inputEdit = inputEdit;
+        this.inputDelAll = inputDelAll;
+        this.inputDelete = inputDelete;
+        this.inputSort = inputSort;
+        this.spanDelAll = spanDelAll;
+        this.spanDelete = spanDelete;
+        this.spanEdit = spanEdit;
+        this.spanSort = spanSort;
+
+        inputEdit.addEventListener('click', this.iconSwitch.bind(this));
+        inputEdit.addEventListener('mouseover', () => this.showTip(spanEdit));
+        inputEdit.addEventListener('mouseout', () => this.hideTip(spanEdit));
+
+        inputDelAll.addEventListener('mouseover', () => this.showTip(spanDelAll));
+        inputDelAll.addEventListener('mouseout', () => this.hideTip(spanDelAll));
+
+        inputSort.addEventListener('mouseover', () => this.showTip(spanSort));
+        inputSort.addEventListener('mouseout', () => this.hideTip(spanSort));
+    }
+    showTip(type) {
+        type.style.display = 'block';
+    }
+    hideTip(type) {
+        type.style.display = 'none';
+    }
+    iconSwitch() {
+        if (this.inputEdit.classList.toggle('edit__cancel')) {
+            this.inputEdit.src = './cancel.png';
+            this.inputDelAll.style.display = 'block';
+            document.querySelectorAll('.edit__delete').forEach(items => {
+                items.style.opacity = 100;
+                items.addEventListener('mouseover', () => this.showTip(this.spanDelete));
+                items.addEventListener('mouseout', () => this.hideTip(this.spanDelete));
+            });
+        }
+        else {
+            this.inputEdit.src = './edit.png';
+            this.inputDelAll.style.display = 'none';
+            document.querySelectorAll('.edit__delete').forEach(items => {
+                items.style.opacity = 0;
+                items.addEventListener('mouseover', () => this.hideTip(this.spanDelete));
+            });
+        }
+    }
+};
+
+
 
 class Workout {
     date = new Date();
@@ -204,6 +259,7 @@ class maptyApp {
         let html = `
         <li class="workout workout--${workout.type}" data-id="${workout.id}">
           <h2 class="workout__title">${workout.description}</h2>
+          <input class="edit edit__delete" style="opacity: 0;" type="image" src="./delete.png" alt="delete" width="30" height="30">
           <div class="workout__details">
             <span class="workout__icon">${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'}</span>
             <span class="workout__value">${workout.distance}</span>
@@ -281,6 +337,11 @@ class maptyApp {
             this._renderWorkout(work);
             // this._pinMap(work); we don't set this because this.#map doesn't defined at this part, so we need to put it when map loaded
         })
+        // active tool option
+        const inputDelete = document.querySelector('.edit__delete');
+        const spanDelete = document.querySelector('.desc__delete');
+        // using Tool class
+        new Tool(this.#workouts.length, inputEdit, inputDelAll, inputDelete, inputSort, spanDelAll, spanDelete, spanEdit, spanSort);
 
     }
     reset() {

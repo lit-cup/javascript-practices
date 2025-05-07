@@ -22,14 +22,27 @@
 
 <body>
   <div class="sidebar">
+    <div class="sideber__head">
+      <span class="desc desc__delete" style="display: none;">Delete</span>
+      <span class="desc desc__delAll" style="display: none;">Delete All</span>
+      <span class="desc desc__edit" style="display: none;">Edit</span>
+      <span class="desc desc__sort" style="display: none;">Sort</span>
+    </div>
     <img src="logo.png" alt="Logo" class="logo" />
+    <li class="editoptions">
+      <input class="edit edit__delAll" type="image" src="./delete-all.png" alt="delAll" width="30" height="30">
+      <input class="edit edit__option" type="image" src="./edit.png" data-description="Edit" alt="cancel" width="30"
+        height="30">
+      <input class="edit edit__sort" type="image" src="./sort.png" data-description="Sort" alt="sort" width="30"
+        height="30">
 
-    <ul class="workouts">
+    </li>
+    <ul class=" workouts">
       <form class="form hidden">
         <div class="form__row">
           <label class="form__label">Type</label>
           <select class="form__input form__input--type">
-            <option value="running">Running</option>
+            <option value="running" selected>Running</option>
             <option value="cycling">Cycling</option>
           </select>
         </div>

@@ -8,6 +8,7 @@
   --color-light--1: #aaa;
   --color-light--2: #ececec;
   --color-light--3: rgb(214, 222, 224);
+  --color-white: white;
 }
 
 * {
@@ -42,6 +43,14 @@ a:visited {
   color: var(--color-brand--1);
 }
 
+.sideber__head {
+  position: absolute;
+  align-self: end;
+  padding: 1rem;
+}
+
+
+
 /* SIDEBAR */
 .sidebar {
   height: 85vh;
@@ -67,6 +76,72 @@ a:visited {
   align-self: center;
   margin-bottom: 4rem;
 }
+
+.editoptions {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem;
+  justify-content: end;
+}
+
+.edit {
+  /* display: none; */
+  padding: 0.5rem;
+  margin: 0 0.5rem;
+  background-color: var(--color-white);
+  color: var(--color-light--2);
+  border: 2.5px solid var(--color-dark--2);
+  border-radius: 5px;
+}
+
+
+.edit:hover {
+  background-color: var(--color-light--3);
+}
+
+.desc {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-dark--1);
+  background-color: var(--color-light--2);
+  border-radius: 5px;
+  border: none;
+  width: 50px;
+  height: 25px;
+  text-align: center;
+  z-index: 100;
+}
+
+.desc__delete {
+  font-size: 1.4rem;
+}
+
+.edit__cancel {
+  background-color: var(--color-light--3);
+}
+
+
+.edit__delete {
+  border: none;
+  margin: 0;
+  grid-column: 5;
+  grid-row: 1;
+  opacity: 0;
+}
+
+.desc__delAll {
+  width: 75px;
+}
+
+.edit__delAll {
+  display: none;
+}
+
+.edit__sort {
+  margin-right: 0;
+}
+
+
 
 .workouts {
   list-style: none;
@@ -100,9 +175,11 @@ a:visited {
 }
 
 .workout__title {
-  font-size: 1.7rem;
+  font-size: 2rem;
   font-weight: 600;
+  margin-bottom: 5px;
   grid-column: 1 / -1;
+  grid-row: 1;
 }
 
 .workout__details {
