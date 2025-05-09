@@ -27,15 +27,16 @@ class Tool {
         this.spanEdit = spanEdit;
         this.spanSort = spanSort;
 
-        inputEdit.addEventListener('click', this.iconSwitch.bind(this));
-        inputEdit.addEventListener('mouseover', () => this.showTip(spanEdit));
-        inputEdit.addEventListener('mouseout', () => this.hideTip(spanEdit));
+        this.inputEdit.addEventListener('click', this.iconSwitch.bind(this));
+        this.inputEdit.addEventListener('mouseover', () => this.showTip(spanEdit));
+        this.inputEdit.addEventListener('mouseout', () => this.hideTip(spanEdit));
 
-        inputDelAll.addEventListener('mouseover', () => this.showTip(spanDelAll));
-        inputDelAll.addEventListener('mouseout', () => this.hideTip(spanDelAll));
+        this.inputDelAll.addEventListener('mouseover', () => this.showTip(spanDelAll));
+        this.inputDelAll.addEventListener('mouseout', () => this.hideTip(spanDelAll));
 
-        inputSort.addEventListener('mouseover', () => this.showTip(spanSort));
-        inputSort.addEventListener('mouseout', () => this.hideTip(spanSort));
+
+        this.inputSort.addEventListener('mouseover', () => this.showTip(spanSort));
+        this.inputSort.addEventListener('mouseout', () => this.hideTip(spanSort));
     }
     showTip(type) {
         type.style.display = 'block';
@@ -44,7 +45,7 @@ class Tool {
         type.style.display = 'none';
     }
     iconSwitch() {
-        if (this.inputEdit.classList.toggle('edit__cancel')) {
+        if (this.inputEdit.classList.toggle('edit__cancel') && this.workout.length > 0) {
             this.inputEdit.src = './cancel.png';
             this.inputDelAll.style.display = 'block';
             document.querySelectorAll('.edit__delete').forEach(items => {
@@ -132,12 +133,18 @@ class maptyApp {
         // Get user's localStorage
         this._getLocalStorage();
 
+        this._setTool();
+
         // using bind because the private variable is not accessible in the event handler
         form.addEventListener('submit', this._newWorkout.bind(this));
 
         inputType.addEventListener('change', this._toggleElevationField);
 
         containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+
+        inputSort.addEventListener('click', this._sortDistance.bind(this));
+
+        inputDelAll.addEventListener('click', () => this.reset().bind(this));
     }
     _getPosition() {
         if (navigator.geolocation) {
@@ -337,12 +344,20 @@ class maptyApp {
             this._renderWorkout(work);
             // this._pinMap(work); we don't set this because this.#map doesn't defined at this part, so we need to put it when map loaded
         })
+    }
+    _setTool() {
         // active tool option
         const inputDelete = document.querySelector('.edit__delete');
         const spanDelete = document.querySelector('.desc__delete');
         // using Tool class
-        new Tool(this.#workouts.length, inputEdit, inputDelAll, inputDelete, inputSort, spanDelAll, spanDelete, spanEdit, spanSort);
-
+        new Tool(this.#workouts, inputEdit, inputDelAll, inputDelete, inputSort, spanDelAll, spanDelete, spanEdit, spanSort);
+    }
+    _sortDistance() {
+        if (this.#workouts.length > 0) {
+            this.#workouts.sort((a, b) => a.distance - b.distance);
+            this.reset();
+            this._setLocalStorage();
+        }
     }
     reset() {
         localStorage.removeItem('workouts');
