@@ -14,8 +14,9 @@ const spanDelAll = document.querySelector('.desc__delAll');
 const inputSort = document.querySelector('.edit__sort');
 const spanSort = document.querySelector('.desc__sort');
 
-
+// Tool class for the edit section
 class Tool {
+    #seleted = true;
     constructor(workout, inputEdit, inputDelAll, inputDelete, inputSort, spanDelAll, spanDelete, spanEdit, spanSort) {
         this.workout = workout;
         this.inputEdit = inputEdit;
@@ -38,6 +39,9 @@ class Tool {
         this.inputSort.addEventListener('mouseover', () => this.showTip(spanSort));
         this.inputSort.addEventListener('mouseout', () => this.hideTip(spanSort));
     }
+    getEditSelected() {
+        return this.#seleted;
+    }
     showTip(type) {
         type.style.display = 'block';
     }
@@ -45,7 +49,7 @@ class Tool {
         type.style.display = 'none';
     }
     iconSwitch() {
-        if (this.inputEdit.classList.toggle('edit__cancel') && this.workout.length > 0) {
+        if (this.#seleted && this.workout.length > 0) {
             this.inputEdit.src = './cancel.png';
             this.inputDelAll.style.display = 'block';
             document.querySelectorAll('.edit__delete').forEach(items => {
@@ -53,6 +57,8 @@ class Tool {
                 items.addEventListener('mouseover', () => this.showTip(this.spanDelete));
                 items.addEventListener('mouseout', () => this.hideTip(this.spanDelete));
             });
+            // check seleted
+            this.#seleted = false;
         }
         else {
             this.inputEdit.src = './edit.png';
@@ -61,11 +67,11 @@ class Tool {
                 items.style.opacity = 0;
                 items.addEventListener('mouseover', () => this.hideTip(this.spanDelete));
             });
+            // check seleted
+            this.#seleted = true;
         }
     }
 };
-
-
 
 class Workout {
     date = new Date();
@@ -126,6 +132,8 @@ class maptyApp {
     #mapviewlevel = 13;
     #mapEvent;
     #workouts = [];
+    #deleteWork;
+    #tool;
 
     constructor() {
         // Get user's position
@@ -138,13 +146,21 @@ class maptyApp {
         // using bind because the private variable is not accessible in the event handler
         form.addEventListener('submit', this._newWorkout.bind(this));
 
-        inputType.addEventListener('change', this._toggleElevationField);
+        inputType.addEventListener('change', () => this._toggleElevationField());
 
         containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
 
+        // sort workout by distance
         inputSort.addEventListener('click', this._sortDistance.bind(this));
 
-        inputDelAll.addEventListener('click', () => this.reset().bind(this));
+        // delAll workout with timeout
+        inputDelAll.addEventListener('click', () => setTimeout(() => (this.resetWorkout().bind(this)), 800));
+
+        // to give all workout delete input eventlistener when loading website
+        this.#deleteWork.forEach(work => {
+            work.addEventListener('click', () => this._deleteWorkout(work.dataset.id));
+        });
+
     }
     _getPosition() {
         if (navigator.geolocation) {
@@ -252,6 +268,9 @@ class maptyApp {
         // display the form
         this._pinMap(workout);
 
+        // active delete input for new workout
+        document.querySelector('.edit__delete').addEventListener('click', () => this._deleteWorkout(workout.id));
+
         // Set local storage to all workot
         this._setLocalStorage();
     }
@@ -266,7 +285,7 @@ class maptyApp {
         let html = `
         <li class="workout workout--${workout.type}" data-id="${workout.id}">
           <h2 class="workout__title">${workout.description}</h2>
-          <input class="edit edit__delete" style="opacity: 0;" type="image" src="./delete.png" alt="delete" width="30" height="30">
+          <input class="edit edit__delete" data-id="${workout.id}" style="opacity: 0;" type="image" src="./delete.png" alt="delete" width="30" height="30">
           <div class="workout__details">
             <span class="workout__icon">${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'}</span>
             <span class="workout__value">${workout.distance}</span>
@@ -344,26 +363,44 @@ class maptyApp {
             this._renderWorkout(work);
             // this._pinMap(work); we don't set this because this.#map doesn't defined at this part, so we need to put it when map loaded
         })
+        // fix reloading type problem
+        inputType.value = 'running';
     }
     _setTool() {
         // active tool option
         const inputDelete = document.querySelector('.edit__delete');
+        this.#deleteWork = document.querySelectorAll('.edit__delete');
         const spanDelete = document.querySelector('.desc__delete');
         // using Tool class
-        new Tool(this.#workouts, inputEdit, inputDelAll, inputDelete, inputSort, spanDelAll, spanDelete, spanEdit, spanSort);
+        this.#tool = new Tool(this.#workouts, inputEdit, inputDelAll, inputDelete, inputSort, spanDelAll, spanDelete, spanEdit, spanSort);
     }
     _sortDistance() {
         if (this.#workouts.length > 0) {
             this.#workouts.sort((a, b) => a.distance - b.distance);
-            this.reset();
+            this.resetWorkout();
             this._setLocalStorage();
         }
     }
-    reset() {
+    _deleteWorkout(work) {
+        // to check edit selected
+        if (!this.#tool.getEditSelected()) {
+            // Find and remove the item from the array with data-id element
+            const index = this.#workouts.findIndex(item => item.id === work);
+            // remove 1 index 
+            this.#workouts.splice(index, 1);
+
+            // init map、localStorage
+            this._getPosition();
+            this.resetWorkout();
+            this._setLocalStorage();
+            // console.log(this.#workouts);
+        }
+    }
+
+    resetWorkout() {
         localStorage.removeItem('workouts');
         location.reload();
     }
 }
-
 const app = new maptyApp();
 
