@@ -3,9 +3,9 @@
   --color-brand--2: #00c46a;
 
   --color-dark--1: #2d3439;
-  --color-dark--bg: #2d34392b;
+  --color-dark--bg: #39332d0f;
   --color-dark--2: #42484d;
-  --color-light--1: #aaa;
+  --color-light--1: #ebebeb;
   --color-light--2: #ececec;
   --color-light--3: rgb(214, 222, 224);
   --color-white: white;
@@ -43,7 +43,7 @@ a:visited {
   color: var(--color-brand--1);
 }
 
-.sideber__head {
+.sidebar__head {
   position: absolute;
   align-self: end;
   padding: 1rem;
@@ -54,7 +54,7 @@ a:visited {
 /* SIDEBAR */
 .sidebar {
   height: 85vh;
-  width: 32%;
+  width: 65rem;
   flex-basis: 50rem;
   background-color: var(--color-dark--bg);
   border-radius: 15px;
@@ -267,7 +267,7 @@ a:visited {
   margin-top: auto;
   font-size: 1.3rem;
   text-align: center;
-  color: var(--color-light--1);
+  color: var(bluse);
 }
 
 .twitter-link:link,
