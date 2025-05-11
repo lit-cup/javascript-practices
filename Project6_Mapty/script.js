@@ -1,6 +1,7 @@
 'use strict';
 
 const form = document.querySelector('.form');
+const workform = document.querySelector('.work');
 const containerWorkouts = document.querySelector('.workouts');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
@@ -131,6 +132,7 @@ class maptyApp {
     #map;
     #mapviewlevel = 13;
     #mapEvent;
+    #workoutlocation;
     #workouts = [];
     #deleteWork;
     #tool;
@@ -328,19 +330,16 @@ class maptyApp {
 
 
         }
-        form.insertAdjacentHTML('afterend', html);
+        workform.insertAdjacentHTML('afterbegin', html);
     }
     _moveToPopup(e) {
         const workoutEl = e.target.closest('.workout');
         if (!workoutEl) return;
-
-        const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
-
+        this.#workoutlocation = this.#workouts.find(work => work.id === workoutEl.dataset.id);
         // // Using public interface
         // this will not work because between string to object, will broken prototype chain so click no longer in the chain
         // workout.clicks();
-
-        this.#map.setView(workout.coords, this.#mapviewlevel, {
+        this.#map.setView(this.#workoutlocation.coords, this.#mapviewlevel, {
             animate: true,
             pan: {
                 duration: 1,
@@ -353,16 +352,28 @@ class maptyApp {
         localStorage.setItem('workouts', JSON.stringify(this.#workouts));
     }
     _getLocalStorage() {
-        const data = JSON.parse(localStorage.getItem('workouts'));
 
+        const data = JSON.parse(localStorage.getItem('workouts'));
         if (!data) return;
 
         this.#workouts = data;
 
         this.#workouts.forEach(work => {
+            let workIdTemp = work.id;
+            // if workout is running, create running object
+            if (work.type === 'running') {
+                work = new Running(work.coords, work.distance, work.duration, work.cadence);
+                work.id = workIdTemp;
+            }
+            // if workout is cycling, create cycling object
+            if (work.type === 'cycling') {
+                work = new Cycling(work.coords, work.distance, work.duration, work.elevationGain);
+                work.id = workIdTemp;
+            }
             this._renderWorkout(work);
             // this._pinMap(work); we don't set this because this.#map doesn't defined at this part, so we need to put it when map loaded
         })
+
         // fix reloading type problem
         inputType.value = 'running';
     }
@@ -376,8 +387,10 @@ class maptyApp {
     }
     _sortDistance() {
         if (this.#workouts.length > 0) {
-            this.#workouts.sort((a, b) => a.distance - b.distance);
-            this.resetWorkout();
+            workform.innerHTML='';
+            this.#workouts
+            .sort((a, b) => a.distance - b.distance)
+            .forEach(work=> this._renderWorkout(work));
             this._setLocalStorage();
         }
     }
