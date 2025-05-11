@@ -22,12 +22,13 @@
 
 <body>
   <div class="error-message hidden"></div>
-  <div class="sidebar">
+  <div class="sidebar minisize">
     <div class="sidebar__head">
       <span class="desc desc__delete" style="display: none;">Delete</span>
       <span class="desc desc__delAll" style="display: none;">Delete All</span>
       <span class="desc desc__edit" style="display: none;">Edit</span>
       <span class="desc desc__sort" style="display: none;">Sort</span>
+      <span class="desc desc__showAll" style="display: none;">Show All Workouts</span>
     </div>
     <img src="logo.png" alt="Logo" class="logo" />
     <li class="editoptions">
@@ -36,7 +37,8 @@
         height="30">
       <input class="edit edit__sort" type="image" src="./sort.png" data-description="Sort" alt="sort" width="30"
         height="30">
-
+      <input class="edit edit__showAll" type="image" src="./show-all.png" data-description="Show All" alt="show all" width="30"
+        height="30">
     </li>
     <ul class=" workouts">
       <form class="form hidden">
