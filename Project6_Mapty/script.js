@@ -2,6 +2,7 @@
 
 const form = document.querySelector('.form');
 const workform = document.querySelector('.work');
+const errorMessage = document.querySelector('.error-message');
 const containerWorkouts = document.querySelector('.workouts');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
@@ -162,18 +163,25 @@ class maptyApp {
         this.#deleteWork.forEach(work => {
             work.addEventListener('click', () => this._deleteWorkout(work.dataset.id));
         });
-
+    }
+    _showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.classList.remove('hidden');
+        setTimeout(() => {
+            errorMessage.classList.add('hidden');
+        }, 3000);
     }
     _getPosition() {
         if (navigator.geolocation) {
-            // console.log('Geolocation is supported by this browser.');
-
             navigator.geolocation.getCurrentPosition(
                 this._loadMap.bind(this),
                 error => {
-                    // console.log('Could not get location by GPS: ', error.message);
-                })
-        };
+                    this._showError('Could not get your location. Please Check location access.');
+                }
+            );
+        } else {
+            this._showError('Geolocation is not supported by your browser.');
+        }
     }
     _loadMap(position) {
         // Get the position coordinates via GPS using the Geolocation API
@@ -242,17 +250,18 @@ class maptyApp {
             const cadence = +inputCadence.value;
             if (!validInput(distance, duration, cadence) ||
                 !positiveInput(distance, duration, cadence)) {
-                return alert('Distance should be a positive number');
+                this._showError('Please enter valid positive numbers for all fields');
+                return;
             }
             workout = new Running([lat, lng], distance, duration, cadence);
-
         }
         // if workout is cycling, create cycling object
         if (type === 'cycling') {
             const elevation = +inputElevation.value;
             if (!validInput(distance, duration, elevation) ||
                 !positiveInput(distance, duration)) {
-                return alert('Distance should be a positive number');
+                this._showError('Please enter valid positive numbers for all fields');
+                return;
             }
             workout = new Cycling([lat, lng], distance, duration, elevation);
         }

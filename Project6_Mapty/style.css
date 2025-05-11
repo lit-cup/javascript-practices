@@ -55,6 +55,7 @@ a:visited {
 .sidebar {
   height: 85vh;
   width: 65rem;
+  right: 20px;
   flex-basis: 50rem;
   background-color: var(--color-dark--bg);
   border-radius: 15px;
@@ -311,4 +312,24 @@ a:visited {
 
 .cycling-popup .leaflet-popup-content-wrapper {
   border-left: 5px solid var(--color-brand--1);
+}
+
+.error-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ff4f4f;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.error-message.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
 }
