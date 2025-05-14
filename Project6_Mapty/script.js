@@ -18,23 +18,21 @@ const spanSort = document.querySelector('.desc__sort');
 const inputShowAll = document.querySelector('.edit__showAll');
 const spanShowAll = document.querySelector('.desc__showAll');
 
-// Tool class for the edit section
+// Tool class for the edit section          
 class Tool {
     #seleted = true;
-    constructor(workout, inputEdit, inputDelAll, inputDelete, inputSort, inputShowAll, spanDelAll, spanDelete, spanEdit, spanSort, spanShowAll) {
+    constructor(workout, inputEdit, inputDelAll, inputSort, inputShowAll, spanDelAll, spanDelete, spanEdit, spanSort, spanShowAll) {
         this.workout = workout;
         this.inputEdit = inputEdit;
         this.inputDelAll = inputDelAll;
-        this.inputDelete = inputDelete;
         this.inputSort = inputSort;
         this.inputShowAll = inputShowAll;
-        this.spanDelAll = spanDelAll;
         this.spanDelete = spanDelete;
         this.spanEdit = spanEdit;
         this.spanSort = spanSort;
         this.spanShowAll = spanShowAll;
 
-        this.inputEdit.addEventListener('click', this.iconSwitch.bind(this));
+        this.inputEdit.addEventListener('click', () => this.iconSwitch());
         this.inputEdit.addEventListener('mouseover', () => this.showTip(spanEdit));
         this.inputEdit.addEventListener('mouseout', () => this.hideTip(spanEdit));
 
@@ -56,28 +54,38 @@ class Tool {
     hideTip(type) {
         type.style.display = 'none';
     }
-    iconSwitch() {
-        if (this.#seleted && this.workout.length > 0) {
-            this.inputEdit.src = './cancel.png';
-            this.inputDelAll.style.display = 'block';
-            document.querySelectorAll('.edit__delete').forEach(items => {
-                items.style.opacity = 100;
-                items.addEventListener('mouseover', () => this.showTip(this.spanDelete));
-                items.addEventListener('mouseout', () => this.hideTip(this.spanDelete));
-            });
-            // check seleted
-            this.#seleted = false;
-        }
-        else {
-            this.inputEdit.src = './edit.png';
-            this.inputDelAll.style.display = 'none';
-            document.querySelectorAll('.edit__delete').forEach(items => {
-                items.style.opacity = 0;
-                items.addEventListener('mouseover', () => this.hideTip(this.spanDelete));
-            });
+    setEditOpen() {
+        this.inputEdit.src = './cancel.png';
+        this.inputDelAll.style.display = 'block';
+        document.querySelectorAll('.edit__delete').forEach(items => {
+            items.style.opacity = 1;
+            items.addEventListener('mouseover', () => this.showTip(this.spanDelete));
+            items.addEventListener('mouseout', () => this.hideTip(this.spanDelete));
+        });
+        // check seleted
+        this.#seleted = false;
+    }
+    setEditClose() {
+        this.inputEdit.src = './edit.png';
+        this.inputDelAll.style.display = 'none';
+        document.querySelectorAll('.edit__delete').forEach(items => {
+            items.style.opacity = 0;
+            items.addEventListener('mouseover', () => this.hideTip(this.spanDelete));
+            items.addEventListener('mouseout', () => this.hideTip(this.spanDelete));
             // check seleted
             this.#seleted = true;
+        });
+    }
+    iconSwitch() {
+        if (this.#seleted && this.workout.length > 0) {
+            this.setEditOpen();
         }
+        else {
+            this.setEditClose();
+        }
+    }
+    updateWorkouts(workouts) {
+        this.workout = workouts;
     }
 };
 
@@ -86,7 +94,6 @@ class Workout {
     // using a unique id for each workout
     id = (Date.now() + '').slice(-10);
 
-    click = 0;
     constructor(coords, distance, duration) {
         this.coords = coords; // [lat, lng]
         this.distance = distance; // in km
@@ -96,9 +103,6 @@ class Workout {
         // prettier-ignore
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()}`;
-    }
-    clicks() {
-        this.click++;
     }
 }
 class Running extends Workout {
@@ -129,28 +133,28 @@ class Cycling extends Workout {
     }
 }
 
-// const run1 = new Running([39, -12], 5.2, 24, 178);
-// const cycling1 = new Cycling([39, -12], 27, 95, 523);
-// console.log(run1, run1.calcPace());
-// console.log(cycling1, cycling1.calcSpeed());
-
 class maptyApp {
 
     #map;
     #mapviewlevel = 13;
     #mapEvent;
     #workouts = [];
-    #deleteWork;
     #tool;
-    #route = [];
+    #routes = [];
+    #routingControls = [];
     #markers = [];
     #marker1;
     #marker2;
-    #location1;
-    #location2;
     #isMinisize = false;
+    #mapLoaded = false;
+    #mapLoadPromise;
 
     constructor() {
+        // using Promise to chicking if map is loaded
+        this.#mapLoadPromise = new Promise(resolve => {
+            this._resolveMapLoad = resolve;
+        })
+
         // Get user's position by _loadMap()
         this._getPosition();
 
@@ -164,15 +168,15 @@ class maptyApp {
         containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
 
         // Use _sortDistance() to handle tool's sort click event
-        inputSort.addEventListener('click', this._sortDistance.bind(this));
+        inputSort.addEventListener('click', this._sortbyDistance.bind(this));
 
         // Use setTimeout() && resetWorkout() to handle tool's delete-all click event
-        inputDelAll.addEventListener('click', () => setTimeout(() => (this.resetWorkout().bind(this)), 800));
+        inputDelAll.addEventListener('click', () => setTimeout(() => (this.resetWorkout()), 1000));
 
         // Use _fitMapToWorkouts() to handle tool's show-all click event
         inputShowAll.addEventListener('click', this._fitMapToWorkouts.bind(this));
-    }
 
+    }
     _setSidebar() {
         const logo = document.querySelector('.logo');
         logo.addEventListener('click', this._toggleSidebar.bind(this));
@@ -197,11 +201,17 @@ class maptyApp {
             errorMessage.classList.add('hidden');
         }, 3000);
     }
+    _isMapLoaded() {
+        return this.#mapLoaded && this.#map instanceof L.Map;
+    }
+    async waitForMapLoad() {
+        await this.#mapLoadPromise;
+    }
     _getPosition() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 this._loadMap.bind(this),
-                error => {
+                () => {
                     this._showError('Could not get your location. Please Check location access.');
                 }
             );
@@ -211,42 +221,40 @@ class maptyApp {
     }
     _loadMap(position) {
         // Get the position coordinates via GPS using the Geolocation API
-        const { latitude } = position.coords;
-        const { longitude } = position.coords;
-        // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        const { latitude, longitude } = position.coords;
+
         // Set the map with the coordinates
         const coords = [latitude, longitude];
 
         this.#map = L.map('map').setView(coords, this.#mapviewlevel);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(this.#map);
-        // handling the map click event
-        // this.#map.on('click', this._showForm.bind(this));
-        this.#map.once('click', this._showRouteAndPan.bind(this));
-        // this._showForm.bind(this)
-        // this.#workouts.forEach(work => {
+        try {
 
-        // Get user's localStorage and _renderWorkout(work)
-        this._getLocalStorage();
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(this.#map);
 
-        // set tools : delete、delete-all、edit、cancel、show-all、sort、tooltips、icon switch handler
-        this._setTool();
+            this.#mapLoaded = true;
+            this._resolveMapLoad();
 
-        // Get user's routing history by localstorage
-        this.#workouts.forEach(work => {
-            this._pinMap(work);
-        });
+            // Get user's localStorage and _renderWorkout(work)
+            this._getLocalStorage();
+            // set tools : delete、delete-all、edit、cancel、show-all、sort、tooltips、icon switch handler
+            this._setTool();
 
-        // Use _deleteWorkout() to render active for all items and handle tool's delete click event
-        this.#deleteWork.forEach(work => {
-            work.addEventListener('click', () => this._deleteWorkout(work.dataset.id));
-        });
+            // handling the map click event
+            // this.#map.on('click', this._showForm.bind(this));
+            this.#map.once('click', this._showRouteAndPan.bind(this));
+        } catch (e) {
+            console.error('Failed to initialize map:', e);
+            this._showError('Map initialization failed. Please refresh the page.');
+        }
 
-        // Fit map to show all workouts after loading
-        this._fitMapToWorkouts();
     }
     _pinMap(workout) {
+        if (!this._isMapLoaded()) {
+            console.warn('Cannot pin map: Map is not loaded.');
+            return;
+        }
         // Display marker on the map
         const marker = L.marker(workout.coords)
             .addTo(this.#map)
@@ -260,19 +268,25 @@ class maptyApp {
                 })
             )
             .setPopupContent(`${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`)
-            .openPopup();
+            .openPopup()
+            .on('click', () => this.#map.panTo(workout.coords));
 
         // Store marker reference
         this.#markers.push(marker);
     }
-    _getRoute() {
+    _getRouteAndPan() {
+        if (!this._isMapLoaded()) {
+            console.warn('Cannot pin map: Map is not loaded.');
+            return;
+        }
         try {
             const savedData = JSON.parse(localStorage.getItem('route'));
             if (savedData) {
-                this.#route = savedData;
+                this.#routes = savedData;
                 savedData.forEach((data, index) => {
                     // Validate each route's data structure
                     if (
+                        data.workoutId &&
                         data.marker1 &&
                         data.marker2 &&
                         typeof data.marker1.lat === 'number' &&
@@ -281,13 +295,15 @@ class maptyApp {
                         typeof data.marker2.lng === 'number'
                     ) {
                         // Create markers
-                        L.marker([data.marker1.lat, data.marker1.lng])
+                        const marker1 = L.marker([data.marker1.lat, data.marker1.lng])
                             .addTo(this.#map)
-                        L.marker([data.marker2.lat, data.marker2.lng])
+                        const marker2 = L.marker([data.marker2.lat, data.marker2.lng])
                             .addTo(this.#map)
 
+                        this.#markers.push(marker1, marker2);
+
                         // Draw route
-                        L.Routing.control({
+                        const routingControl = L.Routing.control({
                             waypoints: [
                                 L.latLng(data.marker1.lat, data.marker1.lng),
                                 L.latLng(data.marker2.lat, data.marker2.lng)
@@ -298,61 +314,62 @@ class maptyApp {
                             }),
                             createMarker: () => null,
                             addWaypoints: false,
-                            routeWhileDragging: false
+                            routeWhileDragging: false,
+                            fitSelectedRoutes: false
                         }).on('routesfound', (e) => {
                             const routeDistanceKm = (e.routes[0].summary.totalDistance / 1000).toFixed(2);
-                            L.marker([data.marker2.lat, data.marker2.lng])
-                                .addTo(this.#map)
-                                .bindPopup(
-                                    L.popup({
-                                        maxWidth: 250,
-                                        minWidth: 100,
-                                        autoClose: false,
-                                        closeOnClick: false,
-                                    })
-                                )
-                                .setPopupContent(`Route: ${routeDistanceKm} km`)
-                                .openPopup();
+                            L.popup({
+                                maxWidth: 250,
+                                minWidth: 100,
+                                autoClose: false,
+                                closeOnClick: false
+                            })
+                                .setLatLng([data.marker2.lat, data.marker2.lng])
+                                .setContent(`Route ${index + 1}: ${routeDistanceKm} km`)
+                                .openOn(this.#map);
                             if (this._isSidebarMinisize()) {
                                 this._toggleSidebar();
                             }
                         }).addTo(this.#map);
+
+                        this.#routingControls.push(routingControl);
                     }
                 });
+            } else {
+                console.warn(`Invalid route data at index ${index}:`, data);
             }
         } catch (e) {
             console.error('Failed to parse localStorage data:', e);
+            localStorage.removeItem('route');
         }
     }
-    _showRouteAndPan(location) {
+    _showRouteAndPan(mapE) {
+        if (!this._isMapLoaded()) {
+            console.warn('Cannot pin map: Map is not loaded.');
+            return;
+        }
+        this.#mapEvent = mapE;
         // Listen for first click
-        this.#marker1 = L.marker(location.latlng).addTo(this.#map).bindPopup('Start').openPopup();
-        this.#location1 = this.#marker1;
-        this.#mapEvent = this.#marker1;
+        this.#marker1 = L.marker(mapE.latlng).addTo(this.#map).bindPopup('Start').openPopup();
+        this.#markers.push(this.#marker1); // Track in #markers
         // Listen for second click
         this.#map.once('click', (e) => {
             this.#marker2 = L.marker(e.latlng).addTo(this.#map).bindPopup('End').openPopup();
-            this.#location2 = this.#marker2;
+            this.#markers.push(this.#marker2); // Track in #markers
             this._setRouteAndPan(); // Draw route after second click
-            if (this._isSidebarMinisize()) {
-                this._toggleSidebar();
-            }
         });
     }
     _setRouteAndPan() {
+        if (!this._isMapLoaded()) {
+            console.warn('Cannot pin map: Map is not loaded.');
+            return;
+        }
+
         form.classList.remove('hidden');
         inputDistance.focus();
-        // Variable to hold the routing control
-        let routingControl = null;
-        let data = null;
-        // Remove existing route if any
-        if (routingControl) {
-            this.#map.removeControl(routingControl);
-        }
-        // Wait for second pan to complete
-        // // Add route
-        routingControl = L.Routing.control({
-            waypoints: [this.#location1._latlng, this.#location2._latlng],
+
+        const routingControl = L.Routing.control({
+            waypoints: [this.#marker1._latlng, this.#marker2._latlng],
             lineOptions: { styles: [{ color: 'red', weight: 4 }] },
             router: L.Routing.osrmv1({
                 serviceUrl: 'https://router.project-osrm.org/route/v1',
@@ -360,59 +377,58 @@ class maptyApp {
             createMarker: () => null,
             addWaypoints: false,
             routeWhileDragging: false,
+            fitSelectedRoutes: false
         }).on('routesfound', (e) => {
             const routeDistanceKm = (e.routes[0].summary.totalDistance / 1000).toFixed(2);
+
+            // set view to the full markers
+            const bounds = L.latLngBounds([this.#marker1._latlng, this.#marker2._latlng]);
+            e.routes[0].coordinates.forEach(coord => bounds.extend([coord.lat, coord.lng]));
+
+            if (bounds.isValid()) {
+                this.#map.fitBounds(bounds, { padding: [100, 100], maxZoom: 15 });
+            }
             // Show distances in popup
             L.popup()
-                .setLatLng(this.#location2._latlng)
+                .setLatLng(this.#marker2._latlng)
                 .setContent(`Route: ${routeDistanceKm} km`)
                 .openOn(this.#map);
-
-            data = {
-                marker1: { lat: this.#location1._latlng.lat, lng: this.#location1._latlng.lng },
-                marker2: { lat: this.#location2._latlng.lat, lng: this.#location2._latlng.lng },
-            }
-            this.#route.push(data);
-            localStorage.setItem('route', JSON.stringify(this.#route));
 
             // set Distance
             inputDistance.value = routeDistanceKm;
             // Expand sidebar if it's in minisize mode
             if (this._isSidebarMinisize()) { this._toggleSidebar(); }
+        }).on('routingerror', (e) => {
+            console.error('Routing failed:', e.error.message);
+            this._showError('Could not calculate route.');
+            form.classList.add('hidden');
+            this.#map.once('click', this._showRouteAndPan.bind(this));
         }).addTo(this.#map);
-    }
-    _showForm(mapE) {
-        this.#mapEvent = mapE;
-        form.classList.remove('hidden');
-        inputDistance.focus();
-        this._showRouteAndPan.bind(this);
+
+        this.#routingControls.push(routingControl);
     }
     _toggleElevationField() {
         inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
         inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     }
     _newWorkout(e) {
-        // check if the input is finite or not
-        const validInput = (...inputs) =>
-            inputs.every(input => Number.isFinite(input));
-
-        const positiveInput = (...inputs) =>
-            inputs.every(input => input > 0);
-
         e.preventDefault();
+
+        // check if the input is finite or not
+        const validInput = (...inputs) => inputs.every(input => Number.isFinite(input));
+        const positiveInput = (...inputs) => inputs.every(input => input > 0);
 
         // Get data from the form
         const type = inputType.value;
         const distance = +inputDistance.value;
         const duration = +inputDuration.value;
-        const { lat, lng } = this.#mapEvent._latlng;
+        const { lat, lng } = this.#mapEvent.latlng;
         let workout;
 
         // if workout is running, create running object
         if (type === 'running') {
             const cadence = +inputCadence.value;
-            if (!validInput(distance, duration, cadence) ||
-                !positiveInput(distance, duration, cadence)) {
+            if (!validInput(distance, duration, cadence) || !positiveInput(distance, duration, cadence)) {
                 this._showError('Please enter valid positive numbers for all fields');
                 return;
             }
@@ -421,8 +437,7 @@ class maptyApp {
         // if workout is cycling, create cycling object
         if (type === 'cycling') {
             const elevation = +inputElevation.value;
-            if (!validInput(distance, duration, elevation) ||
-                !positiveInput(distance, duration)) {
+            if (!validInput(distance, duration, elevation) || !positiveInput(distance, duration)) {
                 this._showError('Please enter valid positive numbers for all fields');
                 return;
             }
@@ -430,15 +445,17 @@ class maptyApp {
         }
 
         // Add new object to the workouts array
-        // console.log(workout.pace);
         this.#workouts.push(workout);
+        this.#routes.push({
+            workoutId: workout.id,
+            marker1: { lat: this.#marker1._latlng.lat, lng: this.#marker1._latlng.lng },
+            marker2: { lat: this.#marker2._latlng.lat, lng: this.#marker2._latlng.lng },
+        });
 
         // Render workout on the list
         this._renderWorkout(workout);
-
         // clear the input fields hide the form
         this._hideForm();
-
         // display the form
         this._pinMap(workout);
 
@@ -447,6 +464,7 @@ class maptyApp {
 
         // Set local storage to all workot
         this._setLocalStorage();
+        localStorage.setItem('route', JSON.stringify(this.#routes));
 
         this.#map.once('click', this._showRouteAndPan.bind(this));
 
@@ -458,7 +476,6 @@ class maptyApp {
     }
     _hideForm() {
         inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = '';
-
         form.style.display = 'none';
         form.classList.add('hidden');
         setTimeout(() => (form.style.display = 'grid'), 1000);
@@ -511,31 +528,41 @@ class maptyApp {
 
         }
         workform.insertAdjacentHTML('afterbegin', html);
+
+        const deleteBtn = workform.querySelector(`.edit__delete[data-id="${workout.id}"]`);
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', () => this._deleteWorkout(workout.id));
+        }
     }
     _moveToPopup(e) {
+        // Ignore clicks on delete buttons
+        if (e.target.classList.contains('edit__delete') || e.target.closest('.edit__delete')) {
+            return;
+        }
+        if (!this._isMapLoaded()) return;
+
         // find correct html form's data with workout array data by id
         const workoutEl = e.target.closest('.workout');
         if (!workoutEl) return;
-        const workoutlocation = this.#workouts.find(work => work.id === workoutEl.dataset.id);
+
+        const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
 
         // check if sidebar is minisize then toggle sidebar open/close
         if (!this._isSidebarMinisize()) {
             this._toggleSidebar();
         }
-
+        if (!workout) return;
         // find correct route data with right html form&workout data
-        const routelocation = this.#route.find(
-            markers => markers.marker1.lat === workoutlocation.coords[0] &&
-                markers.marker1.lng === workoutlocation.coords[1]
-        );
+        const route = this.#routes.find(route => route.workoutId === workout.id);
+        if (!route) {
+            this.#map.panTo(workout.coords);
+            return;
+        }
+
         // using latLngBounds() mix to location
-        const bounds = L.latLngBounds([routelocation.marker1, routelocation.marker2]);
-        console.log(bounds);
+        const bounds = L.latLngBounds([route.marker1, route.marker2]);
         // set view
-        this.#map.fitBounds(bounds, {
-            padding: [100, 100],
-            maxZoom: 20,
-        });
+        this.#map.fitBounds(bounds, { padding: [100, 100], maxZoom: 15, });
     }
 
     _setLocalStorage() {
@@ -543,34 +570,45 @@ class maptyApp {
     }
     _getLocalStorage() {
 
+        if (!this._isMapLoaded()) {
+            console.warn('Cannot load workouts: Map is not loaded.');
+            return;
+        }
+
         const data = JSON.parse(localStorage.getItem('workouts'));
         if (!data) return;
 
-        this.#workouts = data;
-        this.#workouts.forEach(work => {
-            let workIdTemp = work.id;
+        this.#workouts = data.map(work => {
+            const workIdTemp = work.id;
+
             // if workout is running, create running object
             if (work.type === 'running') {
                 work = new Running(work.coords, work.distance, work.duration, work.cadence);
-                work.id = workIdTemp;
-            }
-            // if workout is cycling, create cycling object
-            if (work.type === 'cycling') {
+            } else if (work.type === 'cycling') {
                 work = new Cycling(work.coords, work.distance, work.duration, work.elevationGain);
-                work.id = workIdTemp;
+
             }
-            this._renderWorkout(work);
+            work.id = workIdTemp;
+            return work;
             // this._pinMap(work); we don't set this because this.#map doesn't defined at this part, so we need to put it when map loaded
         })
+
+        // Get user's routing history by localstorage
+        this.#workouts.forEach(work => {
+            this._renderWorkout(work);
+            this._pinMap(work);
+        });
+
         // fix reloading type problem
         inputType.value = 'running';
-
-        this._getRoute();
+        this._getRouteAndPan();
     }
     _setTool() {
-        // active tool option
-        const inputDelete = document.querySelector('.edit__delete');
-        this.#deleteWork = document.querySelectorAll('.edit__delete');
+        if (!this._isMapLoaded()) {
+            console.warn('Cannot set tools: Map is not loaded.');
+            return;
+        }
+        // // active tool option
         const spanDelete = document.querySelector('.desc__delete');
 
         // using Tool class
@@ -578,7 +616,6 @@ class maptyApp {
             this.#workouts,
             inputEdit,
             inputDelAll,
-            inputDelete,
             inputSort,
             inputShowAll,
             spanDelAll,
@@ -587,9 +624,10 @@ class maptyApp {
             spanSort,
             spanShowAll
         );
+
         this._setSidebar();
     }
-    _sortDistance() {
+    _sortbyDistance() {
         if (this.#workouts.length > 0) {
             workform.innerHTML = '';
             this.#workouts
@@ -598,44 +636,116 @@ class maptyApp {
             this._setLocalStorage();
         }
     }
-    _deleteWorkout(work) {
-        // to check edit selected
+    _deleteWorkout(selectedWorkId) {
+        if (!this._isMapLoaded()) return;
         if (!this.#tool.getEditSelected()) {
-            // Find and remove the item from the array with data-id element
-            const index = this.#workouts.findIndex(item => item.id === work);
-            // remove 1 index 
-            this.#workouts.splice(index, 1);
+            const indexWork = this.#workouts.findIndex(item => item.id === selectedWorkId);
+            if (indexWork === -1) return;
 
-            // init map、localStorage
-            this._getPosition();
-            this.resetWorkout();
+            // Store workout coords and route before splicing
+            const workoutCoords = this.#workouts[indexWork].coords;
+            const indexRoute = this.#routes.findIndex(route => route.workoutId === selectedWorkId);
+            let routeMarkers = [];
+            if (indexRoute !== -1) {
+                const route = this.#routes[indexRoute];
+                routeMarkers = [
+                    { lat: route.marker1.lat, lng: route.marker1.lng },
+                    { lat: route.marker2.lat, lng: route.marker2.lng }
+                ];
+            }
+
+            // Remove workout
+            this.#workouts.splice(indexWork, 1);
+
+            // Remove route and routing control
+            if (indexRoute !== -1) {
+                this.#routes.splice(indexRoute, 1);
+                if (this.#routingControls[indexRoute]) {
+                    this.#map.removeControl(this.#routingControls[indexRoute]);
+                    this.#routingControls.splice(indexRoute, 1);
+                }
+            }
+
+            // Remove all related markers
+            const markersToRemove = this.#markers.filter(marker => {
+                const latlng = marker._latlng;
+                return (
+                    // Workout marker
+                    (latlng.lat === workoutCoords[0] && latlng.lng === workoutCoords[1]) ||
+                    // Route start/end markers
+                    routeMarkers.some(rm => latlng.lat === rm.lat && latlng.lng === rm.lng)
+                );
+            });
+            markersToRemove.forEach(marker => {
+                this.#map.removeLayer(marker);
+            });
+            this.#markers = this.#markers.filter(m => !markersToRemove.includes(m));
+
+            // Remove temporary markers if they match the deleted route
+            if (this.#marker1 && this.#marker2 && indexRoute !== -1) {
+                const route = this.#routes[indexRoute] || { marker1: {}, marker2: {} };
+                if (
+                    (this.#marker1._latlng.lat === route.marker1?.lat &&
+                        this.#marker1._latlng.lng === route.marker1?.lng) ||
+                    (this.#marker2._latlng.lat === route.marker2?.lat &&
+                        this.#marker2._latlng.lng === route.marker2?.lng)
+                ) {
+                    this.#map.removeLayer(this.#marker1);
+                    this.#map.removeLayer(this.#marker2);
+                    this.#marker1 = this.#marker2 = null;
+                }
+            }
+            // Re-render workouts
+            workform.innerHTML = '';
+            this.#workouts.forEach(work => this._renderWorkout(work));
+            // Update local storage
             this._setLocalStorage();
+            localStorage.setItem('route', JSON.stringify(this.#routes));
+
+            // Update Tool instance
+            this.#tool.updateWorkouts(this.#workouts);
+            this.#tool.setEditClose();
+            // fixed sometimes display change doesn't work
+            document.querySelector('.desc__delete').style.display = 'none';
+
         }
     }
 
     resetWorkout() {
+        if (!this._isMapLoaded()) return;
+
         // Remove all markers from map
         this.#markers.forEach(marker => this.#map.removeLayer(marker));
         this.#markers = [];
 
+        this.#routingControls.forEach(control => this.#map.removeControl(control));
+        this.#routingControls = [];
+
+        this.#workouts = [];
+        this.#routes = [];
+
         localStorage.removeItem('route');
         localStorage.removeItem('workouts');
-        location.reload();
+
+        workform.innerHTML = '';
+        this.#map.closePopup();
+        this.#map.off('click');
+        this.#marker1 = this.#marker2 = null;
+
+        this.#tool.updateWorkouts(this.#workouts);
+        this.#tool.setEditClose();
     }
 
     _fitMapToWorkouts() {
+
+        if (!this._isMapLoaded() || this.#markers.length === 0) return;
         // Only toggle sidebar if it's not already in minisize mode
         if (!this._isSidebarMinisize()) {
             this._toggleSidebar();
         }
 
-        if (this.#markers.length === 0) return;
-
         const bounds = L.latLngBounds(this.#markers.map(marker => marker._latlng));
-        this.#map.fitBounds(bounds, {
-            padding: [30, 30],
-            maxZoom: 13
-        });
+        this.#map.fitBounds(bounds, { padding: [50, 50], maxZoom: this.#mapviewlevel });
     }
 }
 const app = new maptyApp();
@@ -645,9 +755,9 @@ const app = new maptyApp();
 // TODO
 /**
  * draw line loading bug fix  | done
- * this.#route array refresh error  | done
+ * this.#routes array refresh error  | done
  * button couldn't click fix  | done
  * test everything is okay
  *  click form's items view fix | done
- * loading routing focus on every routing problem after fix this future keep learning after section
+ * loading routing focus on every routing problem after fix this future keep learning after section | done
  */
