@@ -279,7 +279,7 @@ const whereAmI = function () {
     getPostion()
         .then(pos => {
             const {latitude: lat, longitude: lng} = pos.coords;
-            return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+            return fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`);
         })
         .then(res => {
             if(!res.ok) throw new Error(`Problem with geocoding ${res.status}`);
