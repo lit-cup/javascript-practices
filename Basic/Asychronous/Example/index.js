@@ -192,10 +192,108 @@ const getCountryData = function (country) {
     // .finally is used to execute code after the promise is settled, regardless of success or failure, it always runs no matter success or failure
 }
 btn.addEventListener('click', function () {
-    getCountryData('Taiwan');
+    // getCountryData('Taiwan');
     // getCountryData('Taiwan');
     // getCountryData('USA');
     // getCountryData('Canada');
     // getCountryData('Mexico');
     // getCountryData('Brazil');
 });
+
+// Simple Promise Example
+// This is a simple example of a Promise that simulates a lottery draw
+// It resolves with a success message if the random number is greater than or equal to 0.5, otherwise it rejects with a failure message.
+const lotteryPromise = new Promise(function (resolve, reject) {
+    console.log('Lottery draw is happening... 🏆');
+    setTimeout(() => {
+        if( Math.random() >= 0.5) {
+            resolve('You WIN! 🎉');
+        } else {
+            reject('You lost! 😢');
+        }
+    }, 2000);
+});
+lotteryPromise
+    .then(res => console.log(res))// This will log 'You WIN! 🎉' or 'You lost! 😢' based on the random number
+    .catch(err => console.error(err)); // This will log the error message if the promise is rejected
+
+// callback hell using promises same effect at line 64
+const wait = function (seconds) {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, seconds * 1000);
+    });
+}
+wait(1)
+    .then(() => {
+        console.log('1 second passed');
+        return wait(1);
+    })
+    .then(() => {
+        console.log('2 seconds passed');
+        return wait(1);
+    })
+    .then(() => {
+        console.log('3 seconds passed');
+        return wait(1);
+    })
+    .then(() => {
+        console.log('4 seconds passed');
+        return wait(1);
+    })
+    .then(() => {
+        console.log('5 seconds passed');
+    })
+    .catch(err => console.error(err));
+
+// Define Promise fulfilled and rejected  with resolve() and reject()
+// This is a simple example of a Promise that resolves after 2 seconds
+Promise.resolve('Resolved From Format').then(res => {console.log(res);});
+Promise.reject('Rejected From Format').catch(err => {console.error(err);});
+
+// Example refactoring from calling Geolocation API to using Promises
+// Originally, the Geolocation API called getCurrentPosition with a callback function
+/**
+ * navigator.geolocation.getCurrentPosition(
+ *   position => console.log(position),
+ *   err => console.error(err)
+ * );
+ * console.log('Getting position...'); // This will log immediately, not waiting for the geolocation API to respond
+ */
+
+// Refactored to use Promises
+const getPostion = function(){
+    return new Promise(function(resolve, reject) {
+        // navigator.geolocation.getCurrentPosition(
+        // position => resolve(position),
+        // err => reject(err)
+        // );
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+}
+// getPostion().then(pos => console.log(pos));
+// Example of using the getPostion function, handling data via Geolocation API then fetching data from an API based on the position
+// This function retrieves the user's current position and then fetches the country data based on that position
+// It uses the Geolocation API to get the user's latitude and longitude, then uses that data to fetch the country information
+// Finally, it renders the country information in the HTML
+const whereAmI = function () {
+    getPostion()
+        .then(pos => {
+            const {latitude: lat, longitude: lng} = pos.coords;
+            return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+        })
+        .then(res => {
+            if(!res.ok) throw new Error(`Problem with geocoding ${res.status}`);
+            return res.json();
+        })
+        .then(data =>{
+            console.log(data);
+            console.log(`You are in ${data.city}, ${data.country}`);
+            return getJSON(`https://restcountries.com/v3.1/name/${data.country}`);
+        })
+        .then(data => {renderCountry(data[0]);})
+        .catch(err => {
+            console.error(`Something went wrong: ${err.message}`);
+            renderError(`Something went wrong: ${err.message}`);
+        });
+}
+btn.addEventListener('click', whereAmI);
