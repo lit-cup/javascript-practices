@@ -76,6 +76,10 @@ setImmediate(() => {
     },1000);
 },1000);
 */
+// What is Fetch API?
+// The Fetch API is a modern interface for making HTTP requests in JavaScript.
+// It provides a more powerful and flexible feature set than the older XMLHttpRequest.
+// Fetch API returns a Promise that resolves to the Response object representing the response to the request.
 
 // Example of AJAX request using Fetch API
 // const request = fetch('https://restcountries.com/v3.1/name/Taiwan');
