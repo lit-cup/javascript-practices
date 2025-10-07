@@ -29,7 +29,6 @@ body {
 .countries {
   /* margin-bottom: 8rem; */
   display: flex;
-
   font-size: 2rem;
   opacity: 0;
   transition: opacity 1s;
