@@ -57,7 +57,7 @@ const whereAmI = async function (){
         throw err;
     }
 }
-// await keep funtion active before end
+// await keep funtion active before synchronous done
 
 // const city = whereAmI();
 // console.log(city); //async function will return promise never you write what type of return
@@ -93,3 +93,35 @@ console.log('1: Will get location');
 // }catch(err){
 //     console.log(err.message);
 // }
+
+// Example 2:
+
+// async function test() {
+//   console.log('1');
+//   await fetch('https://example.com');  // pretend this takes a while
+//   console.log('2');
+// }
+
+// test();
+// console.log('3');
+
+// Output:
+
+// 1
+// 3
+// 2
+
+// Explain:
+// Why?
+
+// 1. test() starts → prints '1'.
+
+// 2. It hits await fetch() → JS says “ok cool, I’ll wait for that promise”.
+
+// 3. It pauses the async function here and moves on.
+
+// 4. '3' prints — because synchronous code outside keeps going.
+
+// 5. When the fetch finishes (the Promise resolves), '2' prints.
+
+// So the function continues later, after the current synchronous code and after the awaited promise resolves.
