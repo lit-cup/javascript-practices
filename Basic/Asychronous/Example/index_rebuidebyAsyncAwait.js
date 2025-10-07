@@ -46,14 +46,44 @@ const whereAmI = async function (){
         if(!res.ok) throw new Error('Problem getting location country')
         const data = await res.json();
         renderCountry(data[0]);
+
+        // async function return value
+        return `You are in ${dataGeo.countryCode}, ${dataGeo.countryName}`
     } catch(err) {
         console.error(`${err} 🚨`);
         renderError(`🚨 ${err.message}`);
+
+        // async function return error
+        throw err;
     }
 }
 // await keep funtion active before end
-whereAmI();
-console.log('First');
+
+// const city = whereAmI();
+// console.log(city); //async function will return promise never you write what type of return
+console.log('1: Will get location');
+
+// Returnimg values from async functions need to use same method 
+// .then() to get data, 
+// .catch() to get error, 
+// .finally() run never what here was to check if was run.
+/////
+// whereAmI()
+//     .then(city=>console.log(`2: ${city}`))
+//     .catch(err=> console.error(`2: ${err.message}`))
+//     .finally(()=>console.log(`3: finished getiing location`));
+
+// The way to async and handle async function returning value we using IIFEs pattern 
+(async function(){
+    try{
+        const city = await whereAmI();
+        console.log(`2: ${city}`);
+    }catch(err){
+        console.error(`2: ${err.message}`);
+    }
+    console.log(`3: finished getiing location`);
+})();
+
 
 // Simple try catch sample
 // try{
