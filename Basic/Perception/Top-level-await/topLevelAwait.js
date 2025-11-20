@@ -1,7 +1,7 @@
 import addSongToList, { list } from '../musicList.js';
-addSongToList('New Song', 10);
-addSongToList('Another Song', 7);
-addSongToList('Third Song', 3);
+addAlbumToList('New Song', 10);
+addAlbumToList('Another Song', 7);
+addAlbumToList('Third Song', 3);
 console.log(list);
 
 
