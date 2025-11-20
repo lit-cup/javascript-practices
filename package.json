@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2",
-    "javascript-partices": "file:"
+    "javascript-partices": "file:",
+    "lodash-es": "^4.17.21"
   }
 }
