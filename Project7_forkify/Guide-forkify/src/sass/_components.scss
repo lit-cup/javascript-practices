@@ -1,3 +1,4 @@
+@use 'base' as *;
 %btn {
   background-image: $gradient;
   border-radius: 10rem;
@@ -173,9 +174,9 @@
 
   svg {
     height: 6rem;
-    width: 6rem;
     fill: $color-primary;
     animation: rotate 2s infinite linear;
+    width: 6rem;
   }
 }
 
