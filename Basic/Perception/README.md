@@ -13,6 +13,7 @@ This folder contains short demos and notes that illustrate core JavaScript conce
   - ES Modules (native): import / export syntax for public API.
   - CommonJS: module.exports / require (example: musiclist.js).
   - Revealing module pattern and IIFE are shown as legacy patterns for encapsulation.
+- Demo babel to polyfill modern JS features for older browsers
 
 ## What you'll find in this folder
 - Small demos that explain async/await and top-level async.

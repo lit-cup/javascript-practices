@@ -28,7 +28,7 @@ viat advantage: boot fast, change fast, hotfix fast
 `
 
 ## 3. build
-### vita: use rollup to bundle at dist path
+### vita: use rollup to bundle at dist path, esbuild/babel tranform language for old browser support
 `
 npm run build 
 `
