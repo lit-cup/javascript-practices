@@ -1,4 +1,5 @@
 import { API_URL } from "./config";
+import { getJson } from "./view/helpers";
 
 export const state = {
     recipe: {},
@@ -7,14 +8,13 @@ export const state = {
 // this model not will return anything keep it private
 export const loadRecipe = async function(id){
     try{
-        const res = await fetch(`${API_URL}/${id}`); 
-        const data = await res.json();
-        
-        console.log(data);
-        // make better error message
-        if(!res.ok) throw new Error(`${data.message} (${res.status})`);
+        const data = await getJson(`${API_URL}/${id}`);
 
-        console.log(res, data);
+        // const res = await fetch(`${API_URL}/${id}`); 
+        // const data = await res.json();
+        // console.log(data);
+        // // make better error message
+        // if(!res.ok) throw new Error(`${data.message} (${res.status})`);
 
         // set recipe object with porpoty we want
         const { recipe } = data.data;
@@ -30,6 +30,7 @@ export const loadRecipe = async function(id){
         }
         console.log(state.recipe);
     }catch(error){
-        alert(error);
+        // temp error handling
+        console.log(`${error}!!!!!!!!!!`);
     }
 }
