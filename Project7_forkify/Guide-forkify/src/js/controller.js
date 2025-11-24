@@ -48,8 +48,15 @@ const controlRecipe = async function() {
 // window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
 
+// depends on ssub-pub pattern move this to view part, recipeVew.js
+// Array.from(['hashchange', 'load']).forEach(element => {
+//   // listener for hashchange, load event when recipe click, page load 
+//   window.addEventListener(element, controlRecipe);
+// });
 
-Array.from(['hashchange', 'load']).forEach(element => {
-  // listener for hashchange, load event when recipe click, page load 
-  window.addEventListener(element, controlRecipe);
-});
+// create addHandlerRender to handle eventlistener to more close to MVC Architecture view part using sub-pub pattern
+const init = function() {
+  recipeView.addHandlerRender(controlRecipe);
+}
+
+init();

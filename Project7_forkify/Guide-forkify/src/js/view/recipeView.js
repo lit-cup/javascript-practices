@@ -31,7 +31,12 @@ class RecipeView{
     this.#clear();
     this.#insertMarkup(markup);
     }
-
+    addHandlerRender(handler){
+        Array.from(['hashchange', 'load']).forEach(element => {
+        // listener for hashchange, load event when recipe click, page load 
+        window.addEventListener(element, handler);
+        });
+    }
     #generateMarkup(){
         return `
             <figure class="recipe__fig">
