@@ -1,4 +1,6 @@
 import icons from '/src/img/icons.svg';
+// using fraction.js package to tranfrom format of number like 0.5 to 1/2
+import Fraction from 'fraction.js'; 
 
 class RecipeView{
     #parentElement = document.querySelector('.recipe');
@@ -8,13 +10,17 @@ class RecipeView{
         this.#data = data;
         const markup = this.#generateMarkup();
         this.#clear();
-        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+        this.#insertMarkup(markup);
+
     }
     #clear(){
         this.#parentElement.innerHTML = '';
     }
+    #insertMarkup(markup){
+        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    }
 
-    renderSpinner = function() {
+    renderSpinner() {
     const markup = `
         <div class="spinner">
             <svg>
@@ -23,9 +29,8 @@ class RecipeView{
         </div>
     `
     this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this.#insertMarkup(markup);
     }
-
 
     #generateMarkup(){
         return `
@@ -80,20 +85,7 @@ class RecipeView{
             <div class="recipe__ingredients">
               <h2 class="heading--2">Recipe ingredients</h2>
               <ul class="recipe__ingredient-list">
-              ${this.#data.ingredients.map(ing => {
-                return `
-                <li class="recipe__ingredient">
-                  <svg class="recipe__icon">
-                    <use href="${icons}#icon-check"></use>
-                  </svg>
-                  <div class="recipe__quantity">${ing.quantity}</div>
-                  <div class="recipe__description">
-                    <span class="recipe__unit">${ing.unit}</span>
-                    ${ing.description}
-                  </div>
-                </li>
-                `
-              }).join('')}
+              ${this.#data.ingredients.map(this.#generateMarkupIngredients).join('')}
               </ul>
             </div>
 
@@ -116,6 +108,20 @@ class RecipeView{
               </a>
             </div>
         `;
+    }
+    #generateMarkupIngredients(ing){
+        return `
+        <li class="recipe__ingredient">
+            <svg class="recipe__icon">
+            <use href="${icons}#icon-check"></use>
+            </svg>
+            <div class="recipe__quantity">${ing.quantity ? new Fraction(ing.quantity).toFraction() : ''}</div>
+            <div class="recipe__description">
+            <span class="recipe__unit">${ing.unit}</span>
+            ${ing.description}
+            </div>
+        </li>
+        `
     }
 }
 
