@@ -6,6 +6,11 @@ class RecipeView{
     #parentElement = document.querySelector('.recipe');
     #data;
 
+    // set default error Message
+    #errorMessage = 'We could not find that recipe. Please try another one!';
+    // set default success message
+    #message = '';
+    
     render(data){
         this.#data = data;
         const markup = this.#generateMarkup();
@@ -13,9 +18,11 @@ class RecipeView{
         this.#insertMarkup(markup);
 
     }
+
     #clear(){
         this.#parentElement.innerHTML = '';
     }
+
     #insertMarkup(markup){
         this.#parentElement.insertAdjacentHTML('afterbegin', markup);
     }
@@ -31,12 +38,43 @@ class RecipeView{
     this.#clear();
     this.#insertMarkup(markup);
     }
+
+    renderError(message = this.#errorMessage){
+        const markup =  `
+        <div class="error">
+            <div>
+              <svg>
+                <use href="${icons}#icon-alert-triangle"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+        </div>`
+        this.#clear();
+        this.#insertMarkup(markup);
+    }
+    // for success message
+    renderMessage(message = this.#message){
+        const markup =  `
+        <div class="recipe">
+        <div class="message">
+          <div>
+            <svg>
+              <use href="${icons}#icon-smile"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div>` 
+        this.#clear();
+        this.#insertMarkup(markup);
+    }
+    
     addHandlerRender(handler){
         ['hashchange', 'load'].forEach(element => {
         // listener for hashchange, load event when recipe click, page load 
         window.addEventListener(element, handler);
         });
     }
+    
     #generateMarkup(){
         return `
             <figure class="recipe__fig">
