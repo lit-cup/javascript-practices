@@ -1,5 +1,6 @@
 import * as model from "./model.js";
 import recipeView from "./view/recipeView.js";
+import searchView from "./view/searchView.js";
 
 // import icons from '../img/icons.svg'; // parcel 1
 // import icons from 'url:../img/icons.svg'; // parcel 2
@@ -25,7 +26,7 @@ const controlRecipe = async function() {
     // console.log('controlRecipe fired');
     // get hash id then we could fetch by id, MVC: not it is application itself
     const id = window.location.hash.slice(1);
-    console.log(id);
+    // console.log(id);
     // if id not exist or null return
     if(!id) return;
 
@@ -40,7 +41,26 @@ const controlRecipe = async function() {
     recipeView.render(model.state.recipe);
 
   } catch (error) {
-    alert(error)
+    // redner error from view part
+    recipeView.renderError();
+  } 
+};
+
+// controlSearch event
+// view(Handler) -> control(fuction call) -> view(getQuery) -> model(load、render)
+const controlSearchResults = async function(){
+  try {
+    // 1) Get serarch query
+    const query = searchView.getQuery();
+    if(!query) return;
+
+    // 2) load search results
+    await model.loadSearchResults(query);
+
+    // 3) Render results
+    console.log(model.state.search.results);
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -55,8 +75,10 @@ const controlRecipe = async function() {
 // });
 
 // create addHandlerRender to handle eventlistener to more close to MVC Architecture view part using sub-pub pattern
+// keep controller do controll part mission not dom view part
 const init = function() {
   recipeView.addHandlerRender(controlRecipe);
+  searchView.addHandlerSearch(controlSearchResults);
 }
 
 init();

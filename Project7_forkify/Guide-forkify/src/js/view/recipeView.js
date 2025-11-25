@@ -68,10 +68,10 @@ class RecipeView{
         this.#insertMarkup(markup);
     }
     
-    addHandlerRender(handler){
+    addHandlerRender(controlRecipe){
         ['hashchange', 'load'].forEach(element => {
         // listener for hashchange, load event when recipe click, page load 
-        window.addEventListener(element, handler);
+        window.addEventListener(element, controlRecipe);
         });
     }
     
