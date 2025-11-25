@@ -1,6 +1,7 @@
 import * as model from "./model.js";
 import recipeView from "./view/recipeView.js";
 import searchView from "./view/searchView.js";
+import resultView from "./view/resultView.js";
 
 // import icons from '../img/icons.svg'; // parcel 1
 // import icons from 'url:../img/icons.svg'; // parcel 2
@@ -18,6 +19,10 @@ import searchView from "./view/searchView.js";
 
 ///////////////////////////////////////
 
+// hot reloading
+// if(module.hot){
+//   module.hot.accept
+// }
 
 
 // get one single recipe
@@ -42,7 +47,7 @@ const controlRecipe = async function() {
 
   } catch (error) {
     // redner error from view part
-    recipeView.renderError();
+    recipeView.renderError(error);
   } 
 };
 
@@ -50,7 +55,11 @@ const controlRecipe = async function() {
 // view(Handler) -> control(fuction call) -> view(getQuery) -> model(load、render)
 const controlSearchResults = async function(){
   try {
+    resultView.renderSpinner();
+    // console.log(resultView);
+
     // 1) Get serarch query
+
     const query = searchView.getQuery();
     if(!query) return;
 
@@ -59,6 +68,7 @@ const controlSearchResults = async function(){
 
     // 3) Render results
     console.log(model.state.search.results);
+    resultView.render(model.state.search.results);
   } catch (error) {
     console.log(error);
   }
