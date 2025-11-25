@@ -18,7 +18,7 @@ export const state = {
 // this model not will return anything keep it private
 export const loadRecipe = async function(id){
     try{
-        const data = await getJson(`${API_URL}${id}`);
+        const data = await getJson(`${API_URL}/${id}`);
 
         // const res = await fetch(`${API_URL}/${id}`); 
         // const data = await res.json();
@@ -52,9 +52,9 @@ export const loadRecipe = async function(id){
 export const loadSearchResults = async function ( query ){
     try {
         state.search.query = query;
-
+        // serarch when API call
         const data = await getJson(`${API_URL}?search=${query}`);
-        // console.log(data);
+        console.log(data);
 
         // to reciving recipes from data create obj, store in the state
         state.search.results = data.data.recipes.map(recipe => { 
