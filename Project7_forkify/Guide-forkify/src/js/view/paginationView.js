@@ -4,19 +4,33 @@ import icons from '/src/img/icons.svg';
 class PaginationView extends View {
     _parentElement = document.querySelector('.pagination');
 
-    // use search data from model
+    addHandlerPageButtonClick(controlPagination){
+        this._parentElement.addEventListener('click', function(e){
+            // use closest to find the button we click and listening
+            const btn = e.target.closest('.btn--inline');
+            if(!btn) return;
+
+            // get goto page from data-goto attribute
+            const goToPage = +btn.dataset.goto;
+
+            // call controlPagination function from controller.js, then use goToPage to render the right page we clikced
+            controlPagination(goToPage);
+        });
+    }
+
+    // use search data from model,use data-goto attribute to get which page to go
     _generalMarkup(){
         const curPage = this._data.page
+        // calculate total number of pages
         // returns the smallest integer greater than or equal to a given number.
         const numPage = Math.ceil(this._data.results.length / this._data.resultsPerPage);
-        console.log('numPage', numPage);
-        console.log('dataPage', this._data.page)
 
+        // All page's situions for button
         // Page1, and there are other pages
         if(curPage === 1 && numPage > 1){
             // return next button for render, for page 1
             return `        
-            <button class="btn--inline pagination__btn--next">
+            <button data-goto='${curPage + 1}' class="btn--inline pagination__btn--next">
                 <span>Page ${curPage + 1}</span>
                 <svg class="search__icon">
                 <use href="${icons}#icon-arrow-right"></use>
@@ -28,7 +42,7 @@ class PaginationView extends View {
         if(curPage === numPage && numPage > 1){
             // return pre button for render, for last page
             return `
-            <button class="btn--inline pagination__btn--prev">
+            <button data-goto='${curPage - 1}' class="btn--inline pagination__btn--prev">
              <svg class="search__icon">
                <use href="${icons}#icon-arrow-left"></use>
              </svg>
@@ -40,13 +54,13 @@ class PaginationView extends View {
         if(curPage < numPage){
             // return prev/next button for render, for other page
             return `
-            <button class="btn--inline pagination__btn--prev">
+            <button data-goto='${curPage - 1}' class="btn--inline pagination__btn--prev">
                 <svg class="search__icon">
                 <use href="${icons}#icon-arrow-left"></use>
                 </svg>
                 <span>Page ${curPage - 1}</span>
             </button>
-            <button class="btn--inline pagination__btn--next">
+            <button data-goto='${curPage + 1}' class="btn--inline pagination__btn--next">
                 <span>Page ${curPage + 1}</span>
                 <svg class="search__icon">
                 <use href="${icons}#icon-arrow-right"></use>

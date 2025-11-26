@@ -59,17 +59,17 @@ const controlSearchResults = async function(){
     resultView.renderSpinner();
     // console.log(resultView);
 
-    // 1) Get serarch query
-
+    // 1) Get search input query
     const query = searchView.getQuery();
     if(!query) return;
 
-    // 2) load search results
+    // 2) load search results from API call and store
     await model.loadSearchResults(query);
 
     // 3) Render results side bar, use getSearchResultPage() to control, and Pagination control
+    // depends on how many recipes result show in one page
+    // default page 1
     // console.log(model.state.search.results);
-    console.log(model.getSearchResultPage());
     resultView.render(model.getSearchResultPage());
 
     // 4) Render initial pagination button
@@ -79,6 +79,16 @@ const controlSearchResults = async function(){
     console.log(error);
   }
 }
+
+const controlPagination = function(gotoPage){
+    // console.log('gotroPage', gotoPage);  
+    // 3) Render new results side bar, by Pagination control
+    resultView.render(model.getSearchResultPage(gotoPage));
+
+    // 4) Render new initial pagination button
+    paginationView.render(model.state.search);
+}
+
 
 // use foreach to let difference event could call in one event listener
 // window.addEventListener('hashchange', controlRecipe);
@@ -95,6 +105,7 @@ const controlSearchResults = async function(){
 const init = function() {
   recipeView.addHandlerRender(controlRecipe);
   searchView.addHandlerSearch(controlSearchResults);
+  paginationView.addHandlerPageButtonClick(controlPagination);
 }
 
 init();
