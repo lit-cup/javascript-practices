@@ -19,7 +19,7 @@ This document note decide which array method to use depending on whether you wan
 ## A new array based on original:
 
 - **Same length as original:**
-  - `map()` - loop
+  - `map()` - loop and need to change data
 - **Filtered using condition:**
   - `filter()`
 - **Taking portion of original:**
