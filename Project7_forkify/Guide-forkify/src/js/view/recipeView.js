@@ -16,6 +16,17 @@ class RecipeView extends View {
       window.addEventListener(element, controlRecipe);
     });
     }
+
+    addHandlerUpdateServings(controlServings){
+      this._parentElement.addEventListener('click', function(e){
+          // select btn element we want to listening
+          const btn = e.target.closest('.btn--update-servings');
+          if(!btn) return;
+          // get data-updat-to value from btn for updating servings when click
+          const {updateTo} = btn.dataset;
+          if(+updateTo > 0)controlServings(+updateTo);
+      });
+    }
     
     _generalMarkup(){
         return `
@@ -42,12 +53,12 @@ class RecipeView extends View {
                 <span class="recipe__info-text">servings</span>
 
                 <div class="recipe__info-buttons">
-                  <button class="btn--tiny btn--increase-servings">
+                  <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings - 1}">
                     <svg>
                       <use href="${icons}#icon-minus-circle"></use>
                     </svg>
                   </button>
-                  <button class="btn--tiny btn--increase-servings">
+                  <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings + 1}">
                     <svg>
                       <use href="${icons}#icon-plus-circle"></use>
                     </svg>

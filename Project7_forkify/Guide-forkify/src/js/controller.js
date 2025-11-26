@@ -89,6 +89,12 @@ const controlPagination = function(gotoPage){
     paginationView.render(model.state.search);
 }
 
+const controlServings = function(newServings){
+  // update the recipe servings (in state)
+  model.updateServings(newServings);
+  // update the recipe view
+  recipeView.render(model.state.recipe)
+}
 
 // use foreach to let difference event could call in one event listener
 // window.addEventListener('hashchange', controlRecipe);
@@ -104,6 +110,7 @@ const controlPagination = function(gotoPage){
 // keep controller do controll part mission not dom view part
 const init = function() {
   recipeView.addHandlerRender(controlRecipe);
+  recipeView.addHandlerUpdateServings(controlServings);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerPageButtonClick(controlPagination);
 }

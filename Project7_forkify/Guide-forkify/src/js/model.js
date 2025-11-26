@@ -87,3 +87,12 @@ export const getSearchResultPage = function(page = state.search.page){
     
     return state.search.results.slice(start, end);   // 1 page per 10 results
 }
+
+export const updateServings = function(newServings){
+    state.recipe.ingredients.forEach(ing => {
+        // newQt = oldQt * newServing / oldServing // 2 * 8 / 4 = 4
+        ing.quantity = (ing.quantity * newServings) / state.recipe.servings; 
+    });
+    // update new Serving
+    state.recipe.servings = newServings;
+}
