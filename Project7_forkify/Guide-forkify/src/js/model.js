@@ -1,5 +1,5 @@
 // import { result } from "lodash-es";
-import { API_URL } from "./config";
+import { API_URL, RES_PER_PAGE } from "./config";
 import { getJson } from "./view/helpers";
 // import recipeView from "./view/recipeView";
 
@@ -12,7 +12,10 @@ export const state = {
         // query for future if we need to analyze what query search most
         query: '',
         results: [],
+        page: 1,
+        resultsPerPage: RES_PER_PAGE,
     },
+
 };
 
 // this model not will return anything keep it private
@@ -74,3 +77,13 @@ export const loadSearchResults = async function ( query ){
         throw error;
     }
 };
+
+export const getSearchResultPage = function(page = state.search.page){
+    // store value to make we control page easier, default is page 1
+    state.search.page = page;
+
+    const start = (page - 1) * state.search.resultsPerPage; // 0
+    const end = page * state.search.resultsPerPage; // 9
+    
+    return state.search.results.slice(start, end);   // 1 page per 10 results
+}

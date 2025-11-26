@@ -2,6 +2,7 @@ import * as model from "./model.js";
 import recipeView from "./view/recipeView.js";
 import searchView from "./view/searchView.js";
 import resultView from "./view/resultView.js";
+import paginationView from "./view/paginationView.js";
 
 // import icons from '../img/icons.svg'; // parcel 1
 // import icons from 'url:../img/icons.svg'; // parcel 2
@@ -66,9 +67,14 @@ const controlSearchResults = async function(){
     // 2) load search results
     await model.loadSearchResults(query);
 
-    // 3) Render results
-    console.log(model.state.search.results);
-    resultView.render(model.state.search.results);
+    // 3) Render results side bar, use getSearchResultPage() to control, and Pagination control
+    // console.log(model.state.search.results);
+    console.log(model.getSearchResultPage());
+    resultView.render(model.getSearchResultPage());
+
+    // 4) Render initial pagination button
+    paginationView.render(model.state.search);
+
   } catch (error) {
     console.log(error);
   }
