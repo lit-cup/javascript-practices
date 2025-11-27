@@ -40,6 +40,7 @@ const controlRecipe = async function() {
     // 0) upate result view to mark selected search result, not re-render all
     resultView.update(model.getSearchResultPage());
     // 0) update bookmark panel view when we render add or delete bookmark of recipe
+    // debugger; debug mode to check error 
     bookmarksView.update(model.state.bookmarks);
 
     // 1) loading recipe MVC: v
@@ -125,6 +126,10 @@ const controlAddBookmark = function(){
   bookmarksView.render(model.state.bookmarks);
 }
 
+// to fix when update)() newEL and curEL length different, compare error when loading bookmark from localStorage by re-render bookmarkView
+const controlBookmarks = function(){
+  bookmarksView.render(model.state.bookmarks);
+}
 // use foreach to let difference event could call in one event listener
 // window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
@@ -138,6 +143,7 @@ const controlAddBookmark = function(){
 // create addHandlerRender to handle eventlistener to more close to MVC Architecture view part using sub-pub pattern
 // keep controller do controll part mission not dom view part
 const init = function() {
+  recipeView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipe);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);

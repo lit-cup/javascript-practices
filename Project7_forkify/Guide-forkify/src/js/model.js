@@ -105,6 +105,11 @@ export const updateServings = function(newServings){
     // update new Serving
     state.recipe.servings = newServings;
 }
+// when bookmark add or delete, we persist data in localStorage
+export const persistBookmarks = function(){
+    // object => string
+    localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+}
 
 export const addBookMark = function(recipe){
     // add bookmark
@@ -114,6 +119,8 @@ export const addBookMark = function(recipe){
     // UI: this._data.bookmarked ? '-fill': '';
     if(recipe.id === state.recipe.id)
         state.recipe.bookmarked = true;
+
+    persistBookmarks();
 }
 
 export const deleteBookMark = function(id){
@@ -125,4 +132,21 @@ export const deleteBookMark = function(id){
     // UI: this._data.bookmarked ? '-fill': '';
     if(id === state.recipe.id)
         state.recipe.bookmarked = false;
+
+    persistBookmarks();
 }
+
+
+const init = function(){
+    const storage = localStorage.getItem('bookmarks');
+    // string => object
+    if(storage) state.bookmarks = JSON.parse(storage);
+}
+// call once to set bookmark from localStorage when load page
+init();
+
+// debug checking localStrorage working fine 
+const clearBookmarks = function(){
+    localStorage.clear('bookmarks');
+}
+// clearBookmarks();
