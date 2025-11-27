@@ -12,13 +12,14 @@ export default class View {
     this._clear();
     this._insertMarkup(markup);
   }
-  // only update changed part not re-render all for recipe ingredients update: DOM select
+  // only update changed part not re-render all for recipe ingredients update: DOM select (UI diffing)
   update(data){
     this._data = data;
+    // generate new markup with new data
     const newMarkup = this._generalMarkup();
-    // transfrom string to real DOM object
+    // transfrom new markup string to real DOM object
     const newDOM = document.createRange().createContextualFragment(newMarkup);
-    // transfrom DOM object to array for easy loop
+    // transfrom recipe(new, current) attribute node list to array
     const newElements = Array.from(newDOM.querySelectorAll('*'));
     const curElements = Array.from(this._parentElement.querySelectorAll('*'));  
 
@@ -33,10 +34,10 @@ export default class View {
         // console.log(newEl.firstChild.nodeValue.trim());
       }
 
-      // change attribute if node different for servings update to new data attribute 
+      // change attribute if node different for servings update from new servings data attribute 
       if(!newEl.isEqualNode(curEl)){
         Array.from(newEl.attributes).forEach(attr => {
-          // replace attribute in current element which we expect to set when update
+          // replace attribute newEl to curEl
           curEl.setAttribute(attr.name, attr.value);
         })
       }

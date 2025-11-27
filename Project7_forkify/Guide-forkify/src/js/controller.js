@@ -93,11 +93,13 @@ const controlPagination = function(gotoPage){
 }
 
 const controlServings = function(newServings){
-  // update the recipe servings (in state)
+  // Store update: update the recipe servings (in state)
   model.updateServings(newServings);
-  // // update all render the recipe view
+  
+  // update all render the recipe view
   // recipeView.render(model.state.recipe)
-  // only update the changed servings part attribute
+
+  // UI update: only update the changed servings part attribute
   recipeView.update(model.state.recipe);
 
 }
