@@ -3,12 +3,16 @@ import icons from '/src/img/icons.svg';
 export default class View {
   _data;
 
-  render(data) {
+  render(data, render = true) {
     // check if data is null, undefine, not array, array length = 0, than render error
     if(!data || (Array.isArray(data) && data.length === 0)) return this.renderError();
 
     this._data = data;
     const markup = this._generalMarkup();
+    
+    // to get markup string from _generalMarkup method in bookmarkView.js.
+    if(!render) return markup;
+
     this._clear();
     this._insertMarkup(markup);
   }
