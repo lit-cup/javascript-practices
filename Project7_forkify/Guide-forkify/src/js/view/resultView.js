@@ -9,7 +9,7 @@ class ResultView extends View {
     _message = '';
 
     _generalMarkup(){
-        console.log(this._data);
+        // console.log(this._data);
         return this._data.map(this._generalMarkupPreview).join('');
     }
 

@@ -15,7 +15,7 @@ export const state = {
         page: 1,
         resultsPerPage: RES_PER_PAGE,
     },
-
+    bookmarks: [],
 };
 
 // this model not will return anything keep it private
@@ -41,6 +41,12 @@ export const loadRecipe = async function(id){
             cookingTime: recipe.cooking_time,
             ingredients: recipe.ingredients,
         }
+        // check if current recipe is bookmarked from bookmark array we stored after click bookmark button
+        if(state.bookmarks.some(bookmark => bookmark.id === id))
+            state.recipe.bookmarked = true;
+        else
+            state.recipe.bookmarked = false;
+
         console.log(state.recipe);
     }catch(error){
         // temp error handling
@@ -98,4 +104,25 @@ export const updateServings = function(newServings){
     });
     // update new Serving
     state.recipe.servings = newServings;
+}
+
+export const addBookMark = function(recipe){
+    // add bookmark
+    state.bookmarks.push(recipe);
+
+    // Marck current recipe as bookmark
+    // UI: this._data.bookmarked ? '-fill': '';
+    if(recipe.id === state.recipe.id)
+        state.recipe.bookmarked = true;
+}
+
+export const deleteBookMark = function(id){
+    // remove bookmark in state.bookmarks array
+    const index = state.bookmarks.findIndex(recipe => recipe.id === id);
+    state.bookmarks.splice(index, 1);
+
+    // Marck current recipe as NOT bookmark
+    // UI: this._data.bookmarked ? '-fill': '';
+    if(id === state.recipe.id)
+        state.recipe.bookmarked = false;
 }

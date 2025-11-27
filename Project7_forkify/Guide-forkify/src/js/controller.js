@@ -104,6 +104,21 @@ const controlServings = function(newServings){
 
 }
 
+const controlAddBookmark = function(){
+
+  // add/remove bookmark depends on bookmarked state
+  if(!model.state.recipe.bookmarked){
+    // 1) add bookmark
+    model.addBookMark(model.state.recipe);
+  }else{
+    // 1) remove bookmark
+    model.deleteBookMark(model.state.recipe.id);
+  }
+  console.log(model.state.recipe);
+  // 2) update recipe view mark bookmark after change
+  recipeView.update(model.state.recipe);
+}
+
 // use foreach to let difference event could call in one event listener
 // window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
@@ -119,6 +134,7 @@ const controlServings = function(newServings){
 const init = function() {
   recipeView.addHandlerRender(controlRecipe);
   recipeView.addHandlerUpdateServings(controlServings);
+  recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerPageButtonClick(controlPagination);
 }
