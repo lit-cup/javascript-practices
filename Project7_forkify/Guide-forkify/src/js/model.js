@@ -68,6 +68,9 @@ export const loadSearchResults = async function ( query ){
                 image: recipe.image_url,
             };
         });
+  
+        // init state.search.page to page 1 when everytime new search query
+        state.search.page = 1;
 
         // console.log(state.search.results);
     } catch (error) {
