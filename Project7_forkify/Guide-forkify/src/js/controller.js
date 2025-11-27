@@ -3,6 +3,7 @@ import recipeView from "./view/recipeView.js";
 import searchView from "./view/searchView.js";
 import resultView from "./view/resultView.js";
 import paginationView from "./view/paginationView.js";
+import bookmarksView from "./view/bookmarkView.js";
 
 // import icons from '../img/icons.svg'; // parcel 1
 // import icons from 'url:../img/icons.svg'; // parcel 2
@@ -38,6 +39,8 @@ const controlRecipe = async function() {
 
     // 0) upate result view to mark selected search result, not re-render all
     resultView.update(model.getSearchResultPage());
+    // 0) update bookmark panel view when we render add or delete bookmark of recipe
+    bookmarksView.update(model.state.bookmarks);
 
     // 1) loading recipe MVC: v
     //// Spinner
@@ -117,6 +120,9 @@ const controlAddBookmark = function(){
   console.log(model.state.recipe);
   // 2) update recipe view mark bookmark after change
   recipeView.update(model.state.recipe);
+
+  // 3) render bookmark view
+  bookmarksView.render(model.state.bookmarks);
 }
 
 // use foreach to let difference event could call in one event listener
