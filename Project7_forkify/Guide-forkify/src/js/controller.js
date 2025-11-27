@@ -36,6 +36,9 @@ const controlRecipe = async function() {
     // if id not exist or null return
     if(!id) return;
 
+    // 0) upate result view to mark selected search result, not re-render all
+    resultView.update(model.getSearchResultPage());
+
     // 1) loading recipe MVC: v
     //// Spinner
     recipeView.renderSpinner();
@@ -92,8 +95,11 @@ const controlPagination = function(gotoPage){
 const controlServings = function(newServings){
   // update the recipe servings (in state)
   model.updateServings(newServings);
-  // update the recipe view
-  recipeView.render(model.state.recipe)
+  // // update all render the recipe view
+  // recipeView.render(model.state.recipe)
+  // only update the changed servings part attribute
+  recipeView.update(model.state.recipe);
+
 }
 
 // use foreach to let difference event could call in one event listener
