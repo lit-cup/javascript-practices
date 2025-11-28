@@ -6,6 +6,7 @@ import paginationView from "./view/paginationView.js";
 import bookmarksView from "./view/bookmarkView.js";
 import addRecipeView from "./view/addRecipeView.js";
 import UpdateIconsView from "./view/upateIconsView.js";
+import { MODAL_CLOSE_SEC } from "./config.js";
 
 // import icons from '../img/icons.svg'; // parcel 1
 // import icons from 'url:../img/icons.svg'; // parcel 2
@@ -136,9 +137,24 @@ const controlBookmarks = function(){
 // update new recipe data 
 const controlAddRecipe = async function(newRecipe){
   try{
+    // show loading spinner
+    addRecipeView.renderSpinner();
+
     // console.log('newRecipe', newRecipe);
     // because we have async operation, so need await to make reject error from model to catch here
     await model.uploadRecipe(newRecipe);
+    console.log(model.state.recipe);
+
+    // render recipe view
+    recipeView.render(model.state.recipe);
+
+    // success message
+    addRecipeView.renderMessage();
+
+    // close form window
+    setTimeout(function(){
+      addRecipeView.toggleWindow();
+    }, MODAL_CLOSE_SEC * 1000);
   }catch(error){
     console.error('💥', error);
     addRecipeView.renderError(error.message);
