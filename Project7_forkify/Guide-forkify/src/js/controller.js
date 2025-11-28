@@ -140,10 +140,8 @@ const controlAddRecipe = async function(newRecipe){
     // show loading spinner
     addRecipeView.renderSpinner();
 
-    // console.log('newRecipe', newRecipe);
     // because we have async operation, so need await to make reject error from model to catch here
     await model.uploadRecipe(newRecipe);
-    console.log(model.state.recipe);
 
     // render recipe view
     recipeView.render(model.state.recipe);
@@ -155,6 +153,7 @@ const controlAddRecipe = async function(newRecipe){
     setTimeout(function(){
       addRecipeView.toggleWindow();
     }, MODAL_CLOSE_SEC * 1000);
+
   }catch(error){
     console.error('💥', error);
     addRecipeView.renderError(error.message);

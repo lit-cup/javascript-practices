@@ -177,7 +177,6 @@ export const uploadRecipe = async function(newRecipe){
             // empty quantity string convert to null, convert arry to object with property
             return {quantity: quantity ? +quantity : null, unit, description};
         });
-        // console.log(ingredients);
 
         // reconstruct recipe object to match API requirement
         const recipe = {
@@ -189,8 +188,8 @@ export const uploadRecipe = async function(newRecipe){
             servings: +newRecipe.servings,
             ingredients: ingredients,
         };
-        console.log(recipe);
 
+        // send recipe data to API
         const data = await sendJson(`${API_URL}?key=${API_KEY}`, recipe);
         // set recipe object with createRecipeObject function
         // to fix {key, bookmark} not exsit in recipe object issue
