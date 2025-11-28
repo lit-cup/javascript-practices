@@ -35,10 +35,8 @@ class AddRecipeView extends View {
             e.preventDefault();
             // html to js Array using FormData API
             const dataArr = [...new FormData(this)];
-            console.log(dataArr);
             // convert Array to object using Object.fromEntries()
             const data = Object.fromEntries(dataArr);
-            console.log(data);
             controlAddRecipe(data);
         });
     }

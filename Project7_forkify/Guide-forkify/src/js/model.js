@@ -41,7 +41,7 @@ const createRecipeObject = function(data){
 // this model not will return anything keep it private
 export const loadRecipe = async function(id){
     try{
-        const data = await AJAX(`${API_URL}/${id}`);
+        const data = await AJAX(`${API_URL}/${id}?key=${API_KEY}`);
 
         // const res = await fetch(`${API_URL}/${id}`); 
         // const data = await res.json();
@@ -73,7 +73,7 @@ export const loadSearchResults = async function ( query ){
     try {
         state.search.query = query;
         // serarch when API call
-        const data = await AJAX(`${API_URL}?search=${query}`);
+        const data = await AJAX(`${API_URL}?search=${query}&key=${API_KEY}`);
         console.log(data);
 
         // to reciving recipes from data create obj, store in the state
