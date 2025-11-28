@@ -3,6 +3,16 @@ import icons from '../../img/icons.svg?url';
 export default class View {
   _data;
 
+  // rwite jsdoc documentation
+  /**
+   * Render the received object to the DOM
+   * @param {Object|Object[]} data The data to be rendered (e.g. recipe) 
+   * @param {boolean} [render=true] If false, create markup string instead of rendering to the DOM 
+   * @returns {undefined|string} A markup string is returned if render=false
+   * @this {Object} View instance
+   * @author Stuart Chen
+   */
+
   render(data, render = true) {
     // check if data is null, undefine, not array, array length = 0, than render error
     if(!data || (Array.isArray(data) && data.length === 0)) return this.renderError();
