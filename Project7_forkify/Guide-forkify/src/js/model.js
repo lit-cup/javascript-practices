@@ -150,3 +150,37 @@ const clearBookmarks = function(){
     localStorage.clear('bookmarks');
 }
 // clearBookmarks();
+
+export const uploadRecipe = async function(newRecipe){
+    try{
+        // use filter convert obj to arr
+        const ingredients = Object.entries(newRecipe)
+        .filter( entry => 
+            entry[0].startsWith('ingredient') && entry[1] !== '')
+        .map(ing => {
+            // covert ingredient string to array by split with ','
+            const ingArr = ing[1].trim().split(',');
+            const [quantity, unit, description] = ingArr;
+            // arry length checking
+            if(ingArr.length !== 3)
+                throw new Error('Wrong ingredient format! Please use the correct format :)');
+            // empty quantity string convert to null, convert arry to object with property
+            return {quantity: quantity ? +quantity : null, unit, description};
+        });
+        // console.log(ingredients);
+
+        // reconstruct recipe object to match API requirement
+        const recipe = {
+            title: newRecipe.title,
+            source_url: newRecipe.sourceUrl,
+            image_url: newRecipe.image,
+            publisher: newRecipe.publisher,
+            cooking_time: +newRecipe.cookingTime,
+            servings: +newRecipe.servings,
+            ingredients: ingredients,
+        };
+        console.log(recipe);
+    }catch(error){
+        throw error;
+    }
+};

@@ -132,6 +132,20 @@ const controlAddBookmark = function(){
 const controlBookmarks = function(){
   bookmarksView.render(model.state.bookmarks);
 }
+
+// update new recipe data 
+const controlAddRecipe = async function(newRecipe){
+  try{
+    // console.log('newRecipe', newRecipe);
+    // because we have async operation, so need await to make reject error from model to catch here
+    await model.uploadRecipe(newRecipe);
+  }catch(error){
+    console.error('💥', error);
+    addRecipeView.renderError(error.message);
+  }
+}
+
+
 // use foreach to let difference event could call in one event listener
 // window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
@@ -151,6 +165,7 @@ const init = function() {
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerPageButtonClick(controlPagination);
+  addRecipeView.addHandlerUploadRecipe(controlAddRecipe);
 }
 
 init();
