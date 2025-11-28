@@ -1,4 +1,6 @@
 import View from "./View.js";
+import icons from '../../img/icons.svg';
+import upateIconsView from "./upateIconsView.js";
 
 class AddRecipeView extends View {
     _parentElement = document.querySelector('.upload');
@@ -13,6 +15,7 @@ class AddRecipeView extends View {
         this._addHandlerShowWindow();
         this._addHandlerHideWindow();
     }
+    
 
     toggleWindow(){
         this._overlay.classList.toggle('hidden');
@@ -22,7 +25,6 @@ class AddRecipeView extends View {
     _addHandlerShowWindow(){
         // use toggleWindwo.bind() to fix this keyword point to button not upload form
         this._btnOpen.addEventListener('click', this.toggleWindow.bind(this))
-        
     }
     
     _addHandlerHideWindow(){
@@ -39,10 +41,6 @@ class AddRecipeView extends View {
             const data = Object.fromEntries(dataArr);
             controlAddRecipe(data);
         });
-    }
-
-    _generalMarkup(){
-    
     }
 
 }

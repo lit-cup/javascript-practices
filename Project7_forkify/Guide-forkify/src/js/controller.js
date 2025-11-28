@@ -141,6 +141,7 @@ const controlAddRecipe = async function(newRecipe){
     addRecipeView.renderSpinner();
 
     // because we have async operation, so need await to make reject error from model to catch here
+    // upload the new recipe data
     await model.uploadRecipe(newRecipe);
 
     // render recipe view
