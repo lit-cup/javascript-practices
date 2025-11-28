@@ -7,6 +7,7 @@ import bookmarksView from "./view/bookmarkView.js";
 import addRecipeView from "./view/addRecipeView.js";
 import UpdateIconsView from "./view/upateIconsView.js";
 import { MODAL_CLOSE_SEC } from "./config.js";
+import upateIconsView from "./view/upateIconsView.js";
 
 // import icons from '../img/icons.svg'; // parcel 1
 // import icons from 'url:../img/icons.svg'; // parcel 2
@@ -159,6 +160,8 @@ const controlAddRecipe = async function(newRecipe){
     // close form window
     setTimeout(function(){
       addRecipeView.toggleWindow();
+      // reset form after upload
+      addRecipeView.restForm(); 
     }, MODAL_CLOSE_SEC * 1000);
 
   }catch(error){
