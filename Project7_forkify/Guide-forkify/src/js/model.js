@@ -18,6 +18,25 @@ export const state = {
     bookmarks: [],
 };
 
+const createRecipeObject = function(data){
+    const { recipe } = data.data;
+    return {
+        id: recipe.id,
+        title: recipe.title,
+        publisher: recipe.publisher,
+        sourceUrl: recipe.source_url,
+        image: recipe.image_url,
+        servings: recipe.servings,
+        cookingTime: recipe.cooking_time,
+        ingredients: recipe.ingredients,
+        ...(recipe.key && {key: recipe.key}),
+    }
+
+    // tricky way to conditionally add object property
+    // ...(recipe.key && {key: recipe.key})
+};
+
+
 // this model not will return anything keep it private
 export const loadRecipe = async function(id){
     try{
@@ -29,18 +48,9 @@ export const loadRecipe = async function(id){
         // // make better error message
         // if(!res.ok) throw new Error(`${data.message} (${res.status})`);
 
-        // set recipe object with porpoty we want
-        const { recipe } = data.data;
-        state.recipe = {
-            id: recipe.id,
-            title: recipe.title,
-            publisher: recipe.publisher,
-            sourceUrl: recipe.source_url,
-            image: recipe.image_url,
-            servings: recipe.servings,
-            cookingTime: recipe.cooking_time,
-            ingredients: recipe.ingredients,
-        }
+        // set recipe object with createRecipeObject function
+        state.recipe = createRecipeObject(data);
+
         // check if current recipe is bookmarked from bookmark array we stored after click bookmark button
         if(state.bookmarks.some(bookmark => bookmark.id === id))
             state.recipe.bookmarked = true;
@@ -182,7 +192,10 @@ export const uploadRecipe = async function(newRecipe){
         console.log(recipe);
 
         const data = await sendJson(`${API_URL}?key=${API_KEY}`, recipe);
-        console.log(data);
+        // set recipe object with createRecipeObject function
+        // to fix {key, bookmark} not exsit in recipe object issue
+        state.recipe = createRecipeObject(data);
+        addBookMark(state.recipe);
     }catch(error){
         throw error;
     }
