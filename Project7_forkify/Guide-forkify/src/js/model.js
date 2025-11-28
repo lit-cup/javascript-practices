@@ -1,6 +1,7 @@
 // import { result } from "lodash-es";
 import { API_URL, API_KEY, RES_PER_PAGE } from "./config";
-import { getJson, sendJson } from "./view/helpers";
+// import { getJson, sendJson } from "./view/helpers";
+import { AJAX } from "./view/helpers";
 // import recipeView from "./view/recipeView";
 
 // state: store all data we need
@@ -40,7 +41,7 @@ const createRecipeObject = function(data){
 // this model not will return anything keep it private
 export const loadRecipe = async function(id){
     try{
-        const data = await getJson(`${API_URL}/${id}`);
+        const data = await AJAX(`${API_URL}/${id}`);
 
         // const res = await fetch(`${API_URL}/${id}`); 
         // const data = await res.json();
@@ -72,7 +73,7 @@ export const loadSearchResults = async function ( query ){
     try {
         state.search.query = query;
         // serarch when API call
-        const data = await getJson(`${API_URL}?search=${query}`);
+        const data = await AJAX(`${API_URL}?search=${query}`);
         console.log(data);
 
         // to reciving recipes from data create obj, store in the state
@@ -190,7 +191,7 @@ export const uploadRecipe = async function(newRecipe){
         };
 
         // send recipe data to API
-        const data = await sendJson(`${API_URL}?key=${API_KEY}`, recipe);
+        const data = await AJAX(`${API_URL}?key=${API_KEY}`, recipe);
         // set recipe object with createRecipeObject function
         // to fix {key, bookmark} not exsit in recipe object issue
         state.recipe = createRecipeObject(data);
