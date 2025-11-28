@@ -4,6 +4,8 @@ import searchView from "./view/searchView.js";
 import resultView from "./view/resultView.js";
 import paginationView from "./view/paginationView.js";
 import bookmarksView from "./view/bookmarkView.js";
+import addRecipeView from "./view/addRecipeView.js";
+import UpdateIconsView from "./view/upateIconsView.js";
 
 // import icons from '../img/icons.svg'; // parcel 1
 // import icons from 'url:../img/icons.svg'; // parcel 2
