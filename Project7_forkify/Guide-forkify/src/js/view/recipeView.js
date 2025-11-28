@@ -1,5 +1,5 @@
 import View from './View.js'; // all view should have each same Veiw functionilty so we need create parent view to handle 
-import icons from '/src/img/icons.svg';
+import icons from '../../img/icons.svg?url';
 // using fraction.js package to tranfrom format of number like 0.5 to 1/2
 import Fraction from 'fraction.js'; 
 

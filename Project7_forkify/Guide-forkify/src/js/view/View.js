@@ -1,4 +1,4 @@
-import icons from '/src/img/icons.svg';
+import icons from '../../img/icons.svg?url';
 
 export default class View {
   _data;
@@ -9,7 +9,7 @@ export default class View {
 
     this._data = data;
     const markup = this._generalMarkup();
-    
+
     // to get markup string from _generalMarkup method in bookmarkView.js.
     if(!render) return markup;
 
