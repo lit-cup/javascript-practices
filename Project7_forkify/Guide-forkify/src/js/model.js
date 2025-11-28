@@ -1,6 +1,6 @@
 // import { result } from "lodash-es";
-import { API_URL, RES_PER_PAGE } from "./config";
-import { getJson } from "./view/helpers";
+import { API_URL, API_KEY, RES_PER_PAGE } from "./config";
+import { getJson, sendJson } from "./view/helpers";
 // import recipeView from "./view/recipeView";
 
 // state: store all data we need
@@ -180,6 +180,9 @@ export const uploadRecipe = async function(newRecipe){
             ingredients: ingredients,
         };
         console.log(recipe);
+
+        const data = await sendJson(`${API_URL}?key=${API_KEY}`, recipe);
+        console.log(data);
     }catch(error){
         throw error;
     }
