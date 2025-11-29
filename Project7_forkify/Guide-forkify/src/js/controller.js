@@ -170,6 +170,10 @@ const controlAddRecipe = async function(newRecipe){
   }
 }
 
+const testfunction = function(){
+  console.log('deploy is linked');
+}
+
 
 // use foreach to let difference event could call in one event listener
 // window.addEventListener('hashchange', controlRecipe);
@@ -191,6 +195,7 @@ const init = function() {
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerPageButtonClick(controlPagination);
   addRecipeView.addHandlerUploadRecipe(controlAddRecipe);
+  testfunction();
 }
 
 init();
