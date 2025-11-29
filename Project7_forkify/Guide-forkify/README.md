@@ -92,7 +92,7 @@ This project is deployed on **Netlify**, allowing you to preview and interact wi
 
 ### Live Demo
 
-👉 **Demo URL:** `<YOUR_NETLIFY_DEPLOY_LINK_HERE>`
+👉 **Demo URL:** `https://forkify-sturartchen.netlify.app/`
 
 ### How Deployment Works
 
