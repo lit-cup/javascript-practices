@@ -9,3 +9,14 @@
 2. linking repo, netlify -> github 
 3. [build setting](https://docs.netlify.com/build/configure-builds/overview/?_gl=1*11ybclz*_gcl_au*NDIzOTM2MDUxLjE3NjQzNzM0MjIuMTQ1MTUxNjA2NC4xNzY0MzczNTMzLjE3NjQzNzM5ODI.#basic-build-settings)
 4. redeploy to apply
+
+# etc netlify build settings base on forkify
+
+`Base directory: Project7_forkify/Guide-forkify
+
+Build command: vite build
+
+Publish directory: Project7_forkify/Guide-forkify/dist
+
+Functions directory: Project7_forkify/Guide-forkify/netlify/functions
+`
