@@ -3,10 +3,12 @@ const data1Koalas = 65+54+49;
 const data2Dolphins = 85+54+41;
 const data2Koalas = 23+34+27;
 
+// bascially funcion
 function calcAverage(scores){
     return scores/3;
 }
 
+// arrow function
 const calcAverage = (a,b,c) => (a+b+c)/3;
 
 const checkWinner = function (scoreDolphins, scoreKoalas){

@@ -27,6 +27,7 @@
             font-family: 'Courier New', monospace;
             padding: 15px;
             margin: 15px;
+            .error { color: #ff6b6b; }
             overflow-y: auto;
             border: 1px solid #444;
             font-size: 14px;
@@ -34,7 +35,6 @@
         }
         
         .log { color: #ffffff; }
-        .error { color: #ff6b6b; }
         .warn { color: yellow; }
         .info { color: #4ec9b0; }
         
@@ -50,9 +50,9 @@
     <!-- functionscript -->
    <!-- <script type="text/javascript" src="script.js"></script> -->
     <!-- <script type="text/javascript" src="scriptdatestruct.js"></script> -->
-    <script type="text/javascript" src="../Basic/DataStructuresOperatorsString/Challenge4.js" defer></script>
+    <script src="/Basic/alertExample/exampleObjectLiteral.js"></script>
     <div id="consoleOutput" class="console-display"></div>
-    <script>
+    <!-- <script>
         // Function to format timestamp
         function getTimestamp() {
             return new Date().toLocaleTimeString();
@@ -103,8 +103,6 @@
         console.error('Error message');
         console.warn('Warning message');
         console.info('Welcome!!--------');
-    </script>
-
-
+    </script> -->
 </body>
 </html>
