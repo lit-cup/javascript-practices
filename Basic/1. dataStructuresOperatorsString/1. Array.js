@@ -10,11 +10,11 @@ const calcTip = (bill) => {
 // clearfiy options
 
 // use Ternary operator: condition : experIfTrue: experIfFalse;
-// const calcTip = bill => 50<=bill && bill <=300 ? bill*15/100 : bill*20/100;
-
-// 
+// const calcTip = bill => 50<=bill && bill <=300 ? bill*15/100 : bill*20/100; 
 // const tips = [calcTip(bills[0]),calcTip(bills[1]),calcTip(bills[2])];
 // const total = [bills[0]+tips[0],bills[1]+tips[1],bills[2]+tips[2]];
+
+///////////////////////////////////////////
 
 //loop Array use for loop
 for(let i=0;i<bills.length;i++){
@@ -26,28 +26,30 @@ for(let i=0;i<bills.length;i++){
 console.log(tips);
 console.log(total);
 
-//continue and break: spical varible
-const obj = [
+///////////////////////////////////////////
+
+//continue/break - spical varible
+const Array = [
     'John',
     200,
     'smoking','swimming',
     14,
     214
 ]
-console.log(obj);
-// continue ingore keep looping
+console.log(Array);
+// <continue> ingore keep looping
 console.log('---------------continue-----------------');
-for(let i=0;i<obj.length;i++){
-    if(typeof obj[i] !== 'string') 
+for(let i=0;i<Array.length;i++){
+    if(typeof Array[i] !== 'string') 
         continue;
-    console.log(obj[i], typeof obj[i]);
+    console.log(Array[i], typeof Array[i]);
 }
-// break leave looping
+// <break> leave looping
 console.log('---------------break-----------------');
-for(let i=0;i<obj.length;i++){
-    if(typeof obj[i] === 'number') 
+for(let i=0;i<Array.length;i++){
+    if(typeof Array[i] === 'number') 
         break;
-    console.log(obj[i], typeof obj[i]);
+    console.log(Array[i], typeof Array[i]);
 }
 
 

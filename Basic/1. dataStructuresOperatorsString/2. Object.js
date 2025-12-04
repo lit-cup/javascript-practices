@@ -6,23 +6,29 @@ const obj = {
         console.log('Hello, my name is ' + this.name);
     },
     calcAge: function(){
+        // new properties for age
         this.age = 2025 - this.birthYear;
         return this.age;
     }
 }
 
 // Accessing properties
-console.log(obj.name);
-console.log(obj.birthYear);
-console.log(obj.city);
+console.log(obj.name);  // John
+console.log(obj.birthYear); // 2000
+console.log(obj.city); // New York
 
 // Adding new properties
+// obj.newproperties = value;
 obj.gender = 'Male';
-console.log(obj);
+console.log(obj.gender); // Male
 
 // Calling methods
-obj.sayHello();
+obj.sayHello(); // Hello, my name is John.
+
 // Calling methods
-obj.calcAge(); //using funtion calc age to set age property
-console.log(`John's age is ${obj.age}`); //get age property by funciton building in object
+//using funtion calc age to set age property
+obj.calcAge(); // return this.age
+
+//get age property by funciton building in object
+console.log(`John's age is ${obj.age}`); // John's age is 25
 

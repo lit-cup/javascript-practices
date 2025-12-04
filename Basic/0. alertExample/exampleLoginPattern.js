@@ -40,4 +40,4 @@ function signIn(user,pass){
 }
 var userName = prompt("What's your username?");
 var password = prompt("What's your password?");
- signIn(userName,password);
+signIn(userName,password);

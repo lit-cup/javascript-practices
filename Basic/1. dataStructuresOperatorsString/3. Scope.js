@@ -1,4 +1,5 @@
-'use strict';
+'use strict'; // let console show error
+
 function calcAge(birthYear){
     const age = 2037- birthYear;
     //1. Scope could read by parent layer because of scope chain
@@ -11,7 +12,7 @@ function calcAge(birthYear){
 
     //block scope
     if(birthYear>= 1989 && birthYear<=2020){
-        //var is spical can read anywhere not recommend to use
+        //not recommend use in morden var: spical can read anywhere
         var millenial = true;
         //Creating New Variable with same name as outer scope's variable
         const firstName='Josho';
