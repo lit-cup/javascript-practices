@@ -1,4 +1,5 @@
 import mapView from './view/mapView.js';
+import formView from './view/formView.js';
 
 class Controller {
   init() {
@@ -22,9 +23,11 @@ class Controller {
     // transform to coord arrays
     const coords = [latitude, longitude];
 
+    // render default map by coord
     mapView.renderMap(coords);
 
-    mapView.addHandlerMapClick(this._showForm.bind(this));
+    // map click event
+    mapView.addHandlerMapClick(this._handleMapClick.bind(this));
   }
   _showError(message) {
     // console.log(message);
@@ -34,7 +37,10 @@ class Controller {
       errorMessage.classList.add('hidden');
     }, 3000);
   }
-  _showForm(mapE) {
+  _handleMapClick(mapE) {
+    // save form
+    // preview mark and route
+    // render form
     formView.renderForm(mapE);
   }
 }

@@ -393,6 +393,7 @@ class maptyApp {
   }
   // model
   _showRouteAndPan(mapE) {
+    console.log(mapE);
     if (!this._isMapLoaded()) {
       console.warn('Cannot pin map: Map is not loaded.');
       return;
