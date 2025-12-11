@@ -63,6 +63,7 @@
   border: none;
   background-color: $color-grey-light-1;
   padding: 0.8rem 1.2rem;
+  margin: 0 10%;
   border-radius: 10rem;
   cursor: pointer;
 
@@ -88,6 +89,21 @@
 
   &:focus {
     outline: none;
+  }
+}
+.label--inline {
+  color: $color-primary;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  padding: 0.8rem 0.8rem;
+  border-radius: 5rem;
+  transition: all 0.2s;
+  justify-self: flex-end;
+  &:hover {
+    color: $color-grad-2;
+    background-color: $color-grey-light-2;
   }
 }
 

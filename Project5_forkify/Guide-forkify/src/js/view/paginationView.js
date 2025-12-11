@@ -17,7 +17,7 @@ class PaginationView extends View {
       controlPagination(goToPage);
     });
   }
-  // TODO: display correct page between two pagination button
+
   // use search data from model,use data-goto attribute to get which page to go
   _generalMarkup() {
     const curPage = this._data.page;
@@ -30,8 +30,10 @@ class PaginationView extends View {
     // All page's situions for button
     // Page1, and there are other pages
     if (curPage === 1 && numPage > 1) {
+      this._parentElement.style.justifyContent = 'end';
       // return next button for render, for page 1
-      return `        
+      return ` 
+            <div class="label--inline pagination__label--currPage">${curPage}</div>
             <button data-goto='${
               curPage + 1
             }' class="btn--inline pagination__btn--next">
@@ -44,6 +46,7 @@ class PaginationView extends View {
 
     // last page
     if (curPage === numPage && numPage > 1) {
+      this._parentElement.style.justifyContent = 'start';
       // return pre button for render, for last page
       return `
             <button data-goto='${
@@ -53,7 +56,9 @@ class PaginationView extends View {
                <use href="${icons}#icon-arrow-left"></use>
              </svg>
              <span>Page ${curPage - 1}</span>
-            </button>`;
+            </button>
+            <div class="label--inline pagination__label--currPage">${curPage}</div>
+            `;
     }
 
     // other page
@@ -68,6 +73,7 @@ class PaginationView extends View {
                 </svg>
                 <span>Page ${curPage - 1}</span>
             </button>
+            <div class="label--inline pagination__label--currPage">${curPage}</div>
             <button data-goto='${
               curPage + 1
             }' class="btn--inline pagination__btn--next">
