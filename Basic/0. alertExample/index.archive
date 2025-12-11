@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button{
+            margin: 30px;
+            width: 10%;
+            height: 50px;
+        }
+        textarea{
+            width: 50%;
+            height: 200px;
+        }
+        .console-display {
+            width: 900px;
+            height: 400px;
+            background: #1e1e1e;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            margin: 15px;
+            .error { color: #ff6b6b; }
+            overflow-y: auto;
+            border: 1px solid #444;
+            font-size: 14px;
+            white-space: pre;
+        }
+        
+        .log { color: #ffffff; }
+        .warn { color: yellow; }
+        .info { color: #4ec9b0; }
+        
+        .timestamp {
+            color: #666;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>Javascript in HTML for 0.alertExample</h1>
+    <!-- functionscript -->
+   <!-- <script type="text/javascript" src="script.js"></script> -->
+    <!-- <script type="text/javascript" src="scriptdatestruct.js"></script> -->
+    <script src="/Basic/alertExample/exampleObjectLiteral.js"></script>
+    <div id="consoleOutput" class="console-display"></div>
+    <!-- <script>
+        // Function to format timestamp
+        function getTimestamp() {
+            return new Date().toLocaleTimeString();
+        }
+
+        // Function to add message to display
+        function addToDisplay(message, type = 'log') {
+            const consoleDiv = document.getElementById('consoleOutput');
+            const line = document.createElement('div');
+            line.className = type;
+            line.innerHTML = `<span class="timestamp">[${getTimestamp()}]</span> ${message}`;
+            consoleDiv.appendChild(line);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        // Override console methods
+        (function() {
+            const originalConsole = {
+                log: console.log,
+                error: console.error,
+                warn: console.warn,
+                info: console.info
+            };
+
+            console.log = function(...args) {
+                addToDisplay(args.join(' '), 'log');
+                originalConsole.log.apply(console, args);
+            };
+
+            console.error = function(...args) {
+                addToDisplay(args.join(' '), 'error');
+                originalConsole.error.apply(console, args);
+            };
+
+            console.warn = function(...args) {
+                addToDisplay(args.join(' '), 'warn');
+                originalConsole.warn.apply(console, args);
+            };
+
+            console.info = function(...args) {
+                addToDisplay(args.join(' '), 'info');
+                originalConsole.info.apply(console, args);
+            };
+        })();
+
+        // Test the console
+        console.log('Regular message');
+        console.error('Error message');
+        console.warn('Warning message');
+        console.info('Welcome!!--------');
+    </script> -->
+</body>
+</html>
