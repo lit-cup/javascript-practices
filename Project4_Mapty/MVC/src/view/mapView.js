@@ -2,17 +2,17 @@ import { MAP_VIEW_LEVEL } from './config.js';
 
 class mapView {
   #handlerMapClick;
-  #mapEvent;
+  #map;
   #coords;
   renderMap(coords) {
-    this.#mapEvent = L.map('map').setView(coords, MAP_VIEW_LEVEL);
+    this.#map = L.map('map').setView(coords, MAP_VIEW_LEVEL);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(this.#mapEvent);
+    }).addTo(this.#map);
 
-    this.#mapEvent.addEventListener('click', this.#handlerMapClick);
+    this.#map.on('click', this.#handlerMapClick.bind(this));
   }
   setMapClickHandler(handler) {
     this.#handlerMapClick = handler;

@@ -31,16 +31,13 @@ class Controller {
     const { latitude, longitude } = position.coords;
     // transform to coord arrays
     const coords = [latitude, longitude];
-    // store coords data to model
-    model.state.coords = coords;
     // render default map by coord
     mapView.renderMap(coords);
   }
   _handleMapSubmit() {
     try {
       // get form input
-      const input = formView.getInput(model.state.coords);
-      console.log(input);
+      const input = formView.getInput();
       // check input finite
       this._isInputFinite(input);
       // formatWorkout by difference type -> store in model
@@ -74,7 +71,6 @@ class Controller {
   _formatTypeWorkout(input) {
     let newWorkout;
     // if workout is running, create running object
-    console.log(input);
     if (input.type === 'running') {
       return (newWorkout = new Running(
         input.coords,
@@ -92,13 +88,11 @@ class Controller {
       ));
     }
   }
-  _handleMapClick() {
-    // store temp mapEvnet
-    console.log(model.state.coords);
+  _handleMapClick(mapEvent) {
     // preview  mark and route by click location
     // mapViewRenderPreviewSingle(coord);
-    // render form
-    formView.render();
+    // render form and store mapEvnet
+    formView.render(mapEvent);
   }
 }
 

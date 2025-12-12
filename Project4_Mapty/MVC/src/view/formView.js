@@ -6,6 +6,7 @@ class formView {
   _inputCadence = document.querySelector('.form__input--cadence');
   _inputElevation = document.querySelector('.form__input--elevation');
   _errorMessage = document.querySelector('.error-message');
+  #mapEvent;
   addHandlerMapSubmit(handleMapSubmit) {
     this._form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -18,8 +19,10 @@ class formView {
       this._toggleElevationField();
     });
   }
-  getInput(coords) {
+  getInput() {
     // Get input data from the form
+    const { lat, lng } = this.#mapEvent.latlng;
+
     return {
       type: this._inputType.value,
       distance: +this._inputDistance.value,
@@ -32,7 +35,7 @@ class formView {
         this._inputType.value === 'cycling'
           ? +this._inputElevation.value
           : 'noneTypeExist',
-      coords: coords,
+      coords: [lat, lng],
     };
   }
   _clearInput() {
@@ -53,7 +56,10 @@ class formView {
     const sidebar = document.querySelector('.sidebar');
     sidebar.classList.toggle('minisize');
   }
-  render() {
+  render(mapEvnet) {
+    // store on click mapEvent
+    this.#mapEvent = mapEvnet;
+    console.log('3', this.#mapEvent);
     this._form.classList.remove('hidden');
     this._inputDistance.focus();
     this._toggleSidebar();
