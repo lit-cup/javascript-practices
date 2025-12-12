@@ -55,11 +55,12 @@ class formView {
   _toggleSidebar() {
     const sidebar = document.querySelector('.sidebar');
     sidebar.classList.toggle('minisize');
+    this._clearInput();
   }
   render(mapEvnet) {
     // store on click mapEvent
     this.#mapEvent = mapEvnet;
-    console.log('3', this.#mapEvent);
+    console.log('formView: ', this.#mapEvent);
     this._form.classList.remove('hidden');
     this._inputDistance.focus();
     this._toggleSidebar();

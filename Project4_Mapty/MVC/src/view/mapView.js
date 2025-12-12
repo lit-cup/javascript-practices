@@ -1,12 +1,8 @@
-import { MAP_VIEW_LEVEL } from './config.js';
-
 class mapView {
   #handlerMapClick;
   #map;
-  #coords;
-  renderMap(coords) {
-    this.#map = L.map('map').setView(coords, MAP_VIEW_LEVEL);
-
+  renderMap(map) {
+    this.#map = map;
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -17,11 +13,22 @@ class mapView {
   setMapClickHandler(handler) {
     this.#handlerMapClick = handler;
   }
-  setCoords(coords) {
-    this.#coords = coords;
-  }
-  getCoords() {
-    return this.#coords;
+  renderMarker(workout) {
+    L.marker(workout.coords)
+      .addTo(this.#map)
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          autoClose: false,
+          closeOnClick: false,
+          className: `${workout.type}-popup`,
+        })
+      )
+      .setPopupContent(
+        `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
+      )
+      .openPopup();
   }
   //   _showRouteAndPan(mapE) {
   //     this.#mapEvent = mapE;

@@ -4,6 +4,7 @@ import formView from './view/formView.js';
 import workoutView from './view/workoutView.js';
 import Running from './model/running.js';
 import Cycling from './model/cycling.js';
+import { MAP_VIEW_LEVEL } from './view/config.js';
 class Controller {
   init() {
     this._getPosition();
@@ -31,8 +32,10 @@ class Controller {
     const { latitude, longitude } = position.coords;
     // transform to coord arrays
     const coords = [latitude, longitude];
+    // new map set View
+    const map = L.map('map').setView(coords, MAP_VIEW_LEVEL);
     // render default map by coord
-    mapView.renderMap(coords);
+    mapView.renderMap(map);
   }
   _handleMapSubmit() {
     try {
@@ -44,11 +47,14 @@ class Controller {
       model.addWorkout(this._formatTypeWorkout(input));
       // clear workout list before render
       workoutView.clear();
-      // render workout
+      // workouts list loop
       model.state.workouts.forEach(workout => {
+        // render workout
         workoutView.render(workout);
+        // render mark
+        mapView.renderMarker(workout);
       });
-      // render mark
+      formView._toggleSidebar();
     } catch (error) {
       formView._renderError(error.message);
     }
