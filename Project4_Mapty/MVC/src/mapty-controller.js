@@ -56,26 +56,20 @@ class Controller {
       formView._renderError(error.message);
     }
   }
-  _isInputFinite(inputs) {
-    const validInput = (...inputs) =>
-      inputs.every(input => Number.isFinite(input));
-    const positiveInput = (...inputs) => inputs.every(input => input > 0);
-
-    // TODO: fixed only check one type bug
-    if (
-      !validInput(
-        inputs.distance,
-        inputs.duration,
-        inputs.type === 'running' ? inputs.cadence : inputs.elevation
-      ) ||
-      !positiveInput(
-        inputs.distance,
-        inputs.duration,
-        inputs.type === 'running' ? inputs.cadence : inputs.elevations
-      )
-    ) {
-      throw new Error('Please enter valid positive numbers for all fields');
-    }
+  _isInputFinite({ type, distance, duration, cadence, elevation }) {
+    const valueToCheck = type === 'running' ? cadence : elevation;
+    const value = [distance, duration, valueToCheck];
+    const allFinite = value.every(val => Number.isFinite(val));
+    const allPositive = value.every(val => val > 0);
+    // finite error message
+    if (!allFinite) throw new Error('Inputs must be numbers.');
+    // positive error message
+    if (!allPositive)
+      throw new Error(
+        type === 'running'
+          ? 'Distance, duration and cadence must be positive numbers.'
+          : 'Distance, duration and elevation must be positive numbers.'
+      );
   }
   _formatTypeWorkout(input) {
     let newWorkout;
