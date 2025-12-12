@@ -1,4 +1,6 @@
-class Cycling extends Workout {
+import Workout from './workout.js';
+
+export default class Cycling extends Workout {
   type = 'cycling';
   constructor(coords, distance, duration, elevationGain) {
     super(coords, distance, duration);

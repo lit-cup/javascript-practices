@@ -1,6 +1,9 @@
+import * as model from './mapty-model.js';
 import mapView from './view/mapView.js';
 import formView from './view/formView.js';
-import * as model from './mapty-model.js';
+import workoutView from './view/workoutView.js';
+import Running from './model/running.js';
+import Cycling from './model/cycling.js';
 class Controller {
   init() {
     this._getPosition();
@@ -31,27 +34,58 @@ class Controller {
     // render default map by coord
     mapView.renderMap(coords);
   }
-  _showError(message) {
-    // console.log(message);
-    errorMessage.textContent = message;
-    errorMessage.classList.remove('hidden');
-    setTimeout(() => {
-      errorMessage.classList.add('hidden');
-    }, 3000);
-  }
   _handleMapSubmit() {
-    // get from input
-    const input = formView.getInput(model.state.coords);
-    console.log(input);
-    // store in model
-    model.addWorkout(input);
-    // workout type chcek rebuild obj
+    try {
+      // get form input
+      const input = formView.getInput(model.state.coords);
+      // check input finite
+      this._isInputFinite(input);
+      console.log(input);
 
-    // render workout
-    model.state.workouts.forEach(workout => {
-      formView.renderWorkOut(workout);
-    });
-    // render mark
+      const newWorkout = this._formatTypeWorkout(input);
+      console.log(newWorkout);
+      // formatWorkout by difference type -> store in model
+      model.addWorkout(newWorkout);
+      // render workout
+      model.state.workouts.forEach(workout => {
+        workoutView.renderWorkOut(workout);
+      });
+      // render mark
+    } catch (error) {
+      formView._renderError(error.message);
+    }
+  }
+  _isInputFinite(inputs) {
+    const validInput = (...inputs) =>
+      inputs.every(input => Number.isFinite(input));
+    const positiveInput = (...inputs) => inputs.every(input => input > 0);
+    if (
+      !validInput(inputs.distance, inputs.duration, inputs.cadence) ||
+      !positiveInput(inputs.distance, inputs.duration, inputs.cadence)
+    ) {
+      throw new Error('Please enter valid positive numbers for all fields');
+    }
+  }
+  _formatTypeWorkout(input) {
+    let newWorkout;
+    // if workout is running, create running object
+    console.log(input);
+    if (input.type === 'running') {
+      return (newWorkout = new Running(
+        input.coords,
+        input.distance,
+        input.duration,
+        input.cadence
+      ));
+    }
+    if (input.type === 'cycling') {
+      return (newWorkout = new Cycling(
+        input.coords,
+        input.distance,
+        input.duration,
+        input.elevation
+      ));
+    }
   }
   _handleMapClick() {
     // store temp mapEvnet

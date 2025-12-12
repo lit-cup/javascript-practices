@@ -1,4 +1,5 @@
-class Running extends Workout {
+import Workout from './workout.js';
+export default class Running extends Workout {
   type = 'running';
   constructor(coords, distance, duration, cadence) {
     super(coords, distance, duration);
