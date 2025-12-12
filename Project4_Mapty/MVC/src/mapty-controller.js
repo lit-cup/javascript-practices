@@ -9,6 +9,8 @@ class Controller {
     this._getPosition();
     // map click event: deferred binding
     mapView.setMapClickHandler(this._handleMapClick.bind(this));
+    // form input type change event
+    formView.addHandlerInputTypeChange();
     // map sumbit evnet
     formView.addHandlerMapSubmit(this._handleMapSubmit.bind(this));
   }
@@ -38,17 +40,16 @@ class Controller {
     try {
       // get form input
       const input = formView.getInput(model.state.coords);
+      console.log(input);
       // check input finite
       this._isInputFinite(input);
-      console.log(input);
-
-      const newWorkout = this._formatTypeWorkout(input);
-      console.log(newWorkout);
       // formatWorkout by difference type -> store in model
-      model.addWorkout(newWorkout);
+      model.addWorkout(this._formatTypeWorkout(input));
+      // clear workout list before render
+      workoutView.clear();
       // render workout
       model.state.workouts.forEach(workout => {
-        workoutView.renderWorkOut(workout);
+        workoutView.render(workout);
       });
       // render mark
     } catch (error) {
@@ -59,9 +60,19 @@ class Controller {
     const validInput = (...inputs) =>
       inputs.every(input => Number.isFinite(input));
     const positiveInput = (...inputs) => inputs.every(input => input > 0);
+
+    // TODO: fixed only check one type bug
     if (
-      !validInput(inputs.distance, inputs.duration, inputs.cadence) ||
-      !positiveInput(inputs.distance, inputs.duration, inputs.cadence)
+      !validInput(
+        inputs.distance,
+        inputs.duration,
+        inputs.type === 'running' ? inputs.cadence : inputs.elevation
+      ) ||
+      !positiveInput(
+        inputs.distance,
+        inputs.duration,
+        inputs.type === 'running' ? inputs.cadence : inputs.elevations
+      )
     ) {
       throw new Error('Please enter valid positive numbers for all fields');
     }
@@ -93,7 +104,7 @@ class Controller {
     // preview  mark and route by click location
     // mapViewRenderPreviewSingle(coord);
     // render form
-    formView.renderForm();
+    formView.render();
   }
 }
 

@@ -12,6 +12,11 @@ class formView {
       handleMapSubmit();
     });
   }
+  addHandlerInputTypeChange() {
+    this._inputType.addEventListener('change', () => {
+      this._toggleElevationField();
+    });
+  }
   getInput(coords) {
     // Get input data from the form
     return {
@@ -23,17 +28,25 @@ class formView {
           ? +this._inputCadence.value
           : 'noneTypeExist',
       elevation:
-        this._inputElevation.value === 'Cycling'
+        this._inputType.value === 'cycling'
           ? +this._inputElevation.value
           : 'noneTypeExist',
       coords: coords,
     };
   }
+  _toggleElevationField() {
+    this._inputCadence
+      .closest('.form__row')
+      .classList.toggle('form__row--hidden');
+    this._inputElevation
+      .closest('.form__row')
+      .classList.toggle('form__row--hidden');
+  }
   _toggleSidebar() {
     const sidebar = document.querySelector('.sidebar');
     sidebar.classList.toggle('minisize');
   }
-  renderForm() {
+  render() {
     this._form.classList.remove('hidden');
     this._inputDistance.focus();
     this._toggleSidebar();
