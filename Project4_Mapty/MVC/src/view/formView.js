@@ -14,6 +14,7 @@ class formView {
   }
   addHandlerInputTypeChange() {
     this._inputType.addEventListener('change', () => {
+      this._clearInput();
       this._toggleElevationField();
     });
   }
@@ -33,6 +34,12 @@ class formView {
           : 'noneTypeExist',
       coords: coords,
     };
+  }
+  _clearInput() {
+    this._inputDistance.value = '';
+    this._inputDuration.value = '';
+    this._inputCadence.value = '';
+    this._inputElevation.value = '';
   }
   _toggleElevationField() {
     this._inputCadence
