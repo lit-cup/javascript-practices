@@ -44,29 +44,47 @@ class mapView {
       )
       .setPopupContent(
         `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}
-          ${this._isDebug ? `X:${lat.toFixed(3)}, Y:${lng.toFixed(3)}` : ''}`
+          ${
+            this._isDebug
+              ? `X:${coords[0].toFixed(3)}, Y:${coords[1].toFixed(3)}`
+              : ''
+          }`
       )
       .openPopup();
     return marker;
   }
-  //   _showRouteAndPan(mapE) {
-  //     this.#mapEvent = mapE;
-  //     // Listen for first click
-  //     this.#marker1 = L.marker(mapE.latlng)
-  //       .addTo(this.#map)
-  //       .bindPopup('Start')
-  //       .openPopup();
-  //     this.#markers.push(this.#marker1); // Track in #markers
-  //     // Listen for second click
-  //     this.#map.once('click', e => {
-  //       this.#marker2 = L.marker(e.latlng)
-  //         .addTo(this.#map)
-  //         .bindPopup('End')
-  //         .openPopup();
-  //       this.#markers.push(this.#marker2); // Track in #markers
-  //       this._setRouteAndPan(); // Draw route after second click
-  //     });
-  //   }
+  renderRoute(startMark, endMark) {
+    L.Routing.control({
+      waypoints: [
+        L.latLng(startMark[0], startMark[1]),
+        L.latLng(endMark[0], endMark[1]),
+      ],
+      lineOptions: { styles: [{ color: 'red', weight: 4 }] },
+      router: L.Routing.osrmv1({
+        serviceUrl: 'https://router.project-osrm.org/route/v1',
+      }),
+      createMarker: () => {},
+      addWaypoints: false,
+      routeWhileDragging: false,
+      fitSelectedRoutes: false,
+    })
+      .on('routesfound', e => {
+        const routeDistanceKm = (
+          e.routes[0].summary.totalDistance / 1000
+        ).toFixed(2);
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          autoClose: false,
+          closeOnClick: false,
+        })
+          .setLatLng(endMark)
+          //.setContent(`Route ${index + 1}: ${routeDistanceKm} km`)
+          .setContent(`Route: ${routeDistanceKm} km`)
+          .openOn(this.#map);
+      })
+      .addTo(this.#map);
+  }
 }
 
 export default new mapView();

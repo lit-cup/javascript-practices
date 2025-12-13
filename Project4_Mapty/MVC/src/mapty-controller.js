@@ -55,7 +55,7 @@ class Controller {
       // render end mark
       mapView.renderMarker(endMark);
       // render route
-
+      mapView.renderRoute(startMark, endMark);
       // formatWorkout by difference type -> store in model
       model.addWorkout(newWorkout);
       // reset Route
@@ -113,11 +113,13 @@ class Controller {
   }
   _handleMapClick(mapEvent) {
     const { lat, lng } = mapEvent.latlng;
+    // preview  mark by click location
+    if (!model.state.route.startMark || !model.state.route.endMark)
+      mapView.renderMarker([lat, lng]);
     // store mapEvnet
     formView._setMapEvent(mapEvent);
     // mark&route: store two point latlng
     model.setRoutePoint([lat, lng]);
-    // preview  mark and route by click location
     // mapView.previewRoutePoint(model.state.route);
     // render form
     formView.render();
