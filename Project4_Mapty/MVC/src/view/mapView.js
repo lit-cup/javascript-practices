@@ -2,6 +2,7 @@ import { MAP_VIEW_LEVEL } from './config.js';
 class mapView {
   #handlerMapClick;
   #map;
+  _isDebug = false; // hanlde Debug;
   renderMap(coords) {
     // set mapEvent
     this.#map = L.map('map').setView(coords, MAP_VIEW_LEVEL);
@@ -26,11 +27,12 @@ class mapView {
     this.#handlerMapClick = handler;
   }
   renderMarker(workout) {
+    const [lat, lng] = workout.coords;
     L.marker(workout.coords)
       .addTo(this.#map)
       .bindPopup(
         L.popup({
-          maxWidth: 250,
+          maxWidth: 200,
           minWidth: 100,
           autoClose: false,
           closeOnClick: false,
@@ -38,7 +40,8 @@ class mapView {
         })
       )
       .setPopupContent(
-        `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
+        `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}
+          ${this._isDebug ? `X:${lat.toFixed(3)}, Y:${lng.toFixed(3)}` : ''}`
       )
       .openPopup();
   }
