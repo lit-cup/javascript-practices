@@ -8,6 +8,7 @@ import Cycling from './model/cycling.js';
 class Controller {
   init() {
     this._getPosition();
+    formView._toggleSidebar();
     // map click event: deferred binding
     mapView.setMapClickHandler(this._handleMapClick.bind(this));
     // form input type change event
@@ -41,20 +42,25 @@ class Controller {
     try {
       // get form input
       const input = formView.getInput();
+      // get start end mark latlng
+      const { startMark, endMark } = model.state.route;
+      if (!startMark || !endMark) return;
       // check input finite
       this._isInputFinite(input);
+      const newWorkout = this._formatTypeWorkout(input);
+      // render workout
+      workoutView.render(newWorkout);
+      // render start mark
+      mapView.renderMarker(startMark, newWorkout);
+      // render end mark
+      mapView.renderMarker(endMark);
+      // render route
+
       // formatWorkout by difference type -> store in model
-      model.addWorkout(this._formatTypeWorkout(input));
-      // clear workout list before render
-      workoutView.clear();
-      // workouts list loop
-      model.state.workouts.forEach(workout => {
-        // render workout
-        workoutView.render(workout);
-        // render mark
-        mapView.renderMarker(workout);
-      });
-      formView._toggleSidebar();
+      model.addWorkout(newWorkout);
+      // reset Route
+      model.resetRoute();
+      // formView._toggleSidebar();
     } catch (error) {
       formView._renderError(error.message);
     }
@@ -102,14 +108,17 @@ class Controller {
     if (!currWorkout) return;
     // set workout view
     mapView.setView(currWorkout.coords);
-    // mini sidebar
-    formView._toggleSidebar();
+    //TODO: mini sidebar
+    //formView._toggleSidebar();
   }
   _handleMapClick(mapEvent) {
+    const { lat, lng } = mapEvent.latlng;
     // store mapEvnet
     formView._setMapEvent(mapEvent);
+    // mark&route: store two point latlng
+    model.setRoutePoint([lat, lng]);
     // preview  mark and route by click location
-    // mapViewRenderPreviewSingle(coord);
+    // mapView.previewRoutePoint(model.state.route);
     // render form
     formView.render();
   }

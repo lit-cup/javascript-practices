@@ -63,7 +63,7 @@ class formView {
   render() {
     this._form.classList.remove('hidden');
     this._inputDistance.focus();
-    this._toggleSidebar();
+    // this._toggleSidebar();
   }
   _renderError(message) {
     if (!this._errorMessage.classList.contains('hidden')) return;

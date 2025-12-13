@@ -26,10 +26,13 @@ class mapView {
   setMapClickHandler(handler) {
     this.#handlerMapClick = handler;
   }
-  renderMarker(workout) {
-    const [lat, lng] = workout.coords;
-    L.marker(workout.coords)
-      .addTo(this.#map)
+  renderMarker(coords, workout = null) {
+    // start maker popup, end maker not popup
+    const marker = L.marker(coords).addTo(this.#map);
+
+    // when no workout return mark not include popup
+    if (!workout) return marker;
+    marker
       .bindPopup(
         L.popup({
           maxWidth: 200,
@@ -44,6 +47,7 @@ class mapView {
           ${this._isDebug ? `X:${lat.toFixed(3)}, Y:${lng.toFixed(3)}` : ''}`
       )
       .openPopup();
+    return marker;
   }
   //   _showRouteAndPan(mapE) {
   //     this.#mapEvent = mapE;
