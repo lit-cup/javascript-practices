@@ -1,10 +1,17 @@
 class workoutView {
   _workform = document.querySelector('.work');
+  _workoutItem = document.querySelector('.workouts');
 
   clear() {
     this._workform.innerHTML = '';
   }
-
+  addHandlerWorkoutClick(_handleWorkoutClick) {
+    this._workoutItem.addEventListener('click', function (e) {
+      const workoutEl = e.target.closest('.workout');
+      if (!workoutEl) return;
+      _handleWorkoutClick(workoutEl);
+    });
+  }
   render(workout) {
     let html = `
         <li class="workout workout--${workout.type}" data-id="${workout.id}">

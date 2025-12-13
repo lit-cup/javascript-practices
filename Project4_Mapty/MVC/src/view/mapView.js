@@ -1,14 +1,26 @@
+import { MAP_VIEW_LEVEL } from './config.js';
 class mapView {
   #handlerMapClick;
   #map;
-  renderMap(map) {
-    this.#map = map;
+  renderMap(coords) {
+    // set mapEvent
+    this.#map = L.map('map').setView(coords, MAP_VIEW_LEVEL);
+    // apply view
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
-
+    // map click listener
     this.#map.on('click', this.#handlerMapClick.bind(this));
+  }
+  setView(coords) {
+    if (!this.#map);
+    this.#map.setView(coords, MAP_VIEW_LEVEL, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
   }
   setMapClickHandler(handler) {
     this.#handlerMapClick = handler;

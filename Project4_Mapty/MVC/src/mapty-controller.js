@@ -4,7 +4,7 @@ import formView from './view/formView.js';
 import workoutView from './view/workoutView.js';
 import Running from './model/running.js';
 import Cycling from './model/cycling.js';
-import { MAP_VIEW_LEVEL } from './view/config.js';
+
 class Controller {
   init() {
     this._getPosition();
@@ -14,6 +14,8 @@ class Controller {
     formView.addHandlerInputTypeChange();
     // map sumbit evnet
     formView.addHandlerMapSubmit(this._handleMapSubmit.bind(this));
+    // map workout item click
+    workoutView.addHandlerWorkoutClick(this._handleWorkoutClick.bind(this));
   }
   _getPosition() {
     if (navigator.geolocation) {
@@ -32,10 +34,8 @@ class Controller {
     const { latitude, longitude } = position.coords;
     // transform to coord arrays
     const coords = [latitude, longitude];
-    // new map set View
-    const map = L.map('map').setView(coords, MAP_VIEW_LEVEL);
     // render default map by coord
-    mapView.renderMap(map);
+    mapView.renderMap(coords);
   }
   _handleMapSubmit() {
     try {
@@ -94,11 +94,24 @@ class Controller {
       ));
     }
   }
+  _handleWorkoutClick(workoutEl) {
+    // find workout data match click one
+    const currWorkout = model.state.workouts.find(
+      work => work.id === workoutEl.dataset.id
+    );
+    if (!currWorkout) return;
+    // set workout view
+    mapView.setView(currWorkout.coords);
+    // mini sidebar
+    formView._toggleSidebar();
+  }
   _handleMapClick(mapEvent) {
+    // store mapEvnet
+    formView._setMapEvent(mapEvent);
     // preview  mark and route by click location
     // mapViewRenderPreviewSingle(coord);
-    // render form and store mapEvnet
-    formView.render(mapEvent);
+    // render form
+    formView.render();
   }
 }
 

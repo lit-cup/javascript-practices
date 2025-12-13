@@ -57,10 +57,10 @@ class formView {
     sidebar.classList.toggle('minisize');
     this._clearInput();
   }
-  render(mapEvnet) {
-    // store on click mapEvent
-    this.#mapEvent = mapEvnet;
-    console.log('formView: ', this.#mapEvent);
+  _setMapEvent(mapEvent) {
+    this.#mapEvent = mapEvent;
+  }
+  render() {
     this._form.classList.remove('hidden');
     this._inputDistance.focus();
     this._toggleSidebar();
