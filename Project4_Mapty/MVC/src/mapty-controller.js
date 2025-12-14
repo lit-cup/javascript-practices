@@ -46,26 +46,28 @@ class Controller {
     try {
       // get form input
       const input = formView.getInput();
-      // get start end mark latlng
-      const { startMark, endMark } = model.state.tempRoute;
-      if (!startMark || !endMark) return;
+      // // get start end mark latlng
+      // const { startMark, endMark } = model.state.tempRoute;
+      // if (!startMark || !endMark) return;
       // check input finite
       this._isInputFinite(input);
-      const newWorkout = this._formatTypeWorkout(input);
-      console.log(newWorkout);
-      // TODO: view-> model to model->view
-      // render workout
-      workoutView.render(newWorkout);
-      // render start mark
-      mapView.renderMarker(startMark, newWorkout);
-      // render end mark
-      mapView.renderMarker(endMark);
-      // render route
-      mapView.renderRoute(startMark, endMark);
       // store workout in model
-      model.addWorkout(newWorkout);
+      model.addWorkout(this._formatTypeWorkout(input));
       // store in localStorage
       localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
+      // TODO: view-> model to model->view
+      workoutView.clear();
+      // render workout items
+      model.state.workouts.forEach(workout => {
+        // render workout list
+        workoutView.render(workout);
+        // render start mark
+        mapView.renderMarker(model.state.tempRoute.startMark, workout);
+        // render end mark
+        mapView.renderMarker(model.state.tempRoute.endMark);
+        // render route
+        mapView.renderRoute(model.state.tempRoute);
+      });
       // resetRoute
       model.resetRoute();
       // close sidebar
@@ -74,8 +76,8 @@ class Controller {
       formView._renderError(error.message);
     }
   }
-  _isInputFinite({ type, distance, duration, cadence, elevation }) {
-    const valueToCheck = type === 'running' ? cadence : elevation;
+  _isInputFinite({ type, distance, duration, cadence, elevationGain }) {
+    const valueToCheck = type === 'running' ? cadence : elevationGain;
     const value = [distance, duration, valueToCheck];
     const allFinite = value.every(val => Number.isFinite(val));
     const allPositive = value.every(val => val > 0);
@@ -90,7 +92,6 @@ class Controller {
       );
   }
   _formatTypeWorkout(input) {
-    console.log(model.state.tempRoute);
     // if workout is running, create running object
     if (input.type === 'running') {
       return new Running({
@@ -107,7 +108,7 @@ class Controller {
         route: structuredClone(model.state.tempRoute),
         distance: input.distance,
         duration: input.duration,
-        cadence: input.cadence,
+        elevationGain: input.elevation,
       });
     }
   }
@@ -121,7 +122,6 @@ class Controller {
     mapView.setView(currWorkout.coords);
   }
   _handleMapClick(mapEvent) {
-    console.log(mapEvent);
     const { lat, lng } = mapEvent.latlng;
     // preview  mark by click location
     if (!model.state.tempRoute.startMark || !model.state.tempRoute.endMark)
