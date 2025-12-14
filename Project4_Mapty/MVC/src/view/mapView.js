@@ -14,13 +14,12 @@ class mapView {
     // map click listener
     this.#map.on('click', this.#handlerMapClick.bind(this));
   }
-  setView(coords) {
+  setView({ startMark, endMark }) {
     if (!this.#map);
-    this.#map.setView(coords, MAP_VIEW_LEVEL, {
-      animate: true,
-      pan: {
-        duration: 1,
-      },
+    const bounds = L.latLngBounds([startMark, endMark]);
+    this.#map.fitBounds(bounds, {
+      padding: [100, 100],
+      maxZoom: 15,
     });
   }
   setMapClickHandler(handler) {
