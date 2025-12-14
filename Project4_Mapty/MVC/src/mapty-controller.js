@@ -8,7 +8,6 @@ import Cycling from './model/cycling.js';
 class Controller {
   init() {
     this._getPosition();
-    formView._toggleSidebar();
     // map click event: deferred binding
     mapView.setMapClickHandler(this._handleMapClick.bind(this));
     // form input type change event
@@ -17,6 +16,11 @@ class Controller {
     formView.addHandlerMapSubmit(this._handleMapSubmit.bind(this));
     // map workout item click
     workoutView.addHandlerWorkoutClick(this._handleWorkoutClick.bind(this));
+
+    console.log('NEW SCHEMA VERSION');
+    localStorage.clear();
+
+    localStorage.setItem('schemaVersion', '2');
   }
   _getPosition() {
     if (navigator.geolocation) {
@@ -48,6 +52,7 @@ class Controller {
       // check input finite
       this._isInputFinite(input);
       const newWorkout = this._formatTypeWorkout(input);
+      // TODO: view-> model to model->view
       // render workout
       workoutView.render(newWorkout);
       // render start mark
@@ -56,11 +61,14 @@ class Controller {
       mapView.renderMarker(endMark);
       // render route
       mapView.renderRoute(startMark, endMark);
-      // formatWorkout by difference type -> store in model
+      // store workout in model
       model.addWorkout(newWorkout);
-      // reset Route
+      // store in localStorage
+      localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
+      // resetRoute
       model.resetRoute();
-      // formView._toggleSidebar();
+      // close sidebar
+      formView._closeSidebar();
     } catch (error) {
       formView._renderError(error.message);
     }
@@ -81,23 +89,22 @@ class Controller {
       );
   }
   _formatTypeWorkout(input) {
-    let newWorkout;
     // if workout is running, create running object
     if (input.type === 'running') {
-      return (newWorkout = new Running(
+      return new Running(
         input.coords,
         input.distance,
         input.duration,
         input.cadence
-      ));
+      );
     }
     if (input.type === 'cycling') {
-      return (newWorkout = new Cycling(
+      return new Cycling(
         input.coords,
         input.distance,
         input.duration,
         input.elevation
-      ));
+      );
     }
   }
   _handleWorkoutClick(workoutEl) {
@@ -108,8 +115,6 @@ class Controller {
     if (!currWorkout) return;
     // set workout view
     mapView.setView(currWorkout.coords);
-    //TODO: mini sidebar
-    //formView._toggleSidebar();
   }
   _handleMapClick(mapEvent) {
     const { lat, lng } = mapEvent.latlng;
@@ -118,11 +123,15 @@ class Controller {
       mapView.renderMarker([lat, lng]);
     // store mapEvnet
     formView._setMapEvent(mapEvent);
+
+    // TODO: check why model.state.route store workout id
     // mark&route: store two point latlng
     model.setRoutePoint([lat, lng]);
     // mapView.previewRoutePoint(model.state.route);
     // render form
     formView.render();
+    // open sideBar
+    formView._openSidebar();
   }
 }
 
