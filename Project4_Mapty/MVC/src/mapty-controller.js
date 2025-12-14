@@ -46,32 +46,30 @@ class Controller {
     try {
       // get form input
       const input = formView.getInput();
-      // // get start end mark latlng
-      // const { startMark, endMark } = model.state.tempRoute;
-      // if (!startMark || !endMark) return;
       // check input finite
       this._isInputFinite(input);
+      const newWorkout = this._formatTypeWorkout(input);
       // store workout in model
-      model.addWorkout(this._formatTypeWorkout(input));
-      // store in localStorage
-      localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
-      // TODO: view-> model to model->view
+      model.addWorkout(newWorkout);
+      // render current start mark
+      mapView.renderMarker(model.state.tempRoute.startMark, newWorkout);
+      // render current end mark
+      mapView.renderMarker(model.state.tempRoute.endMark);
+      // render current route
+      mapView.renderRoute(model.state.tempRoute);
+      // clear workout list
       workoutView.clear();
-      // render workout items
+      // render workout lists
       model.state.workouts.forEach(workout => {
         // render workout list
         workoutView.render(workout);
-        // render start mark
-        mapView.renderMarker(model.state.tempRoute.startMark, workout);
-        // render end mark
-        mapView.renderMarker(model.state.tempRoute.endMark);
-        // render route
-        mapView.renderRoute(model.state.tempRoute);
       });
       // resetRoute
       model.resetRoute();
       // close sidebar
       formView._closeSidebar();
+      // store in localStorage
+      localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
     } catch (error) {
       formView._renderError(error.message);
     }
@@ -108,7 +106,7 @@ class Controller {
         route: structuredClone(model.state.tempRoute),
         distance: input.distance,
         duration: input.duration,
-        elevationGain: input.elevation,
+        elevationGain: input.elevationGain,
       });
     }
   }
