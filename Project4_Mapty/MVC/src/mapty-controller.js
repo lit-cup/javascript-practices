@@ -71,10 +71,8 @@ class Controller {
       const input = formView.getInput();
       // check current input finite
       this._isInputFinite(input);
-      // buid current workout data object
-      const newWorkout = this._formatTypeWorkout(input);
-      // store current workout in model
-      model.addWorkout(newWorkout);
+      // Buidl than store current workout in model
+      model.addWorkout(this._formatTypeWorkout(input));
       // clear current workout list
       workoutView.clear();
       // render workouts list
