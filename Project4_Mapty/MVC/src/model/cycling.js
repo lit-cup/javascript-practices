@@ -5,7 +5,7 @@ export default class Cycling extends Workout {
   constructor({ coords, route, distance, duration, elevationGain }) {
     super({ coords, route, distance, duration });
     this.elevationGain = elevationGain; // in steps/min
-    this.calcPace();
+    this.calcSpeed();
     this._setDescription();
   }
   calcSpeed() {

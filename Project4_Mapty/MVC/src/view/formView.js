@@ -32,7 +32,7 @@ class formView {
         this._inputType.value === 'running'
           ? +this._inputCadence.value
           : 'noneTypeExist',
-      elevation:
+      elevationGain:
         this._inputType.value === 'cycling'
           ? +this._inputElevation.value
           : 'noneTypeExist',

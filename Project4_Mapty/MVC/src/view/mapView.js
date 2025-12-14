@@ -29,7 +29,6 @@ class mapView {
   renderMarker(coords, workout = null) {
     // start maker popup, end maker not popup
     const marker = L.marker(coords).addTo(this.#map);
-
     // when no workout return mark not include popup
     if (!workout) return marker;
     marker
@@ -53,12 +52,9 @@ class mapView {
       .openPopup();
     return marker;
   }
-  renderRoute(startMark, endMark) {
+  renderRoute({ startMark, endMark }) {
     L.Routing.control({
-      waypoints: [
-        L.latLng(startMark[0], startMark[1]),
-        L.latLng(endMark[0], endMark[1]),
-      ],
+      waypoints: [L.latLng(startMark), L.latLng(endMark)],
       lineOptions: { styles: [{ color: 'red', weight: 4 }] },
       router: L.Routing.osrmv1({
         serviceUrl: 'https://router.project-osrm.org/route/v1',
