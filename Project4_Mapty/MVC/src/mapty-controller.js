@@ -8,6 +8,8 @@ import Cycling from './model/cycling.js';
 class Controller {
   init() {
     this._getPosition();
+
+    // sthis._loadWorkout();
     // map click event: deferred binding
     mapView.setMapClickHandler(this._handleMapClick.bind(this));
     // form input type change event
@@ -17,10 +19,32 @@ class Controller {
     // map workout item click
     workoutView.addHandlerWorkoutClick(this._handleWorkoutClick.bind(this));
 
-    console.log('NEW SCHEMA VERSION');
-    localStorage.clear();
+    // console.log('NEW SCHEMA VERSION');
+    // // localStorage.clear();
 
-    localStorage.setItem('schemaVersion', '2');
+    // localStorage.setItem('schemaVersion', '2');
+  }
+  _loadWorkout() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    if (!Array.isArray(data)) {
+      this.state.workouts = [];
+      return;
+    }
+    model.state.workouts = data;
+    // this._workoutsRenderHelper(model.state.workouts);
+  }
+  _workoutsRenderHelper(workouts) {
+    workouts.forEach(workout => {
+      console.log(workout);
+      // render current start mark
+      mapView.renderMarker(workout.route.startMark, workout);
+      // render current end mark
+      mapView.renderMarker(workout.route.endMark);
+      // render current route
+      mapView.renderRoute(workout.route);
+      // render workout
+      workoutView.render(workout);
+    });
   }
   _getPosition() {
     if (navigator.geolocation) {
@@ -44,26 +68,18 @@ class Controller {
   }
   _handleMapSubmit() {
     try {
-      // get form input
+      // get current form input
       const input = formView.getInput();
-      // check input finite
+      // check current input finite
       this._isInputFinite(input);
+      // buid current workout data object
       const newWorkout = this._formatTypeWorkout(input);
-      // store workout in model
+      // store current workout in model
       model.addWorkout(newWorkout);
-      // render current start mark
-      mapView.renderMarker(model.state.tempRoute.startMark, newWorkout);
-      // render current end mark
-      mapView.renderMarker(model.state.tempRoute.endMark);
-      // render current route
-      mapView.renderRoute(model.state.tempRoute);
-      // clear workout list
+      // clear current workout list
       workoutView.clear();
-      // render workout lists
-      model.state.workouts.forEach(workout => {
-        // render workout list
-        workoutView.render(workout);
-      });
+      // render workouts list
+      this._workoutsRenderHelper(model.state.workouts);
       // resetRoute
       model.resetRoute();
       // close sidebar
