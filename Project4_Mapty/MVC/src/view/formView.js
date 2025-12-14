@@ -7,11 +7,17 @@ class formView {
   _inputElevation = document.querySelector('.form__input--elevation');
   _errorMessage = document.querySelector('.error-message');
   _sidebar = document.querySelector('.sidebar');
+  _logo = document.querySelector('.logo');
   #mapEvent;
   addHandlerMapSubmit(handleMapSubmit) {
     this._form.addEventListener('submit', function (e) {
       e.preventDefault();
       handleMapSubmit();
+    });
+  }
+  addHandlerIconClick() {
+    this._logo.addEventListener('click', () => {
+      this._toggleSidebar();
     });
   }
   addHandlerInputTypeChange() {
@@ -52,6 +58,9 @@ class formView {
     this._inputElevation
       .closest('.form__row')
       .classList.toggle('form__row--hidden');
+  }
+  _toggleSidebar() {
+    this._sidebar.classList.toggle('minisize');
   }
   _openSidebar() {
     this._sidebar.classList.remove('minisize');

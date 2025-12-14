@@ -12,6 +12,8 @@ class Controller {
     mapView.setMapClickHandler(this._handleMapClick.bind(this));
     // form input type change event
     formView.addHandlerInputTypeChange();
+    // sidebar button click hander
+    formView.addHandlerIconClick();
     // map sumbit evnet
     formView.addHandlerMapSubmit(this._handleMapSubmit.bind(this));
     // map workout item click
@@ -25,7 +27,7 @@ class Controller {
   _loadWorkout() {
     const data = JSON.parse(localStorage.getItem('workouts'));
     if (!Array.isArray(data)) {
-      this.state.workouts = [];
+      model.state.workouts = [];
       return;
     }
     model.state.workouts = data;
@@ -130,7 +132,8 @@ class Controller {
     );
     if (!currWorkout) return;
     // set workout view
-    mapView.setView(currWorkout.coords);
+    mapView.setView(currWorkout.route);
+    formView._closeSidebar();
   }
   _handleMapClick(mapEvent) {
     const { lat, lng } = mapEvent.latlng;
@@ -139,8 +142,6 @@ class Controller {
       mapView.renderMarker([lat, lng]);
     // store mapEvnet
     formView._setMapEvent(mapEvent);
-
-    // TODO: check why model.state.route store workout id
     // mark&route: store two point latlng
     model.setRoutePoint([lat, lng]);
     // mapView.previewRoutePoint(model.state.route);
