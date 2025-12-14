@@ -1,8 +1,8 @@
 import Workout from './workout.js';
 export default class Running extends Workout {
   type = 'running';
-  constructor(coords, distance, duration, cadence) {
-    super(coords, distance, duration);
+  constructor({ coords, route, distance, duration, cadence }) {
+    super({ coords, route, distance, duration });
     this.cadence = cadence; // in steps/min
     this.calcPace();
     this._setDescription();

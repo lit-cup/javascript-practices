@@ -47,11 +47,12 @@ class Controller {
       // get form input
       const input = formView.getInput();
       // get start end mark latlng
-      const { startMark, endMark } = model.state.route;
+      const { startMark, endMark } = model.state.tempRoute;
       if (!startMark || !endMark) return;
       // check input finite
       this._isInputFinite(input);
       const newWorkout = this._formatTypeWorkout(input);
+      console.log(newWorkout);
       // TODO: view-> model to model->view
       // render workout
       workoutView.render(newWorkout);
@@ -89,22 +90,25 @@ class Controller {
       );
   }
   _formatTypeWorkout(input) {
+    console.log(model.state.tempRoute);
     // if workout is running, create running object
     if (input.type === 'running') {
-      return new Running(
-        input.coords,
-        input.distance,
-        input.duration,
-        input.cadence
-      );
+      return new Running({
+        coords: input.coords,
+        route: structuredClone(model.state.tempRoute),
+        distance: input.distance,
+        duration: input.duration,
+        cadence: input.cadence,
+      });
     }
     if (input.type === 'cycling') {
-      return new Cycling(
-        input.coords,
-        input.distance,
-        input.duration,
-        input.elevation
-      );
+      return new Cycling({
+        coords: input.coords,
+        route: structuredClone(model.state.tempRoute),
+        distance: input.distance,
+        duration: input.duration,
+        cadence: input.cadence,
+      });
     }
   }
   _handleWorkoutClick(workoutEl) {
@@ -117,9 +121,10 @@ class Controller {
     mapView.setView(currWorkout.coords);
   }
   _handleMapClick(mapEvent) {
+    console.log(mapEvent);
     const { lat, lng } = mapEvent.latlng;
     // preview  mark by click location
-    if (!model.state.route.startMark || !model.state.route.endMark)
+    if (!model.state.tempRoute.startMark || !model.state.tempRoute.endMark)
       mapView.renderMarker([lat, lng]);
     // store mapEvnet
     formView._setMapEvent(mapEvent);

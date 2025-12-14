@@ -1,7 +1,7 @@
 export const state = {
   // store coords
   workouts: [],
-  route: {
+  tempRoute: {
     startMark: null,
     endMark: null,
   },
@@ -12,11 +12,13 @@ export const addWorkout = function (input) {
 };
 
 export const setRoutePoint = function (coords) {
-  if (!state.route.startMark) state.route.startMark = coords;
-  else if (!state.route.endMark) state.route.endMark = coords;
+  if (!state.tempRoute.startMark) state.tempRoute.startMark = coords;
+  else if (!state.tempRoute.endMark) state.tempRoute.endMark = coords;
 };
 
 export const resetRoute = function () {
-  state.route.startMark = null;
-  state.route.endMark = null;
+  state.tempRoute = {
+    startMark: null,
+    endMark: null,
+  };
 };
