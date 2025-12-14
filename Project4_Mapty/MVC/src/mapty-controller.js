@@ -8,8 +8,6 @@ import Cycling from './model/cycling.js';
 class Controller {
   init() {
     this._getPosition();
-
-    // sthis._loadWorkout();
     // map click event: deferred binding
     mapView.setMapClickHandler(this._handleMapClick.bind(this));
     // form input type change event
@@ -31,11 +29,10 @@ class Controller {
       return;
     }
     model.state.workouts = data;
-    // this._workoutsRenderHelper(model.state.workouts);
+    this._workoutsRenderHelper(model.state.workouts);
   }
   _workoutsRenderHelper(workouts) {
     workouts.forEach(workout => {
-      console.log(workout);
       // render current start mark
       mapView.renderMarker(workout.route.startMark, workout);
       // render current end mark
@@ -65,6 +62,8 @@ class Controller {
     const coords = [latitude, longitude];
     // render default map by coord
     mapView.renderMap(coords);
+    // reload workout data
+    this._loadWorkout();
   }
   _handleMapSubmit() {
     try {
