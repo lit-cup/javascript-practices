@@ -6,6 +6,7 @@ class formView {
   _inputCadence = document.querySelector('.form__input--cadence');
   _inputElevation = document.querySelector('.form__input--elevation');
   _errorMessage = document.querySelector('.error-message');
+  _sidebar = document.querySelector('.sidebar');
   #mapEvent;
   addHandlerMapSubmit(handleMapSubmit) {
     this._form.addEventListener('submit', function (e) {
@@ -52,9 +53,12 @@ class formView {
       .closest('.form__row')
       .classList.toggle('form__row--hidden');
   }
-  _toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    sidebar.classList.toggle('minisize');
+  _openSidebar() {
+    this._sidebar.classList.remove('minisize');
+    this._clearInput();
+  }
+  _closeSidebar() {
+    this._sidebar.classList.add('minisize');
     this._clearInput();
   }
   _setMapEvent(mapEvent) {
@@ -63,7 +67,6 @@ class formView {
   render() {
     this._form.classList.remove('hidden');
     this._inputDistance.focus();
-    // this._toggleSidebar();
   }
   _renderError(message) {
     if (!this._errorMessage.classList.contains('hidden')) return;
