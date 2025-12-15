@@ -33,7 +33,10 @@ class Controller {
     this._workoutsRenderHelper(model.state.workouts);
   }
   _workoutsRenderHelper(workouts) {
+    workoutView.clear();
     workouts.forEach(workout => {
+      // close hasMark
+      workout.hasMark = false;
       // render list workout
       workoutView.render(workout);
     });
@@ -83,7 +86,7 @@ class Controller {
       // close sidebar
       formView._closeSidebar();
       // store in localStorage
-      // localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
+      localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
     } catch (error) {
       console.log(error);
       formView._renderError(error.message);
@@ -131,9 +134,18 @@ class Controller {
       work => work.id === workoutEl.dataset.id
     );
     if (!currWorkout) return;
-    console.log('cur', currWorkout.routes);
     // set workout view
     mapView.setRouteView(currWorkout.routes);
+    console.log(currWorkout);
+    // re-render Marker
+    if (currWorkout.hasMark === false) {
+      mapView.setStartMarkerContent(currWorkout.routes.startMark, currWorkout);
+      mapView.renderMarker(currWorkout.routes.endMark);
+    }
+    // render workouts list
+    mapView.clearRouting();
+    // render routes
+    mapView.renderRoute(currWorkout.routes);
     formView._closeSidebar();
   }
   _handleMapClick(mapEvent) {
