@@ -2,6 +2,7 @@ import { MAP_VIEW_LEVEL } from './config.js';
 class mapView {
   #handlerMapClick;
   #map;
+  #routeControl;
   _isDebug = false; // hanlde Debug;
   renderMap(coords) {
     // set mapEvent
@@ -14,7 +15,7 @@ class mapView {
     // map click listener
     this.#map.on('click', this.#handlerMapClick.bind(this));
   }
-  setView({ startMark, endMark }) {
+  setRouteView({ startMark, endMark }) {
     if (!this.#map);
     const bounds = L.latLngBounds([startMark, endMark]);
     this.#map.fitBounds(bounds, {
@@ -25,12 +26,10 @@ class mapView {
   setMapClickHandler(handler) {
     this.#handlerMapClick = handler;
   }
-  renderMarker(coords, workout = null) {
+  setStartMarkerContent(startMark, workout) {
     // start maker popup, end maker not popup
-    const marker = L.marker(coords).addTo(this.#map);
-    // when no workout return mark not include popup
-    if (!workout) return marker;
-    marker
+    const marker = L.marker(startMark)
+      .addTo(this.#map)
       .bindPopup(
         L.popup({
           maxWidth: 200,
@@ -51,8 +50,20 @@ class mapView {
       .openPopup();
     return marker;
   }
+  renderMarker(coords, workout = null) {
+    // start maker popup, end maker not popup
+    const marker = L.marker(coords).addTo(this.#map);
+    // when no workout return mark not include popup
+    if (!workout) return marker;
+  }
+  clearRouting() {
+    if (!this.#map || !this.#routeControl) return;
+
+    this.#map.removeControl(this.#routeControl);
+    this.#routeControl = null;
+  }
   renderRoute({ startMark, endMark }) {
-    L.Routing.control({
+    this.#routeControl = L.Routing.control({
       waypoints: [L.latLng(startMark), L.latLng(endMark)],
       lineOptions: { styles: [{ color: 'red', weight: 4 }] },
       router: L.Routing.osrmv1({

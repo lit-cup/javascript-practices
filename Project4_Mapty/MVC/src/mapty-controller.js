@@ -4,7 +4,6 @@ import formView from './view/formView.js';
 import workoutView from './view/workoutView.js';
 import Running from './model/running.js';
 import Cycling from './model/cycling.js';
-
 class Controller {
   init() {
     this._getPosition();
@@ -35,13 +34,7 @@ class Controller {
   }
   _workoutsRenderHelper(workouts) {
     workouts.forEach(workout => {
-      // render current start mark
-      mapView.renderMarker(workout.route.startMark, workout);
-      // render current end mark
-      mapView.renderMarker(workout.route.endMark);
-      // render current route
-      mapView.renderRoute(workout.route);
-      // render workout
+      // render list workout
       workoutView.render(workout);
     });
   }
@@ -74,18 +67,25 @@ class Controller {
       // check current input finite
       this._isInputFinite(input);
       // Buidl than store current workout in model
-      model.addWorkout(this._formatTypeWorkout(input));
-      // clear current workout list
-      workoutView.clear();
+      const currWorkout = model.addWorkout(this._formatTypeWorkout(input));
+      // remove repeat mark
+      model.state.preView.startMark.remove();
+      // render current start/end mark
+      mapView.setStartMarkerContent(currWorkout.routes.startMark, currWorkout);
       // render workouts list
-      this._workoutsRenderHelper(model.state.workouts);
-      // resetRoute
-      model.resetRoute();
+      mapView.clearRouting();
+      // render routes
+      mapView.renderRoute(currWorkout.routes);
+      // render workout;
+      workoutView.render(currWorkout);
+      // resetRouteMark
+      model.resetRouteMark();
       // close sidebar
       formView._closeSidebar();
       // store in localStorage
-      localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
+      // localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
     } catch (error) {
+      console.log(error);
       formView._renderError(error.message);
     }
   }
@@ -109,7 +109,7 @@ class Controller {
     if (input.type === 'running') {
       return new Running({
         coords: input.coords,
-        route: structuredClone(model.state.tempRoute),
+        routes: structuredClone(model.state.tempRoute),
         distance: input.distance,
         duration: input.duration,
         cadence: input.cadence,
@@ -118,7 +118,7 @@ class Controller {
     if (input.type === 'cycling') {
       return new Cycling({
         coords: input.coords,
-        route: structuredClone(model.state.tempRoute),
+        routes: structuredClone(model.state.tempRoute),
         distance: input.distance,
         duration: input.duration,
         elevationGain: input.elevationGain,
@@ -131,19 +131,22 @@ class Controller {
       work => work.id === workoutEl.dataset.id
     );
     if (!currWorkout) return;
+    console.log('cur', currWorkout.routes);
     // set workout view
-    mapView.setView(currWorkout.route);
+    mapView.setRouteView(currWorkout.routes);
     formView._closeSidebar();
   }
   _handleMapClick(mapEvent) {
     const { lat, lng } = mapEvent.latlng;
-    // preview  mark by click location
-    if (!model.state.tempRoute.startMark || !model.state.tempRoute.endMark)
-      mapView.renderMarker([lat, lng]);
-    // store mapEvnet
+    // preview  endmark by click location
+    if (!model.state.tempRoute.startMark && !model.state.tempRoute.endMark)
+      model.addStartPreViewMarker(mapView.renderMarker([lat, lng]));
+    else if (model.state.tempRoute.startMark && !model.state.tempRoute.endMark)
+      model.addEndPreViewMarker(mapView.renderMarker([lat, lng]));
+    // store mapEvnet for getInput()
     formView._setMapEvent(mapEvent);
     // mark&route: store two point latlng
-    model.setRoutePoint([lat, lng]);
+    model.setRouteMarkPoint([lat, lng]);
     // mapView.previewRoutePoint(model.state.route);
     // render form
     formView.render();
