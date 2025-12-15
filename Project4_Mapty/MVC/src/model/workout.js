@@ -1,9 +1,9 @@
 export default class Workout {
   date = new Date();
-  constructor({ coords, route, distance, duration }) {
+  constructor({ coords, routes, distance, duration }) {
     this.id = (Date.now() + '').slice(-10);
     this.coords = coords; // [lat, lng]
-    this.route = route; // startMark, endMark
+    this.routes = routes; // startMark, endMark
     this.distance = distance; // in km
     this.duration = duration; // in min
   }
