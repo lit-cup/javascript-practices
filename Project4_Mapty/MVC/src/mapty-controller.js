@@ -71,6 +71,8 @@ class Controller {
   }
   _handleMapSubmit() {
     try {
+      if (!model.state.tempRoute.startMark || !model.state.tempRoute.endMark)
+        return;
       // clear map before re-render mark routing
       mapView.clearMapArtifacts(
         mapView.getTempMaker(),
