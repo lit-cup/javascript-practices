@@ -2,6 +2,8 @@ import { MAP_VIEW_LEVEL } from './config.js';
 class mapView {
   #handlerMapClick;
   #map;
+  #tempMaker = [];
+  #routing = null;
   #routeControl;
   _isDebug = false; // hanlde Debug;
   renderMap(coords) {
@@ -50,18 +52,16 @@ class mapView {
       .openPopup();
     return marker;
   }
-  renderMarker(coords, workout = null) {
+  renderMarker(coords) {
     // start maker popup, end maker not popup
     const marker = L.marker(coords).addTo(this.#map);
-    // when no workout return mark not include popup
-    if (!workout) return marker;
+    return marker;
   }
-  clearRouting() {
-    if (!this.#map || !this.#routeControl) return;
-
-    this.#map.removeControl(this.#routeControl);
-    this.#routeControl = null;
-  }
+  // clearRouting() {
+  //   console.log('clean route');
+  //   this.#map.removeControl(this.#routeControl);
+  //   this.#routeControl = null;
+  // }
   renderRoute({ startMark, endMark }) {
     this.#routeControl = L.Routing.control({
       waypoints: [L.latLng(startMark), L.latLng(endMark)],
@@ -90,6 +90,36 @@ class mapView {
           .openOn(this.#map);
       })
       .addTo(this.#map);
+    return this.#routeControl;
+  }
+  clearMapArtifacts(tempMaker, routing) {
+    tempMaker.forEach(m => this.#map.removeLayer(m));
+    tempMaker.length = 0;
+    console.log('clear', tempMaker);
+    if (tempMaker.length === 0 && routing) {
+      this.#map.removeControl(routing);
+      routing = null;
+    }
+    this.#map.closePopup();
+  }
+  addTempMarker(startMark, endMark) {
+    if (startMark) this.#tempMaker.push(startMark);
+    if (endMark) this.#tempMaker.push(endMark);
+  }
+  getTempMaker() {
+    return this.#tempMaker;
+  }
+
+  setTempRouting(route) {
+    this.#routing = route;
+  }
+  getTempRouting() {
+    return this.#routing;
+  }
+  clearPreviewIfNeeded() {
+    if (this.#tempMaker.length === 2) {
+      this.clearMapArtifacts(this.#tempMaker, this.#routing);
+    }
   }
 }
 
