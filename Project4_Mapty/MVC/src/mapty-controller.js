@@ -4,6 +4,8 @@ import formView from './view/formView.js';
 import workoutView from './view/workoutView.js';
 import Running from './model/running.js';
 import Cycling from './model/cycling.js';
+import toolView from './view/toolView.js';
+
 class Controller {
   init() {
     this._getPosition();
@@ -18,6 +20,9 @@ class Controller {
     // map workout item click
     workoutView.addHandlerWorkoutClick(this._handleWorkoutClick.bind(this));
 
+    toolView.addHandlerEditClick(this._handleEditClick.bind(this));
+
+    toolView.addHandlerDeleteAll(this._handleDeleteAll.bind(this));
     // console.log('NEW SCHEMA VERSION');
     // // localStorage.clear();
 
@@ -34,12 +39,13 @@ class Controller {
   }
   _workoutsRenderHelper(workouts) {
     workoutView.clear();
-    workouts.forEach(workout => {
-      // close hasMark
-      workout.hasMark = false;
-      // render list workout
-      workoutView.render(workout);
-    });
+    if (workouts)
+      workouts.forEach(workout => {
+        // close hasMark
+        workout.hasMark = false;
+        // render list workout
+        workoutView.render(workout);
+      });
   }
   _getPosition() {
     if (navigator.geolocation) {
@@ -184,6 +190,17 @@ class Controller {
     formView.render();
     // open sideBar
     formView._openSidebar();
+  }
+  _handleEditClick() {
+    toolView.iconSwitcher(model.state.workouts);
+  }
+  _handleDeleteAll() {
+    mapView.clearMapArtifacts(mapView.getTempMaker(), mapView.getTempRouting());
+    localStorage.removeItem('workouts');
+    model.resetTempRouting();
+    model.state.workouts = [];
+    this._workoutsRenderHelper(model.state.workouts);
+    toolView.setEditClose();
   }
 }
 
