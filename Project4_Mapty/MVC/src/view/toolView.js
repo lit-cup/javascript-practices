@@ -9,6 +9,7 @@ class toolView {
   _spanShowAll = document.querySelector('.desc__showAll');
   _spanDelete = document.querySelector('.desc__delete');
   #seleted = true;
+  ICONS = { edit: 'img/edit.png', cancel: 'img/cancel.png' };
   addHandlerEditClick(_handleEditClick) {
     this._inputEdit.addEventListener('click', function (e) {
       _handleEditClick();
@@ -19,15 +20,15 @@ class toolView {
       _handleDeleteAll();
     });
   }
-  iconSwitcher(workouts) {
-    if (this.#seleted && workouts.length > 0) {
-      this.setEditOpen();
-    } else {
-      this.setEditClose();
-    }
-  }
+  //   iconSwitcher(workouts) {
+  //     if (this.#seleted && workouts.length > 0) {
+  //       this.setEditOpen();
+  //     } else {
+  //       this.setEditClose();
+  //     }
+  //   }
   setEditOpen() {
-    this._inputEdit.src = '../../img/cancel.png';
+    this._inputEdit.src = this.ICONS.cancel;
     this._inputDelAll.style.display = 'block';
     // document.querySelectorAll('.edit__delete').forEach(items => {
     //   items.style.opacity = 1;
@@ -38,7 +39,7 @@ class toolView {
     this.#seleted = false;
   }
   setEditClose() {
-    this._inputEdit.src = './edit.png';
+    this._inputEdit.src = this.ICONS.edit;
     this._inputDelAll.style.display = 'none';
     // document.querySelectorAll('.edit__delete').forEach(items => {
     //   items.style.opacity = 0;
@@ -47,6 +48,9 @@ class toolView {
     // });
     // check seleted
     this.#seleted = true;
+  }
+  getSeleted() {
+    return this.#seleted;
   }
   //   showTip(type) {
   //     type.style.display = 'block';
