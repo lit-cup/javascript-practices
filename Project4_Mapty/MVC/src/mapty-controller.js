@@ -69,39 +69,28 @@ class Controller {
   }
   _handleMapSubmit() {
     try {
-      // clear map before re-render mark routing
-      mapView.clearMapArtifacts(
-        mapView.getTempMaker(),
-        mapView.getTempRouting()
-      );
       //guard: return when mark not right, and reset tempRoute;
       if (!model.state.tempRoute.startMark || !model.state.tempRoute.endMark)
-        return model.resetTempRouting();
-
+        return;
       // get current form input
       const input = formView.getInput();
+      // clear up mark/ route temp and close sidebar form
+      this._resetTempWorkoutUI();
       // check current input finite
       this._isInputFinite(input);
       // Buidl than store current workout in model
       const currWorkout = model.addWorkout(this._formatTypeWorkout(input));
-      // render current startmark/endMark with popup content
+      // render current startmark/endMark with popup content & store in mapView tempMarker
       mapView.addTempMarker(
-        mapView.setStartMarkerContent(
-          currWorkout.routes.startMark,
-          currWorkout
-        ),
-        mapView.renderMarker(currWorkout.routes.endMark)
+        mapView.setStartMarkerContent(currWorkout.routes.startMark, currWorkout)
       );
+      mapView.addTempMarker(mapView.renderMarker(currWorkout.routes.endMark));
       // render routes
       mapView.setTempRouting(mapView.renderRoute(currWorkout.routes));
+      // reset model state tempRoute Marker
+      model.resetTempRouting();
       // render workout;
       workoutView.render(currWorkout);
-      // resetRouteMark
-      model.resetTempRouting();
-      // close sidebar
-      formView._closeSidebar();
-      // close form()
-      formView.closeForm();
       // store in localStorage
       localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
     } catch (error) {
@@ -115,18 +104,24 @@ class Controller {
     const allPositive = value.every(val => val > 0);
     // finite error message
     if (!allFinite) {
-      model.resetTempRouting();
       throw new Error('Inputs must be numbers.');
     }
     // positive error message
     if (!allPositive) {
-      model.resetTempRouting();
       throw new Error(
         type === 'running'
           ? 'Distance, duration and cadence must be positive numbers. Please Try Again'
           : 'Distance, duration and elevation must be positive numbers. Please Try Again'
       );
     }
+  }
+  _resetTempWorkoutUI() {
+    // clear map before re-render mark routing
+    mapView.clearMapArtifacts();
+    // close sidebar
+    formView._closeSidebar();
+    // close form()
+    formView.closeForm();
   }
   _formatTypeWorkout(input) {
     // if workout is running, create running object
@@ -150,9 +145,8 @@ class Controller {
     }
   }
   _handleWorkoutClick(workoutEl) {
-    formView.closeForm();
-    // clear map before re-render mark routing
-    mapView.clearMapArtifacts(mapView.getTempMaker(), mapView.getTempRouting());
+    // clear up mark/ route temp and close sidebar form
+    this._resetTempWorkoutUI();
     // find workout data match click one
     const currWorkout = model.state.workouts.find(
       work => work.id === workoutEl.dataset.id
@@ -160,49 +154,44 @@ class Controller {
     if (!currWorkout) return;
     // set workout view
     mapView.setRouteView(currWorkout.routes);
-    // re-render Marker
-
+    // re-render start/end Marker and store tempMark
     mapView.addTempMarker(
-      mapView.setStartMarkerContent(currWorkout.routes.startMark, currWorkout),
-      mapView.renderMarker(currWorkout.routes.endMark)
+      mapView.setStartMarkerContent(currWorkout.routes.startMark, currWorkout)
     );
-
+    mapView.addTempMarker(mapView.renderMarker(currWorkout.routes.endMark));
     // render routes
     mapView.setTempRouting(mapView.renderRoute(currWorkout.routes));
-    formView._closeSidebar();
   }
   _handleMapClick(mapEvent) {
-    let tempStartMark = null;
-    let tempEndMark = null;
     const { lat, lng } = mapEvent.latlng;
     // guard: avoid three mark conditional
     if (model.state.tempRoute.startMark && model.state.tempRoute.endMark)
       return;
-    // clear map before second workout
-    mapView.clearPreviewIfNeeded();
-    // preview mark add and store by click location
-    if (!model.state.tempRoute.startMark && !model.state.tempRoute.endMark)
-      tempStartMark = mapView.renderMarker([lat, lng]);
-    else if (model.state.tempRoute.startMark && !model.state.tempRoute.endMark)
-      tempEndMark = mapView.renderMarker([lat, lng]);
-    console.log(model.state.tempRoute);
-    // add tempMarker UI instance state
-    mapView.addTempMarker(tempStartMark, tempEndMark);
+    // clear preview mark/route when two tempMark exist after submit
+    if (mapView.getTempMaker().length === 2) mapView.clearPreviewTempMarkers();
     // store mapEvnet for getInput()
     formView._setMapEvent(mapEvent);
+    // preview mark add and store in mapView tempMark of UI instance state
+    if (!model.state.tempRoute.startMark)
+      mapView.addTempMarker(mapView.renderMarker([lat, lng]));
+    else if (!model.state.tempRoute.endMark)
+      mapView.addTempMarker(mapView.renderMarker([lat, lng]));
     // mark&route: store two point latlng
-    model.setTempRoutingPoint([lat, lng]);
-    // mapView.previewRoutePoint(model.state.route);
+    model.setTempRoutingMarker([lat, lng]);
     // render form
     formView.render();
     // open sideBar
     formView._openSidebar();
   }
   _handleEditClick() {
-    toolView.iconSwitcher(model.state.workouts);
+    if (toolView.getSeleted() && model.state.workouts.length > 0) {
+      toolView.setEditOpen();
+    } else {
+      toolView.setEditClose();
+    }
   }
   _handleDeleteAll() {
-    mapView.clearMapArtifacts(mapView.getTempMaker(), mapView.getTempRouting());
+    mapView.clearMapArtifacts();
     localStorage.removeItem('workouts');
     model.resetTempRouting();
     model.state.workouts = [];

@@ -6,13 +6,14 @@ export const state = {
     endMark: null,
   },
 };
+
 export const addWorkout = function (input) {
   state.workouts.push(input);
   // return lastest workoout
   return state.workouts[state.workouts.length - 1];
 };
 
-export const setTempRoutingPoint = function (coords) {
+export const setTempRoutingMarker = function (coords) {
   if (!state.tempRoute.startMark) state.tempRoute.startMark = coords;
   else if (!state.tempRoute.endMark) state.tempRoute.endMark = coords;
 };

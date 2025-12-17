@@ -92,19 +92,20 @@ class mapView {
       .addTo(this.#map);
     return this.#routeControl;
   }
-  clearMapArtifacts(tempMaker, routing) {
-    tempMaker.forEach(m => this.#map.removeLayer(m));
-    tempMaker.length = 0;
-    console.log('clear', tempMaker);
-    if (tempMaker.length === 0 && routing) {
-      this.#map.removeControl(routing);
-      routing = null;
+  clearMapArtifacts() {
+    this.#tempMaker.forEach(m => this.#map.removeLayer(m));
+    this.#tempMaker.length = 0;
+    if (this.#routing) {
+      this.#map.removeControl(this.#routing);
+      this.#routing = null;
     }
     this.#map.closePopup();
   }
-  addTempMarker(startMark, endMark) {
-    if (startMark) this.#tempMaker.push(startMark);
-    if (endMark) this.#tempMaker.push(endMark);
+  clearPreviewTempMarkers() {
+    this.clearMapArtifacts();
+  }
+  addTempMarker(marker) {
+    this.#tempMaker.push(marker);
   }
   getTempMaker() {
     return this.#tempMaker;
@@ -115,11 +116,6 @@ class mapView {
   }
   getTempRouting() {
     return this.#routing;
-  }
-  clearPreviewIfNeeded() {
-    if (this.#tempMaker.length === 2) {
-      this.clearMapArtifacts(this.#tempMaker, this.#routing);
-    }
   }
 }
 
