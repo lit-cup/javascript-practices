@@ -51,12 +51,12 @@ class Controller {
     if (navigator.geolocation) {
       // showError use arrow function because getCurrentPosition callback just listening error evnt once time
       navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), () => {
-        this._showError(
+        formView._renderError(
           'Could not get your location. Please Check location access.'
         );
       });
     } else {
-      this._showError('Geolocation is not supported by your browser.');
+      formView._renderError('Geolocation is not supported by your browser.');
     }
   }
   _loadMap(position) {
@@ -71,13 +71,14 @@ class Controller {
   }
   _handleMapSubmit() {
     try {
-      if (!model.state.tempRoute.startMark || !model.state.tempRoute.endMark)
-        return;
       // clear map before re-render mark routing
       mapView.clearMapArtifacts(
         mapView.getTempMaker(),
         mapView.getTempRouting()
       );
+      if (!model.state.tempRoute.startMark || !model.state.tempRoute.endMark)
+        return model.resetTempRouting();
+
       // get current form input
       const input = formView.getInput();
       // check current input finite
@@ -103,7 +104,6 @@ class Controller {
       // store in localStorage
       localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
     } catch (error) {
-      console.log(error);
       formView._renderError(error.message);
     }
   }
@@ -113,14 +113,19 @@ class Controller {
     const allFinite = value.every(val => Number.isFinite(val));
     const allPositive = value.every(val => val > 0);
     // finite error message
-    if (!allFinite) throw new Error('Inputs must be numbers.');
+    if (!allFinite) {
+      model.resetTempRouting();
+      throw new Error('Inputs must be numbers.');
+    }
     // positive error message
-    if (!allPositive)
+    if (!allPositive) {
+      model.resetTempRouting();
       throw new Error(
         type === 'running'
-          ? 'Distance, duration and cadence must be positive numbers.'
-          : 'Distance, duration and elevation must be positive numbers.'
+          ? 'Distance, duration and cadence must be positive numbers. Please Try Again'
+          : 'Distance, duration and elevation must be positive numbers. Please Try Again'
       );
+    }
   }
   _formatTypeWorkout(input) {
     // if workout is running, create running object
@@ -171,7 +176,7 @@ class Controller {
     let tempStartMark = null;
     let tempEndMark = null;
     const { lat, lng } = mapEvent.latlng;
-    // avoid three mark contional
+    // guard: avoid three mark conditional
     if (model.state.tempRoute.startMark && model.state.tempRoute.endMark)
       return;
     // clear map before second workout
@@ -181,6 +186,7 @@ class Controller {
       tempStartMark = mapView.renderMarker([lat, lng]);
     else if (model.state.tempRoute.startMark && !model.state.tempRoute.endMark)
       tempEndMark = mapView.renderMarker([lat, lng]);
+    console.log(model.state.tempRoute);
     // add tempMarker UI instance state
     mapView.addTempMarker(tempStartMark, tempEndMark);
     // store mapEvnet for getInput()
