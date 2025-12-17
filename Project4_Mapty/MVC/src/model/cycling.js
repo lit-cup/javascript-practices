@@ -2,7 +2,6 @@ import Workout from './workout.js';
 
 export default class Cycling extends Workout {
   type = 'cycling';
-  hasMark = true;
   constructor({ coords, routes, distance, duration, elevationGain }) {
     super({ coords, routes, distance, duration });
     this.elevationGain = elevationGain; // in steps/min

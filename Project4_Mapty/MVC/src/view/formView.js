@@ -77,6 +77,9 @@ class formView {
     this._form.classList.remove('hidden');
     this._inputDistance.focus();
   }
+  closeForm() {
+    this._form.classList.add('hidden');
+  }
   _renderError(message) {
     if (!this._errorMessage.classList.contains('hidden')) return;
     // console.log(message);

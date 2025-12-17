@@ -41,8 +41,6 @@ class Controller {
     workoutView.clear();
     if (workouts)
       workouts.forEach(workout => {
-        // close hasMark
-        workout.hasMark = false;
         // render list workout
         workoutView.render(workout);
       });
@@ -76,6 +74,7 @@ class Controller {
         mapView.getTempMaker(),
         mapView.getTempRouting()
       );
+      //guard: return when mark not right, and reset tempRoute;
       if (!model.state.tempRoute.startMark || !model.state.tempRoute.endMark)
         return model.resetTempRouting();
 
@@ -101,6 +100,8 @@ class Controller {
       model.resetTempRouting();
       // close sidebar
       formView._closeSidebar();
+      // close form()
+      formView.closeForm();
       // store in localStorage
       localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
     } catch (error) {
@@ -149,6 +150,7 @@ class Controller {
     }
   }
   _handleWorkoutClick(workoutEl) {
+    formView.closeForm();
     // clear map before re-render mark routing
     mapView.clearMapArtifacts(mapView.getTempMaker(), mapView.getTempRouting());
     // find workout data match click one
@@ -159,15 +161,12 @@ class Controller {
     // set workout view
     mapView.setRouteView(currWorkout.routes);
     // re-render Marker
-    if (currWorkout.hasMark === false) {
-      mapView.addTempMarker(
-        mapView.setStartMarkerContent(
-          currWorkout.routes.startMark,
-          currWorkout
-        ),
-        mapView.renderMarker(currWorkout.routes.endMark)
-      );
-    }
+
+    mapView.addTempMarker(
+      mapView.setStartMarkerContent(currWorkout.routes.startMark, currWorkout),
+      mapView.renderMarker(currWorkout.routes.endMark)
+    );
+
     // render routes
     mapView.setTempRouting(mapView.renderRoute(currWorkout.routes));
     formView._closeSidebar();
@@ -209,6 +208,7 @@ class Controller {
     model.state.workouts = [];
     this._workoutsRenderHelper(model.state.workouts);
     toolView.setEditClose();
+    formView.closeForm();
   }
 }
 
