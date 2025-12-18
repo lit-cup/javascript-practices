@@ -8,56 +8,56 @@ class toolView {
   _inputShowAll = document.querySelector('.edit__showAll');
   _spanShowAll = document.querySelector('.desc__showAll');
   _spanDelete = document.querySelector('.desc__delete');
-  #seleted = true;
+  _workoutContainer = document.querySelector('.work');
+  #isEdited = false;
   ICONS = { edit: 'img/edit.png', cancel: 'img/cancel.png' };
-  addHandlerEditClick(_handleEditClick) {
+
+  addHandlerEditClick(_handleEditClick, showTip, hideTip) {
     this._inputEdit.addEventListener('click', function (e) {
       _handleEditClick();
     });
+    // this._inputEdit.addEventListener('mouseover', showTip);
+    // this._inputEdit.addEventListener('mouseout', hideTip);
   }
   addHandlerDeleteAll(_handleDeleteAll) {
     this._inputDelAll.addEventListener('click', function (e) {
       _handleDeleteAll();
     });
   }
-  //   iconSwitcher(workouts) {
-  //     if (this.#seleted && workouts.length > 0) {
-  //       this.setEditOpen();
-  //     } else {
-  //       this.setEditClose();
-  //     }
-  //   }
+  addDeleteHoverHandler(showTip, hideTip) {
+    // items.addEventListener('mouseover', showTip);
+    // items.addEventListener('mouseout', hideTip);
+  }
+  toggleDeleteButtons() {
+    this._workoutContainer.classList.toggle('edit-mode');
+  }
+  switchEditState(state) {
+    this.#isEdited = state;
+  }
   setEditOpen() {
     this._inputEdit.src = this.ICONS.cancel;
     this._inputDelAll.style.display = 'block';
-    // document.querySelectorAll('.edit__delete').forEach(items => {
-    //   items.style.opacity = 1;
-    //   items.addEventListener('mouseover', () => this.showTip(this.spanDelete));
-    //   items.addEventListener('mouseout', () => this.hideTip(this.spanDelete));
-    // });
-    // check seleted
-    this.#seleted = false;
+    this.toggleDeleteButtons();
+    // // set isEdit is false to switch
+    this.#isEdited = true;
   }
   setEditClose() {
     this._inputEdit.src = this.ICONS.edit;
     this._inputDelAll.style.display = 'none';
-    // document.querySelectorAll('.edit__delete').forEach(items => {
-    //   items.style.opacity = 0;
-    //   items.addEventListener('mouseover', () => this.hideTip(this.spanDelete));
-    //   items.addEventListener('mouseout', () => this.hideTip(this.spanDelete));
-    // });
-    // check seleted
-    this.#seleted = true;
+    this.toggleDeleteButtons();
+    this.#isEdited = false;
+    // // set isEdit is false to keep it close
+    // this.#isEdited = true;
   }
-  getSeleted() {
-    return this.#seleted;
+  getIsEdited() {
+    return this.#isEdited;
   }
-  //   showTip(type) {
-  //     type.style.display = 'block';
-  //   }
-  //   hideTip(type) {
-  //     type.style.display = 'none';
-  //   }
+  showTip(type) {
+    type.style.display = 'block';
+  }
+  hideTip(type) {
+    type.style.display = 'none';
+  }
 }
 
 export default new toolView();

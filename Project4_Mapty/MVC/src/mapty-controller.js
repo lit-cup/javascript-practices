@@ -18,11 +18,14 @@ class Controller {
     // map sumbit evnet
     formView.addHandlerMapSubmit(this._handleMapSubmit.bind(this));
     // map workout item click
-    workoutView.addHandlerWorkoutClick(this._handleWorkoutClick.bind(this));
-
     toolView.addHandlerEditClick(this._handleEditClick.bind(this));
 
     toolView.addHandlerDeleteAll(this._handleDeleteAll.bind(this));
+
+    workoutView.addHandlerContainerClick(
+      this._handleDeleteWorkout.bind(this),
+      this._handleWorkoutClick.bind(this)
+    );
     // console.log('NEW SCHEMA VERSION');
     // // localStorage.clear();
 
@@ -144,14 +147,18 @@ class Controller {
       });
     }
   }
-  _handleWorkoutClick(workoutEl) {
+  _handleWorkoutClick(workoutID) {
+    // guard
+    if (toolView.getIsEdited() && model.state.currWorkoutId != null) return;
     // clear up mark/ route temp and close sidebar form
     this._resetTempWorkoutUI();
     // find workout data match click one
     const currWorkout = model.state.workouts.find(
-      work => work.id === workoutEl.dataset.id
+      work => work.id === workoutID
     );
     if (!currWorkout) return;
+    // set current workout by id
+    model.setCurrWorkout(currWorkout.id);
     // set workout view
     mapView.setRouteView(currWorkout.routes);
     // re-render start/end Marker and store tempMark
@@ -184,11 +191,17 @@ class Controller {
     formView._openSidebar();
   }
   _handleEditClick() {
-    if (toolView.getSeleted() && model.state.workouts.length > 0) {
+    if (!toolView.getIsEdited() && model.state.currWorkoutId !== null) {
       toolView.setEditOpen();
-    } else {
+    } else if (toolView.getIsEdited() && model.state.currWorkoutId !== null) {
+      model.resetCurrWorkout();
       toolView.setEditClose();
     }
+    // toolView.addDeleteHoverHandler(
+    //   () => toolView.showTip(toolView._spanDelete),
+    //   () => toolView.hideTip(toolView._spanDelete)
+    // );
+    // toolView.addHandlerDeleteWorkout(this._handleDeleteWorkout.bind(this));
   }
   _handleDeleteAll() {
     mapView.clearMapArtifacts();
@@ -199,7 +212,27 @@ class Controller {
     toolView.setEditClose();
     formView.closeForm();
   }
+  _handleDeleteWorkout(workoutId, e) {
+    e.stopPropagation();
+    if (!toolView.getIsEdited() || workoutId != model.state.currWorkoutId)
+      return;
+    const selectedWorkoutIndex = model.state.workouts.findIndex(
+      workout => workout.id === workoutId
+    );
+    if (selectedWorkoutIndex < 0) return;
+    // delete workout in the model state by currect workou index
+    model.deleteWrokout(selectedWorkoutIndex);
+    toolView.setEditClose();
+    this._afterDeleteCleanUp();
+    localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
+  }
+  _afterDeleteCleanUp() {
+    this._workoutsRenderHelper(model.state.workouts);
+    this._resetTempWorkoutUI();
+    model.resetCurrWorkout();
+  }
 }
 
 const app = new Controller();
+1;
 app.init();

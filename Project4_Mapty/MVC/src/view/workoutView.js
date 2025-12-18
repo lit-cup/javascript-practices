@@ -1,15 +1,17 @@
 class workoutView {
-  _workform = document.querySelector('.work');
-  _workoutItem = document.querySelector('.workouts');
-
+  _workoutContainer = document.querySelector('.work');
   clear() {
-    this._workform.innerHTML = '';
+    this._workoutContainer.innerHTML = '';
   }
-  addHandlerWorkoutClick(_handleWorkoutClick) {
-    this._workoutItem.addEventListener('click', function (e) {
+  addHandlerContainerClick(_handleDeleteWorkout, _handleWorkoutClick) {
+    this._workoutContainer.addEventListener('click', e => {
       const workoutEl = e.target.closest('.workout');
       if (!workoutEl) return;
-      _handleWorkoutClick(workoutEl);
+      if (e.target.classList.contains('edit__delete')) {
+        _handleDeleteWorkout(workoutEl.dataset.id, e);
+        return;
+      }
+      _handleWorkoutClick(workoutEl.dataset.id);
     });
   }
   render(workout) {
@@ -18,7 +20,7 @@ class workoutView {
           <h2 class="workout__title">${workout.description}</h2>
           <input class="edit edit__delete" data-id="${
             workout.id
-          }" style="opacity: 0;" type="image" src="../img/delete.png" alt="delete" width="30" height="30">
+          }" type="image" src="../img/delete.png" alt="delete" width="30" height="30">
           <div class="workout__details">
             <span class="workout__icon">${
               workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
@@ -61,7 +63,7 @@ class workoutView {
             </div>
           </li>`;
     }
-    this._workform.insertAdjacentHTML('afterbegin', html);
+    this._workoutContainer.insertAdjacentHTML('afterbegin', html);
   }
 }
 

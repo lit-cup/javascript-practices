@@ -1,5 +1,6 @@
 export const state = {
   // store coords
+  currWorkoutId: null,
   workouts: [],
   tempRoute: {
     startMark: null,
@@ -23,4 +24,16 @@ export const resetTempRouting = function () {
     startMark: null,
     endMark: null,
   };
+};
+
+export const deleteWrokout = function (workoutIndex) {
+  state.workouts.splice(workoutIndex, 1);
+};
+
+export const setCurrWorkout = function (id) {
+  state.currWorkoutId = id;
+};
+
+export const resetCurrWorkout = function () {
+  state.currWorkoutId = null;
 };

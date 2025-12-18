@@ -49,8 +49,6 @@ a:visited {
   padding: 1rem;
 }
 
-
-
 /* SIDEBAR */
 .sidebar {
   height: 55vh;
@@ -82,12 +80,10 @@ a:visited {
   justify-content: center;
 }
 
-
 .sidebar.minisize .logo {
   margin: 0;
   height: 60px;
   width: 60px;
-
 }
 
 .sidebar.minisize .editoptions,
@@ -135,7 +131,6 @@ a:visited {
   border-radius: 5px;
 }
 
-
 .edit:hover {
   background-color: var(--color-light--3);
 }
@@ -161,13 +156,15 @@ a:visited {
   background-color: var(--color-light--3);
 }
 
-
 .edit__delete {
   border: none;
   margin: 0;
   grid-column: 5;
   grid-row: 1;
   opacity: 0;
+}
+.edit-mode .edit__delete {
+  opacity: 1;
 }
 
 .desc__delAll {
@@ -185,7 +182,6 @@ a:visited {
 .desc__showAll {
   width: 100px;
 }
-
 
 .workouts {
   list-style: none;
