@@ -20,6 +20,8 @@ class Controller {
     // map workout item click
     toolView.addHandlerEditClick(this._handleEditClick.bind(this));
 
+    toolView.addHandlerShowAllWorkout(this._handleShowAllWorkout.bind(this));
+
     toolView.addHandlerDeleteAll(this._handleDeleteAll.bind(this));
 
     workoutView.addHandlerContainerClick(
@@ -160,7 +162,7 @@ class Controller {
     // set current workout by id
     model.setCurrWorkout(currWorkout.id);
     // set workout view
-    mapView.setRouteView(currWorkout.routes);
+    mapView.setRouteView(Object.values(currWorkout.routes));
     // re-render start/end Marker and store tempMark
     mapView.addTempMarker(
       mapView.setStartMarkerContent(currWorkout.routes.startMark, currWorkout)
@@ -201,7 +203,26 @@ class Controller {
     //   () => toolView.showTip(toolView._spanDelete),
     //   () => toolView.hideTip(toolView._spanDelete)
     // );
-    // toolView.addHandlerDeleteWorkout(this._handleDeleteWorkout.bind(this));
+  }
+  _handleShowAllWorkout() {
+    if (model.state.workouts.length === 0) return;
+    // clear up mark/ route temp and close sidebar form
+    this._resetTempWorkoutUI();
+
+    // set workout view
+    mapView.setRouteView(
+      model.state.workouts.map(w => Object.values(w.routes)),
+      true
+    );
+    model.state.workouts.forEach(workout => {
+      // re-render start/end Marker and store tempMark
+      mapView.addTempMarker(
+        mapView.setStartMarkerContent(workout.routes.startMark, workout)
+      );
+      mapView.addTempMarker(mapView.renderMarker(workout.routes.endMark));
+      // render routes
+      mapView.setTempRouting(mapView.renderRoute(workout.routes));
+    });
   }
   _handleDeleteAll() {
     mapView.clearMapArtifacts();

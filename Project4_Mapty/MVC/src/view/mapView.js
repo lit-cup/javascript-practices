@@ -17,12 +17,12 @@ class mapView {
     // map click listener
     this.#map.on('click', this.#handlerMapClick.bind(this));
   }
-  setRouteView({ startMark, endMark }) {
+  setRouteView(coords, showAll = false) {
     if (!this.#map);
-    const bounds = L.latLngBounds([startMark, endMark]);
+    const bounds = L.latLngBounds(coords);
     this.#map.fitBounds(bounds, {
-      padding: [100, 100],
-      maxZoom: 15,
+      padding: showAll ? [50, 50] : [150, 150],
+      maxZoom: showAll ? MAP_VIEW_LEVEL : 20,
     });
   }
   setMapClickHandler(handler) {

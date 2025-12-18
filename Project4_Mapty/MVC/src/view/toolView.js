@@ -12,7 +12,7 @@ class toolView {
   #isEdited = false;
   ICONS = { edit: 'img/edit.png', cancel: 'img/cancel.png' };
 
-  addHandlerEditClick(_handleEditClick, showTip, hideTip) {
+  addHandlerEditClick(_handleEditClick) {
     this._inputEdit.addEventListener('click', function (e) {
       _handleEditClick();
     });
@@ -22,6 +22,11 @@ class toolView {
   addHandlerDeleteAll(_handleDeleteAll) {
     this._inputDelAll.addEventListener('click', function (e) {
       _handleDeleteAll();
+    });
+  }
+  addHandlerShowAllWorkout(_handleShowAllWorkout) {
+    this._inputShowAll.addEventListener('click', function (e) {
+      _handleShowAllWorkout();
     });
   }
   addDeleteHoverHandler(showTip, hideTip) {
