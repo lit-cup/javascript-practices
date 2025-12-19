@@ -31,52 +31,56 @@
   <body>
     <div class="error-message hidden"></div>
     <div class="sidebar minisize">
-      <div class="sidebar__head">
-        <span class="desc desc__delete" style="display: none">Delete</span>
-        <span class="desc desc__delAll" style="display: none">Delete All</span>
-        <span class="desc desc__edit" style="display: none">Edit</span>
-        <span class="desc desc__sort" style="display: none">Sort</span>
-        <span class="desc desc__showAll" style="display: none"
-          >Show All Workouts</span
-        >
-      </div>
+      <div class="sidebar__head"></div>
       <img src="../img/logo.png" alt="Logo" class="logo" />
       <li class="editoptions">
-        <input
-          class="edit edit__delAll"
-          type="image"
-          src="../img/delete-all.png"
-          alt="delAll"
-          width="30"
-          height="30"
-        />
-        <input
-          class="edit edit__option"
-          type="image"
-          src="../img/edit.png"
-          data-description="Edit"
-          alt="cancel"
-          width="30"
-          height="30"
-        />
-        <input
-          class="edit edit__sort"
-          type="image"
-          src="../img/sort.png"
-          data-description="Sort"
-          alt="sort"
-          width="30"
-          height="30"
-        />
-        <input
-          class="edit edit__showAll"
-          type="image"
-          src="../img/show-all.png"
-          data-description="Show All"
-          alt="show all"
-          width="30"
-          height="30"
-        />
+        <div class="tool-btn">
+          <input
+            class="edit edit__delAll"
+            type="image"
+            src="../img/delete-all.png"
+            alt="delAll"
+            width="30"
+            height="30"
+          />
+          <span class="desc desc__delAll">Delete All</span>
+        </div>
+        <div class="tool-btn">
+          <input
+            class="edit edit__option"
+            type="image"
+            src="../img/edit.png"
+            data-description="Edit"
+            alt="cancel"
+            width="30"
+            height="30"
+          />
+          <span class="desc desc__edit">Edit</span>
+        </div>
+        <div class="tool-btn">
+          <input
+            class="edit edit__sort"
+            type="image"
+            src="../img/sort.png"
+            data-description="Sort"
+            alt="sort"
+            width="30"
+            height="30"
+          />
+          <span class="desc desc__sort">Sort</span>
+        </div>
+        <div class="tool-btn">
+          <input
+            class="edit edit__showAll"
+            type="image"
+            src="../img/show-all.png"
+            data-description="Show All"
+            alt="show all"
+            width="30"
+            height="30"
+          />
+          <span class="desc desc__showAll">Show All Workouts</span>
+        </div>
       </li>
       <ul class="workouts">
         <form class="form hidden">

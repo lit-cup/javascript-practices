@@ -3,24 +3,19 @@ class workoutView {
   clear() {
     this._workoutContainer.innerHTML = '';
   }
-  addHandlerContainerClick(_handleDeleteWorkout, _handleWorkoutClick) {
-    this._workoutContainer.addEventListener('click', e => {
-      const workoutEl = e.target.closest('.workout');
-      if (!workoutEl) return;
-      if (e.target.classList.contains('edit__delete')) {
-        _handleDeleteWorkout(workoutEl.dataset.id, e);
-        return;
-      }
-      _handleWorkoutClick(workoutEl.dataset.id);
-    });
-  }
   render(workout) {
     let html = `
-        <li class="workout workout--${workout.type}" data-id="${workout.id}">
-          <h2 class="workout__title">${workout.description}</h2>
-          <input class="edit edit__delete" data-id="${
-            workout.id
-          }" type="image" src="../img/delete.png" alt="delete" width="30" height="30">
+        <li class="workout workout--${workout.type}" data-id="${workout.id}"> 
+          <div class='workout__head'>
+            <h2 class="workout__title">${workout.description}</h2>
+            <div class="tool-btn tool-delete">
+              <input class="edit edit__delete" data-id="${
+                workout.id
+              }" type="image" src="../img/delete.png" alt="delete" width="30" height="30">
+              <span class="desc desc__delete">Delete</span>
+            </div> 
+          </div>
+          <div class="workout__body">
           <div class="workout__details">
             <span class="workout__icon">${
               workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
@@ -46,7 +41,8 @@ class workoutView {
               <span class="workout__value">${workout.cadence}</span>
               <span class="workout__unit">spm</span>
             </div>
-          </li>`;
+          </div>
+          </li> `;
     }
 
     if (workout.type === 'cycling') {
@@ -61,6 +57,7 @@ class workoutView {
               <span class="workout__value">${workout.elevationGain}</span>
               <span class="workout__unit">m</span>
             </div>
+          </div>         
           </li>`;
     }
     this._workoutContainer.insertAdjacentHTML('afterbegin', html);

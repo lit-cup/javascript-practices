@@ -26,14 +26,10 @@ class Controller {
 
     toolView.addHandlerDeleteAll(this._handleDeleteAll.bind(this));
 
-    workoutView.addHandlerContainerClick(
+    toolView.addHandlerContainerClick(
       this._handleDeleteWorkout.bind(this),
       this._handleWorkoutClick.bind(this)
     );
-    // console.log('NEW SCHEMA VERSION');
-    // // localStorage.clear();
-
-    // localStorage.setItem('schemaVersion', '2');
   }
   _loadWorkout() {
     const data = JSON.parse(localStorage.getItem('workouts'));
@@ -87,13 +83,8 @@ class Controller {
       this._isInputFinite(input);
       // Buidl than store current workout in model
       const currWorkout = model.addWorkout(this._formatTypeWorkout(input));
-      // render current startmark/endMark with popup content & store in mapView tempMarker
-      mapView.addTempMarker(
-        mapView.setStartMarkerContent(currWorkout.routes.startMark, currWorkout)
-      );
-      mapView.addTempMarker(mapView.renderMarker(currWorkout.routes.endMark));
-      // render routes
-      mapView.setTempRouting(mapView.renderRoute(currWorkout.routes));
+
+      this._addTempWorkoutUI(currWorkout);
       // reset model state tempRoute Marker
       model.resetTempRouting();
       // render workout;
@@ -121,6 +112,15 @@ class Controller {
           : 'Distance, duration and elevation must be positive numbers. Please Try Again'
       );
     }
+  }
+  _addTempWorkoutUI(currWorkout) {
+    // render current startmark/endMark with popup content & store in mapView tempMarker
+    mapView.addTempMarker(
+      mapView.setStartMarkerContent(currWorkout.routes.startMark, currWorkout)
+    );
+    mapView.addTempMarker(mapView.renderMarker(currWorkout.routes.endMark));
+    // render routes
+    mapView.setTempRouting(mapView.renderRoute(currWorkout.routes));
   }
   _resetTempWorkoutUI() {
     // clear map before re-render mark routing
@@ -217,23 +217,17 @@ class Controller {
       true
     );
     model.state.workouts.forEach(workout => {
-      // re-render start/end Marker and store tempMark
-      mapView.addTempMarker(
-        mapView.setStartMarkerContent(workout.routes.startMark, workout)
-      );
-      mapView.addTempMarker(mapView.renderMarker(workout.routes.endMark));
-      // render routes
-      mapView.setTempRouting(mapView.renderRoute(workout.routes));
+      this._addTempWorkoutUI(workout);
     });
   }
   _handleDeleteAll() {
-    // TODO: bug deleteAll edit no close, routing UI not clear
     toolView.setEditClose();
     formView.closeForm();
     mapView.clearMapArtifacts();
     localStorage.removeItem('workouts');
     model.resetTempRouting();
     model.state.workouts = [];
+    mapView.reloadMap();
     this._workoutsRenderHelper(model.state.workouts);
   }
   _handleDeleteWorkout(workoutId, e) {
