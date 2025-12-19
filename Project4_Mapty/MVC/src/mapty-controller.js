@@ -195,7 +195,11 @@ class Controller {
     formView._openSidebar();
   }
   _handleEditClick() {
-    if (!toolView.getIsEdited() && model.state.currWorkoutId !== null) {
+    if (
+      !toolView.getIsEdited() &&
+      model.state.currWorkoutId !== null &&
+      model.state.workouts.length > 0
+    ) {
       toolView.setEditOpen();
     } else if (toolView.getIsEdited() && model.state.currWorkoutId !== null) {
       model.resetCurrWorkout();
