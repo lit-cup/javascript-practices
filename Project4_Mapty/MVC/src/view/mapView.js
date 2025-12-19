@@ -6,9 +6,11 @@ class mapView {
   #routing = [];
   #pops = [];
   #routeControl;
+  #coords;
   _isDebug = false; // hanlde Debug;
   renderMap(coords) {
     // set mapEvent
+    this.#coords = coords;
     this.#map = L.map('map').setView(coords, MAP_VIEW_LEVEL);
     // apply view
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -17,6 +19,9 @@ class mapView {
     }).addTo(this.#map);
     // map click listener
     this.#map.on('click', this.#handlerMapClick.bind(this));
+  }
+  reloadMap() {
+    this.#map.setView(this.#coords, MAP_VIEW_LEVEL);
   }
   setRouteView(coords, showAll = false) {
     if (!this.#map);
@@ -95,10 +100,10 @@ class mapView {
     return this.#routeControl;
   }
   clearMapArtifacts() {
+    // clear markers
+    this.#tempMaker.forEach(m => this.#map.removeLayer(m));
+    this.#tempMaker.length = 0;
     if (this.#routing.length > 0) {
-      // clear markers
-      this.#tempMaker.forEach(m => this.#map.removeLayer(m));
-      this.#tempMaker.length = 0;
       // clear routings
       this.#routing.forEach(r => {
         this.#map.removeControl(r);
