@@ -12,6 +12,12 @@ class toolView {
   #isEdited = false;
   ICONS = { edit: 'img/edit.png', cancel: 'img/cancel.png' };
 
+  addHandlerSortClick(_handleSortClick) {
+    this._inputSort.addEventListener('click', function () {
+      _handleSortClick();
+    });
+  }
+
   addHandlerEditClick(_handleEditClick) {
     this._inputEdit.addEventListener('click', function (e) {
       _handleEditClick();

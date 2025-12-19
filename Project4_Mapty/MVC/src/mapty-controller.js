@@ -20,6 +20,8 @@ class Controller {
     // map workout item click
     toolView.addHandlerEditClick(this._handleEditClick.bind(this));
 
+    toolView.addHandlerSortClick(this._handleSortClick.bind(this));
+
     toolView.addHandlerShowAllWorkout(this._handleShowAllWorkout.bind(this));
 
     toolView.addHandlerDeleteAll(this._handleDeleteAll.bind(this));
@@ -225,13 +227,14 @@ class Controller {
     });
   }
   _handleDeleteAll() {
+    // TODO: bug deleteAll edit no close, routing UI not clear
+    toolView.setEditClose();
+    formView.closeForm();
     mapView.clearMapArtifacts();
     localStorage.removeItem('workouts');
     model.resetTempRouting();
     model.state.workouts = [];
     this._workoutsRenderHelper(model.state.workouts);
-    toolView.setEditClose();
-    formView.closeForm();
   }
   _handleDeleteWorkout(workoutId, e) {
     e.stopPropagation();
@@ -251,6 +254,16 @@ class Controller {
     this._workoutsRenderHelper(model.state.workouts);
     this._resetTempWorkoutUI();
     model.resetCurrWorkout();
+  }
+  _handleSortClick() {
+    if (model.state.workouts.length > 0) {
+      workoutView.clear();
+      model.state.workouts
+        .sort((a, b) => a.distance - b.distance)
+        .forEach(work => workoutView.render(work));
+      // store in localStorage
+      localStorage.setItem('workouts', JSON.stringify(model.state.workouts));
+    }
   }
 }
 
