@@ -1,5 +1,4 @@
 export const state = {
-  // store coords
   currWorkoutId: null,
   workouts: [],
   tempRoute: {

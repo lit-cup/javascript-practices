@@ -82,7 +82,6 @@ class formView {
   }
   _renderError(message) {
     if (!this._errorMessage.classList.contains('hidden')) return;
-    // console.log(message);
     this._errorMessage.textContent = message;
     this._errorMessage.classList.remove('hidden');
     setTimeout(() => {

@@ -205,10 +205,6 @@ class Controller {
       model.resetCurrWorkout();
       toolView.setEditClose();
     }
-    // toolView.addDeleteHoverHandler(
-    //   () => toolView.showTip(toolView._spanDelete),
-    //   () => toolView.hideTip(toolView._spanDelete)
-    // );
   }
   _handleShowAllWorkout() {
     if (model.state.workouts.length === 0) return;

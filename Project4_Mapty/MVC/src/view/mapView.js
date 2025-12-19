@@ -63,11 +63,6 @@ class mapView {
     const marker = L.marker(coords).addTo(this.#map);
     return marker;
   }
-  // clearRouting() {
-  //   console.log('clean route');
-  //   this.#map.removeControl(this.#routeControl);
-  //   this.#routeControl = null;
-  // }
   renderRoute({ startMark, endMark }) {
     this.#routeControl = L.Routing.control({
       waypoints: [L.latLng(startMark), L.latLng(endMark)],
