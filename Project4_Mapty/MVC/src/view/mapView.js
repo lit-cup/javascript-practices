@@ -3,7 +3,8 @@ class mapView {
   #handlerMapClick;
   #map;
   #tempMaker = [];
-  #routing = null;
+  #routing = [];
+  #pops = [];
   #routeControl;
   _isDebug = false; // hanlde Debug;
   renderMap(coords) {
@@ -78,7 +79,7 @@ class mapView {
         const routeDistanceKm = (
           e.routes[0].summary.totalDistance / 1000
         ).toFixed(2);
-        L.popup({
+        const pop = L.popup({
           maxWidth: 250,
           minWidth: 100,
           autoClose: false,
@@ -88,18 +89,25 @@ class mapView {
           //.setContent(`Route ${index + 1}: ${routeDistanceKm} km`)
           .setContent(`Route: ${routeDistanceKm} km`)
           .openOn(this.#map);
+        this.#pops.push(pop);
       })
       .addTo(this.#map);
     return this.#routeControl;
   }
   clearMapArtifacts() {
-    this.#tempMaker.forEach(m => this.#map.removeLayer(m));
-    this.#tempMaker.length = 0;
-    if (this.#routing) {
-      this.#map.removeControl(this.#routing);
-      this.#routing = null;
+    if (this.#routing.length > 0) {
+      // clear markers
+      this.#tempMaker.forEach(m => this.#map.removeLayer(m));
+      this.#tempMaker.length = 0;
+      // clear routings
+      this.#routing.forEach(r => {
+        this.#map.removeControl(r);
+      });
+      this.#routing.length = 0;
+      // clear pops
+      this.#pops.forEach(p => this.#map.closePopup(p));
+      this.#pops.length = 0;
     }
-    this.#map.closePopup();
   }
   clearPreviewTempMarkers() {
     this.clearMapArtifacts();
@@ -112,10 +120,7 @@ class mapView {
   }
 
   setTempRouting(route) {
-    this.#routing = route;
-  }
-  getTempRouting() {
-    return this.#routing;
+    this.#routing.push(route);
   }
 }
 
