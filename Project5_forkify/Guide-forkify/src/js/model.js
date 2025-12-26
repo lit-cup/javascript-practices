@@ -105,40 +105,40 @@ export const getSearchResultPage = function (page = state.search.page) {
   return state.search.results.slice(start, end); // 1 page per 10 results
 };
 
-// TODO: sort enrich currpage search results by cookingtime
+// Done: sort enrich currpage search results by cookingtime
 // NOTE:
 // Data: all search result, currpage result, resultsPerPage
 // flow: sort click -> get currpage -> enrich cookingtime & servings data -> sort currpage -> update page
-export const enrichSearchResult = async function(currPageSearchResults){
-        const enrichedResult = await Promise.all(
-          currPageSearchResults.map(async recipe => {
-          const data = await AJAX(`${API_URL}/${recipe.id}?key=${API_KEY}`);
-          return {
-            ...recipe,
-            cookingTime: data.data.recipe.cooking_time,
-            servings: data.data.recipe.servings,
-          };
-        }));
-        return enrichedResult;
-}
+export const enrichSearchResult = async function (currPageSearchResults) {
+  const enrichedResult = await Promise.all(
+    currPageSearchResults.map(async recipe => {
+      const data = await AJAX(`${API_URL}/${recipe.id}?key=${API_KEY}`);
+      return {
+        ...recipe,
+        cookingTime: data.data.recipe.cooking_time,
+        servings: data.data.recipe.servings,
+      };
+    })
+  );
+  return enrichedResult;
+};
 
-export const sortSearchResult = function(enrichedResults, sortOption){
-   const results = enrichedResults.slice(); // copy array to avoid mutate original array
-    if(sortOption === 'cookingtime-asc'){
-      results.sort((a, b) => a.cookingTime - b.cookingTime);
-    }
-    if(sortOption === 'cookingtime-desc'){
-      results.sort((a, b) => b.cookingTime - a.cookingTime);
-    }
-    if(sortOption === 'servings-asc'){
-      results.sort((a, b) => a.servings - b.servings);
-    }
-    if(sortOption === 'servings-desc'){
-      results.sort((a, b) => b.servings - a.servings);
-    }
-    return results;
-}
-
+export const sortSearchResult = function (enrichedResults, sortOption) {
+  const results = enrichedResults.slice(); // copy array to avoid mutate original array
+  if (sortOption === 'cookingtime-asc') {
+    results.sort((a, b) => a.cookingTime - b.cookingTime);
+  }
+  if (sortOption === 'cookingtime-desc') {
+    results.sort((a, b) => b.cookingTime - a.cookingTime);
+  }
+  if (sortOption === 'servings-asc') {
+    results.sort((a, b) => a.servings - b.servings);
+  }
+  if (sortOption === 'servings-desc') {
+    results.sort((a, b) => b.servings - a.servings);
+  }
+  return results;
+};
 
 export const updateServings = function (newServings) {
   state.recipe.ingredients.forEach(ing => {
