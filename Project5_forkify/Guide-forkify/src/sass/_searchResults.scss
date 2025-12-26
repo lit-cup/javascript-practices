@@ -10,6 +10,31 @@
   margin-bottom: 2rem;
 }
 
+.sort{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+
+  &__label {
+    font-size: 1.4rem;
+    margin-right: 1rem;
+    align-self: center;
+  }
+
+  &__select {
+    border: none;
+    background-color: $color-grey-light-3;
+    font-size: 1.4rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: $color-grey-dark-1;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+
 .pagination {
   display: flex;
   margin-top: auto;

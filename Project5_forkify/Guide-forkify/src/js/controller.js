@@ -5,9 +5,8 @@ import resultView from "./view/resultView.js";
 import paginationView from "./view/paginationView.js";
 import bookmarksView from "./view/bookmarkView.js";
 import addRecipeView from "./view/addRecipeView.js";
-import UpdateIconsView from "./view/upateIconsView.js";
+import sortView from "./view/sortView.js";
 import { MODAL_CLOSE_SEC } from "./config.js";
-import upateIconsView from "./view/upateIconsView.js";
 
 // import icons from '../img/icons.svg'; // parcel 1
 // import icons from 'url:../img/icons.svg'; // parcel 2
@@ -22,6 +21,7 @@ import upateIconsView from "./view/upateIconsView.js";
 
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
+// https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
 
@@ -87,7 +87,28 @@ const controlSearchResults = async function(){
     paginationView.render(model.state.search);
 
   } catch (error) {
-    console.log(error);
+    resultView.renderError(error);
+  }
+}
+
+const controlSearchResultsSorted = async function(){
+  try {
+    sortView.setDefultOption();
+    sortView.renderSpinner();
+    // 1) Get sort input option
+    const sortOption = sortView.getSortOption();
+    if(!sortOption) return;
+
+    // 2) enrich currpage search results by getSearchResultPagecookingtime and servings data
+    const enrichedResults = await model.enrichSearchResult(model.getSearchResultPage());
+
+    // 3) sort currpage search results by enrichResults and sort option
+    const sortedResults = model.sortSearchResult(enrichedResults, sortOption);
+
+    // 4) update page with sorted results
+    resultView.update(sortedResults);
+  } catch (error) {
+    resultView.renderError(error);
   }
 }
 
@@ -189,6 +210,7 @@ const init = function() {
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
+  sortView.addHandlerSort(controlSearchResultsSorted);
   paginationView.addHandlerPageButtonClick(controlPagination);
   addRecipeView.addHandlerUploadRecipe(controlAddRecipe);
 }
