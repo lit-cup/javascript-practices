@@ -1,5 +1,13 @@
 // import { result } from "lodash-es";
-import { API_URL, API_KEY, RES_PER_PAGE } from './config';
+import {
+  API_URL,
+  API_KEY,
+  RES_PER_PAGE,
+  SORT_OPTION_CTA,
+  SORT_OPTION_CTD,
+  SORT_OPTION_SA,
+  SORT_OPTION_SD,
+} from './config';
 // import { getJson, sendJson } from "./view/helpers";
 import { AJAX } from './view/helpers';
 // import recipeView from "./view/recipeView";
@@ -125,16 +133,16 @@ export const enrichSearchResult = async function (currPageSearchResults) {
 
 export const sortSearchResult = function (enrichedResults, sortOption) {
   const results = enrichedResults.slice(); // copy array to avoid mutate original array
-  if (sortOption === 'cookingtime-asc') {
+  if (sortOption === SORT_OPTION_CTA) {
     results.sort((a, b) => a.cookingTime - b.cookingTime);
   }
-  if (sortOption === 'cookingtime-desc') {
+  if (sortOption === SORT_OPTION_CTD) {
     results.sort((a, b) => b.cookingTime - a.cookingTime);
   }
-  if (sortOption === 'servings-asc') {
+  if (sortOption === SORT_OPTION_SA) {
     results.sort((a, b) => a.servings - b.servings);
   }
-  if (sortOption === 'servings-desc') {
+  if (sortOption === SORT_OPTION_SD) {
     results.sort((a, b) => b.servings - a.servings);
   }
   return results;
