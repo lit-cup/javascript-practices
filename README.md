@@ -58,4 +58,9 @@ The Repo purpose to Learning/Practices/NOTES and enlighten JavaScript from [The 
 5. **[BankistWebsite](./Project5_BankistWebsite)** ('bankistWebsite'): A modern, interactive banking landing page demo. This project demonstrates advanced DOM manipulation, event handling, and UI effects using vanilla JavaScript and CSS.
 
 ## Planing Update
+
 1. Build a simple feature show all the files i practices or Project(Modal), exploring like code edite on website and could execute then show the result.
+
+## Course Complete Certificate
+
+![Course Complete Certificate](./course-complete-certificate.jpg)
