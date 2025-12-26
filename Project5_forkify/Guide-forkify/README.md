@@ -6,30 +6,32 @@ A dynamic recipe search and management application built while practicing modern
 
 This README is generated based on your project structure.
 
-* **Repository path:** `https://github.com/lit-cup/javascript-practices/tree/65b7caabf7b5df5850726c0c2ccbf4490bf76896/Project7_forkify/Guide-forkify`
-* Update this section with the correct GitHub URL once known.
+- **Repository path:** `https://github.com/lit-cup/javascript-practices/tree/65b7caabf7b5df5850726c0c2ccbf4490bf76896/Project7_forkify/Guide-forkify`
+- Update this section with the correct GitHub URL once known.
 
 ## Features
 
-* Built with **MVC architecture** for clean separation of logic.
-* Fetches recipes from a public API with **async/await**.
-* User can search recipes, view details, adjust servings, bookmark favorites.
-* Clean modular structure: controllers, models, and views split by responsibility.
-* Reusable UI components and update mechanisms.
+- Built with **MVC architecture** for clean separation of logic.
+- Fetches recipes from a public API with **async/await**.
+- User can search recipes, view details, adjust servings, bookmark favorites, sort search result in current result page.
+- Clean modular structure: controllers, models, and views split by responsibility.
+- Reusable UI components and update mechanisms.
 
 ## Architecture Overview (MVC)
 
-* **Model**
+- **Model**
 
-  * Handles API calls, data transformation, bookmarking logic, and application state.
-* **View**
+  - Handles API calls, data transformation, bookmarking logic, sort logic, and application state.
 
-  * Responsible for rendering UI components (recipe view, search results, bookmarks, pagination, ingredients, etc.).
-  * Includes reusable parent class with `render()`, `update()`, and error handling.
-* **Controller**
+- **View**
 
-  * Connects user actions with model updates and view rendering.
-  * Controls recipe loading, search results, pagination, serving updates, bookmarks.
+  - Responsible for rendering UI components (recipe view, search results, bookmarks, pagination, ingredients, etc.).
+  - Includes reusable parent class with `render()`, `update()`, and error handling.
+
+- **Controller**
+
+  - Connects user actions with model updates and view rendering.
+  - Controls recipe loading, search results, pagination, serving updates, bookmarks, search result sort.
 
 ## Project Structure
 
@@ -39,25 +41,30 @@ Guide-forkify/
  ├── model.js            # State management + API logic
  ├── config.js           # API URLs, timeout settings
  ├── views/
- │    ├── recipeView.js
- │    ├── searchView.js
- │    ├── resultsView.js
+ │    ├── addRecipeView.js
  │    ├── bookmarksView.js
+ │    ├── helpers.js          # AJAX abstraction, timeout wrapper
  │    ├── paginationView.js
+ │    ├── previewView.js      # search result items ui
+ │    ├── recipeView.js
+ │    ├── resultsView.js      # connect all search result items ui
+ │    ├── searchView.js
+ │    ├── sortView.js
+ │    ├── updateIconsView.js
  │    └── View.js        # Base class for all views
- ├── helpers.js          # AJAX abstraction, timeout wrapper
  ├── index.html
  └── ...
 ```
 
 ## Major Functionality & Effects
 
-* **Load recipe**: Fetches recipe by ID → updates UI with spinner, error UI, or recipe content.
-* **Search recipes**: API call → stores results → paginated display.
-* **Pagination**: Navigates through pages without reloading data.
-* **Update servings**: Adjust ingredient quantities based on new serving size.
-* **Bookmarks**: Add/remove bookmarks + persist in localStorage.
-* **Upload recipe**: Allows user to add custom recipes into the system.
+- **Load recipe**: Fetches recipe by ID → updates UI with spinner, error UI, or recipe content.
+- **Search recipes**: API call → stores results → paginated display.
+- **Pagination**: Navigates through pages without reloading data.
+- **Update servings**: Adjust ingredient quantities based on new serving size.
+- **Bookmarks**: Add/remove bookmarks + persist in localStorage.
+- **Upload recipe**: Allows user to add custom recipes into the system.
+- **Sort Search Result**: Allows user sort current result page by cooking time / servings
 
 ## Installation
 
@@ -96,9 +103,9 @@ This project is deployed on **Netlify**, allowing you to preview and interact wi
 
 ### How Deployment Works
 
-* The project is built as a client-side JavaScript application.
-* Netlify automatically detects the HTML/CSS/JS setup.
-* No server configuration required — simply drag & drop your `dist` or project folder, or connect GitHub for auto‑deploy.
+- The project is built as a client-side JavaScript application.
+- Netlify automatically detects the HTML/CSS/JS setup.
+- No server configuration required — simply drag & drop your `dist` or project folder, or connect GitHub for auto‑deploy.
 
 ### Deployment Steps (if you want to redeploy)
 
@@ -137,7 +144,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-This project is inspired by the course “The Complete JavaScript Course 2025” 
+This project is inspired by the course “The Complete JavaScript Course 2025”
 by Jonas Schmedtmann.
 ```
 
