@@ -7,55 +7,43 @@ The Repo purpose to Learning/Practices/NOTES and enlighten JavaScript from [The 
 ```
 /javascript-practices
 │
+│── Basic/        # JavaScript fundamental
 │
-├── Project1_GuessTheNumber/
-│   ├── index.html
-│   ├── script.js
-│   ├── style.css
-│   └── README.md
+│── DOM & Event/
+│   ├── Practice1_GuessTheNumber/
+│   ├── Practice2_ModalWindow/
+|   └── Project1_PigGame/
 │
-├── Project2_ModalWindow/
-│   ├── index.html
-|   |── style.css
-│   ├── script.js
-│   └── README.md
+├── HowToPlanAWebProject/
 │
-├── Project3_PigGame/
-|   |── images
-│   ├── index.html
-|   |── style.css
-│   ├── script.js
-│   └── README.md
+├── Project2_BankistApp/
 │
-├── Project4_BankistApp/
-|   |── media
-│   ├── index.html
-|   |── style.css
-│   ├── script.js
-│   └── README.md
+├── Project3_BankistWebsite/
 |
-├── Project5_BankistWebsite/
-|   |── img
-|   |──.prettierrc
-│   ├── index.html
-|   |── style.css
-│   ├── script.js
-│   └── README.md
+├── Project4_Mapty/
 │
+├── Project5_forkify/
+|
 └── README.md
 ```
 
 ## Project List:
 
-1. **[Guess the Number](./Project1_GuessTheNumber)** ('guess-the-number'): a simple guess number game, player need to guess number between 1 to 20.
+1. **[Guess the Number](./DOM&Event/Practice1_GuessTheNumber/)** ('guess-the-number'): a simple guess number game, player need to guess number between 1 to 20.
 
-2. **[Modal Window](./Project2_ModalWindow)** ('modal-window'): a simple simulation to handle Open/Close/Pass Event.
+2. **[Modal Window](./DOM&Event/Practice2_ModalWindow/)** ('modal-window'): a simple simulation to handle Open/Close/Pass Event.
 
-3. **[Pig Game](./Project3_PigGame)** ('pig-game'): a two-player dice game where players take turns to roll a dice and accumulate points.
+3. **[Pig Game](./DOM&Event/Project1_PigGame/)** ('pig-game'): a two-player dice game where players take turns to roll a dice and accumulate points.
 
-4. **[BankistApp](./Project4_BankistApp)** ('bankist'): a banking demo app that allows users to log in, view transactions, transfer money, request loans, and close accounts. Demonstrates modern JavaScript array methods and UI updates.
+4. **[BankistApp](./Project2_BankistApp/)** ('bankist'): a banking demo app that allows users to log in, view transactions, transfer money, request loans, and close accounts. Demonstrates modern JavaScript array methods and UI updates.
 
-5. **[BankistWebsite](./Project5_BankistWebsite)** ('bankistWebsite'): A modern, interactive banking landing page demo. This project demonstrates advanced DOM manipulation, event handling, and UI effects using vanilla JavaScript and CSS.
+5. **[BankistWebsite](./Project3_BankistWebsite/)** ('bankistWebsite'): A modern, interactive banking landing page demo. This project demonstrates advanced DOM manipulation, event handling, and UI effects using vanilla JavaScript and CSS.
+
+6. **[Mapty app](./Project4_Mapty/)**('project-MVC-Mapty'):
+   A refactored map-based workout tracking application built with Vanilla JavaScript, focusing on predictable state-driven UI updates and explicit MVC separation to manage complex map and UI interactions.
+
+7. **[Forkify app](./Project5_forkify/)**('project-forkify-newfeauture'):
+   A dynamic recipe search and management application built while practicing modern JavaScript concepts. This project showcases API integration, MVC architecture, modular code organization, and DOM-driven UI updates.
 
 ## Planing Update
 
