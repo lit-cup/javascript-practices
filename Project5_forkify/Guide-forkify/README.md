@@ -1,10 +1,10 @@
 # Forkify Project
 
-A dynamic recipe search and management application built while practicing modern JavaScript concepts. This project showcases API integration, MVC architecture, modular code organization, and DOM-driven UI updates.
+A dynamic recipe search and management application built while demonstrating modern JavaScript concepts. This project showcases API integration, MVC architecture, modular code organization, and DOM-driven UI updates.
 
 ## Repository
 
-This README is generated based on your project structure.
+This repository contains the Forkify project, a modular JavaScript application following the MVC pattern.
 
 - **Repository path:** `https://github.com/lit-cup/javascript-practices/tree/65b7caabf7b5df5850726c0c2ccbf4490bf76896/Project7_forkify/Guide-forkify`
 - Update this section with the correct GitHub URL once known.
@@ -13,7 +13,7 @@ This README is generated based on your project structure.
 
 - Built with **MVC architecture** for clean separation of logic.
 - Fetches recipes from a public API with **async/await**.
-- User can search recipes, view details, adjust servings, bookmark favorites, sort search result in current result page.
+- Users can search recipes, view details, adjust servings, bookmark favorites, and sort search results within the current page.
 - Clean modular structure: controllers, models, and views split by responsibility.
 - Reusable UI components and update mechanisms.
 
@@ -31,7 +31,7 @@ This README is generated based on your project structure.
 - **Controller**
 
   - Connects user actions with model updates and view rendering.
-  - Controls recipe loading, search results, pagination, serving updates, bookmarks, search result sort.
+  - Controls recipe loading, search results, pagination, serving updates, bookmarks, sort search result.
 
 ## Project Structure
 
@@ -64,7 +64,7 @@ Guide-forkify/
 - **Update servings**: Adjust ingredient quantities based on new serving size.
 - **Bookmarks**: Add/remove bookmarks + persist in localStorage.
 - **Upload recipe**: Allows user to add custom recipes into the system.
-- **Sort Search Result**: Allows user sort current result page by cooking time / servings
+- **Sort Search Result**: Allows user sort current result page by cooking time / servings. ensuring sorting occurs only after all asynchronous data has been resolved.
 
 ## Installation
 
