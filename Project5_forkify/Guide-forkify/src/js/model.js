@@ -63,11 +63,9 @@ export const loadRecipe = async function (id) {
     if (state.bookmarks.some(bookmark => bookmark.id === id))
       state.recipe.bookmarked = true;
     else state.recipe.bookmarked = false;
-
-    console.log(state.recipe);
   } catch (error) {
     // temp error handling
-    console.log(`${error}!!!!!!!!!!`);
+    // console.log(`${error}!!!!!!!!!!`);
 
     // to make error come from view part
     throw error;
@@ -97,7 +95,7 @@ export const loadSearchResults = async function (query) {
     // console.log(state.search.results);
   } catch (error) {
     // temp error handling
-    console.log(`${error}!!!!!!!!!!`);
+    // console.log(`${error}!!!!!!!!!!`);
     // to make error come from view part
     throw error;
   }
@@ -116,15 +114,20 @@ export const getSearchResultPage = function (page = state.search.page) {
 // Done: sort enrich currpage search results by cookingtime
 // NOTE:
 // Data: all search result, currpage result, resultsPerPage
-// flow: sort click -> get currpage -> enrich cookingtime & servings data -> sort currpage -> update page
+// flow:
+// sort option chnage -> result Spinner -> get currOption -> get currpage
+// -> enrich currpage cookingtime & servings data
+// -> sort enriched currpage -> re-render page
 export const enrichSearchResult = async function (currPageSearchResults) {
+  // return all Promise resolve to promise then await get value
   const enrichedResult = await Promise.all(
     currPageSearchResults.map(async recipe => {
       const data = await AJAX(`${API_URL}/${recipe.id}?key=${API_KEY}`);
+      //async return promise
       return {
         ...recipe,
-        cookingTime: data.data.recipe.cooking_time,
         servings: data.data.recipe.servings,
+        cookingTime: data.data.recipe.cooking_time,
       };
     })
   );

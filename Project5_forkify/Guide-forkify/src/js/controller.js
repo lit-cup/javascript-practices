@@ -33,6 +33,8 @@ import { MODAL_CLOSE_SEC } from './config.js';
 // get one single recipe
 const controlRecipe = async function () {
   try {
+    // set sort default option
+    sortView.setDefultOption();
     // console.log('controlRecipe fired');
     // get hash id then we could fetch by id, MVC: not it is application itself
     const id = window.location.hash.slice(1);
@@ -65,9 +67,9 @@ const controlRecipe = async function () {
 // view(Handler) -> control(fuction call) -> view(getQuery) -> model(load、render)
 const controlSearchResults = async function () {
   try {
-    resultView.renderSpinner();
+    // set sort default option
     sortView.setDefultOption();
-    // console.log(resultView);
+    resultView.renderSpinner();
 
     // 1) Get search input query
     const query = searchView.getQuery();
@@ -94,18 +96,18 @@ const controlSearchResultsSorted = async function () {
     resultView.renderSpinner();
     // 1) Get sort input option
     const sortOption = sortView.getSortOption();
-    console.log('sort option', sortOption);
     if (!sortOption) return;
 
     // check if search result is exist
-    const currSearchResult = model.getSearchResultPage();
-    if (currSearchResult.length === 0) {
+    const currPageSearchResults = model.getSearchResultPage();
+    if (currPageSearchResults.length === 0) {
       sortView.setDefultOption();
       throw new Error('No result to sort, Please try Search something first!!');
     }
-
-    // 2) enrich currpage search results by getSearchResultPagecookingtime and servings data
-    const enrichedResults = await model.enrichSearchResult(currSearchResult);
+    // 2) enrich currpage search results by getSearchResultPage cookingtime and servings data
+    const enrichedResults = await model.enrichSearchResult(
+      currPageSearchResults
+    );
 
     // 3) sort currpage search results by enrichResults and sort option
     const sortedResults = model.sortSearchResult(enrichedResults, sortOption);
@@ -118,11 +120,11 @@ const controlSearchResultsSorted = async function () {
 };
 
 const controlPagination = function (gotoPage) {
+  // set sort default option
   sortView.setDefultOption();
   // console.log('gotroPage', gotoPage);
   // 3) Render new results side bar, by Pagination control
   resultView.render(model.getSearchResultPage(gotoPage));
-
   // 4) Render new initial pagination button
   paginationView.render(model.state.search);
 };
@@ -130,7 +132,6 @@ const controlPagination = function (gotoPage) {
 const controlServings = function (newServings) {
   // Store update: update the recipe servings (in state)
   model.updateServings(newServings);
-
   // update all render the recipe view
   // recipeView.render(model.state.recipe)
 
@@ -139,6 +140,8 @@ const controlServings = function (newServings) {
 };
 
 const controlAddBookmark = function () {
+  // set sort default option
+  sortView.setDefultOption();
   // add/remove bookmark depends on bookmarked state
   if (!model.state.recipe.bookmarked) {
     // 1) add bookmark
@@ -147,7 +150,6 @@ const controlAddBookmark = function () {
     // 1) remove bookmark
     model.deleteBookMark(model.state.recipe.id);
   }
-  console.log(model.state.recipe);
   // 2) update recipe view mark bookmark after change
   recipeView.update(model.state.recipe);
 
@@ -163,6 +165,8 @@ const controlBookmarks = function () {
 // update new recipe data
 const controlAddRecipe = async function (newRecipe) {
   try {
+    // set sort default option
+    sortView.setDefultOption();
     // show loading spinner
     addRecipeView.renderSpinner();
 
