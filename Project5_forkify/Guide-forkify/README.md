@@ -6,7 +6,7 @@ A dynamic recipe search and management application built while practicing modern
 
 This README is generated based on your project structure.
 
-* **Repository path:** `https://github.com/lit-cup/javascript-practices/tree/65b7caabf7b5df5850726c0c2ccbf4490bf76896/Project7_forkify/Guide-forkify`
+* **Repository path:** `[https://github.com/lit-cup/javascript-practices/tree/65b7caabf7b5df5850726c0c2ccbf4490bf76896/Project7_forkify/Guide-forkify](https://github.com/stuartchendev/javascript-practices/edit/main/Project5_forkify/Guide-forkify/)`
 * Update this section with the correct GitHub URL once known.
 
 ## Features
@@ -62,7 +62,7 @@ Guide-forkify/
 ## Installation
 
 ```bash
-git clone https://github.com/lit-cup/javascript-practices/tree/65b7caabf7b5df5850726c0c2ccbf4490bf76896/Project7_forkify/Guide-forkify
+git https://github.com/stuartchendev/javascript-practices/edit/main/Project5_forkify/Guide-forkify/
 cd <project-folder>
 ```
 
@@ -143,6 +143,6 @@ by Jonas Schmedtmann.
 
 ## Author
 
-Created by **Chen Yi-Ting (lit-cup)** — Aiming to master JavaScript, build solid web applications, and prepare for remote frontend roles.
+Created by **Yi-Ting(Stuart) Chen** — Aiming to master JavaScript, build solid web applications, and prepare for remote frontend roles.
 
-GitHub: [https://github.com/lit-cup](https://github.com/lit-cup)
+GitHub: [https://github.com/stuartchendev](https://github.com/stuartchendev)
